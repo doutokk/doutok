@@ -12,6 +12,14 @@ gen-client: ## gen client code of {svc}. example: make gen-client svc=product �
 gen-server: ## gen service code of {svc}. example: make gen-server svc=product 不加这个--pass会生成一个kitex_gen
 	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/PengJingzhao/douyin-commerce/app/${svc} --pass "-use github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto
 
+.PHONY: work
+work:
+	@cd app/${svc} && go work use .
+
 .PHONY: tidy
 tidy:
 	@cd app/${svc} && go mod tidy
+
+.PHONY: run
+run:
+	@cd app/${svc} && go run .
