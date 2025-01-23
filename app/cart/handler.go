@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/service"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/kitex_gen/cart"
+	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
 )
 
 // CartServiceImpl implements the last service interface defined in the IDL.

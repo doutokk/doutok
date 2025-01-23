@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart/cartservice"
 	"net"
 	"time"
 
 	"github.com/PengJingzhao/douyin-commerce/app/cart/conf"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
