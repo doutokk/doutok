@@ -10,8 +10,14 @@ gen-client: ## gen client code of {svc}. example: make gen-client svc=product �
 
 .PHONY: gen-server
 gen-server: ## gen service code of {svc}. example: make gen-server svc=product 不加这个--pass会生成一个kitex_gen
-	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/PengJingzhao/douyin-commerce/app/${svc} --pass "-use github.com/puzzlehh/kill_system/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto
+	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/PengJingzhao/douyin-commerce/app/${svc} --pass "-use github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto
 
 .PHONY: gen-model
 gen-model: ## Generate model code with CRUD operations. Example: make gen-model svc=user
 	@cd app/${svc} && cwgo model c ../../idl --idl ../../idl/${svc}.proto
+
+.PHONY: tidy
+tidy:
+	@cd app/auth && go mod tidy
+	@cd app/user && go mod tidy
+	@cd app/facade && go mod tidy
