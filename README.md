@@ -6,5 +6,6 @@
 2. go mod init
 进入子模块包，执行go mod init
 如go mod init github.com/PengJingzhao/douyin-commerce/app/auth
-3. 进入项目根目录
+3. 在go.work加入子模块包
+4. 进入项目根目录
 make gen svc=auth
