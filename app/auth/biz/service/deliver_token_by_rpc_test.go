@@ -2,16 +2,16 @@ package service
 
 import (
 	"context"
-	cart "github.com/PengJingzhao/douyin-commerce/app/cart/kitex_gen/cart"
+	auth "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth"
 	"testing"
 )
 
-func TestEmptyCart_Run(t *testing.T) {
+func TestDeliverTokenByRPC_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewEmptyCartService(ctx)
+	s := NewDeliverTokenByRPCService(ctx)
 	// init req and assert value
 
-	req := &cart.EmptyCartReq{}
+	req := &auth.DeliverTokenReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

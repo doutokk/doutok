@@ -1,8 +1,9 @@
-package cart
+package main
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/cart-service/biz/service"
+	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/service"
+	
 )
 
 // CartServiceImpl implements the last service interface defined in the IDL.

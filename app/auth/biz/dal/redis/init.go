@@ -3,7 +3,7 @@ package redis
 import (
 	"context"
 
-	"github.com/PengJingzhao/douyin-commerce/app/cart/conf"
+	"github.com/PengJingzhao/douyin-commerce/app/auth/conf"
 	
 )
 

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	cart "github.com/PengJingzhao/douyin-commerce/cart-service/kitex_gen/cart"
+	cart "github.com/PengJingzhao/douyin-commerce/app/cart/kitex_gen/cart"
 )
 
 type EmptyCartService struct {

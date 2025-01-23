@@ -4,7 +4,7 @@ package cartservice
 
 import (
 	"context"
-	cart "github.com/PengJingzhao/douyin-commerce/cart-service/kitex_gen/cart"
+	cart "github.com/PengJingzhao/douyin-commerce/app/cart/kitex_gen/cart"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )
