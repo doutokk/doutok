@@ -18,6 +18,4 @@ gen-model: ## Generate model code with CRUD operations. Example: make gen-model 
 
 .PHONY: tidy
 tidy:
-	@cd app/auth && go mod tidy
-	@cd app/user && go mod tidy
-	@cd app/facade && go mod tidy
+	@cd app/${svc} && go mod tidy
