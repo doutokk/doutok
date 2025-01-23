@@ -2,7 +2,7 @@
 package cartservice
 
 import (
-	cart "github.com/PengJingzhao/douyin-commerce/app/cart/kitex_gen/cart"
+	cart "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
 	server "github.com/cloudwego/kitex/server"
 )
 

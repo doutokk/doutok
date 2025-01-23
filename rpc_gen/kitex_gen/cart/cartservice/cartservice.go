@@ -5,7 +5,7 @@ package cartservice
 import (
 	"context"
 	"errors"
-	cart "github.com/PengJingzhao/douyin-commerce/app/cart/kitex_gen/cart"
+	cart "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	streaming "github.com/cloudwego/kitex/pkg/streaming"
