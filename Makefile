@@ -1,5 +1,6 @@
 ##@ Build
 
+
 .PHONY: gen
 gen: ## gen client code of {svc}. example: make gen svc=product
 	@scripts/gen.sh ${svc}
