@@ -4,7 +4,7 @@ package authservice
 
 import (
 	"context"
-	"douyin-commerce/auth_service/kitex_gen/auth"
+	"douyin-commerce/auth-service/app/service/auth"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 )

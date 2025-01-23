@@ -1,8 +1,8 @@
-package main
+package http
 
 import (
 	"context"
-	"douyin-commerce/auth_service/kitex_gen/auth"
+	"douyin-commerce/auth-service/app/service/auth"
 )
 
 // AuthServiceImpl implements the last service interface defined in the IDL.

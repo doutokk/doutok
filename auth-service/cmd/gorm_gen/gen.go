@@ -1,8 +1,8 @@
 package main
 
 import (
-	"douyin-commerce/auth_service/biz/dal/mysql"
-	"douyin-commerce/auth_service/biz/dal/mysql/model"
+	"douyin-commerce/auth-service/app/model"
+	"douyin-commerce/auth-service/pkg/mysql"
 	"gorm.io/gen"
 )
 

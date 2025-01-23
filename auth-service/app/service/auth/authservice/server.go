@@ -2,7 +2,7 @@
 package authservice
 
 import (
-	"douyin-commerce/auth_service/kitex_gen/auth"
+	"douyin-commerce/auth-service/app/service/auth"
 	server "github.com/cloudwego/kitex/server"
 )
 

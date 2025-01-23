@@ -6,7 +6,7 @@ package gen
 
 import (
 	"context"
-
+	"douyin-commerce/auth-service/app/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
@@ -15,8 +15,6 @@ import (
 	"gorm.io/gen/field"
 
 	"gorm.io/plugin/dbresolver"
-
-	"douyin-commerce/auth_service/biz/dal/mysql/model"
 )
 
 func newToken(db *gorm.DB, opts ...gen.DOOption) token {
