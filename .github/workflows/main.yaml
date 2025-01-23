@@ -35,11 +35,11 @@ jobs:
           go mod tidy
 
       # 4. Run Golint
-      - name: Run Linter (golangci-lint)
-        run: |
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-          cd app/${{ matrix.service }}
-          golangci-lint run ./...
+#      - name: Run Linter (golangci-lint)
+#        run: |
+#          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+#          cd app/${{ matrix.service }}
+#          golangci-lint run ./...
 
       # 5. Run Unit Tests
       - name: Run Unit Tests

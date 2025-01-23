@@ -14,10 +14,10 @@ registry:
   password: ""
 
 mysql:
-  dsn: "gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "root:puzzle@tcp(10.21.32.14:3306)/doutok?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
-  address: "127.0.0.1:6379"
+  address: "10.21.32.14:6379"
   username: ""
-  password: ""
+  password: "puzzle"
   db: 0
