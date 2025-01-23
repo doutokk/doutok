@@ -4,10 +4,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/PengJingzhao/douyin-commerce/app/auth/conf"
-
-	"github.com/PengJingzhao/douyin-commerce/app/auth/kitex_gen/auth/authservice"
-
+	"github.com/PengJingzhao/douyin-commerce/app/checkout/conf"
+	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout/checkoutservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -19,7 +17,7 @@ import (
 func main() {
 	opts := kitexInit()
 
-	svr := authservice.NewServer(new(AuthServiceImpl), opts...)
+	svr := checkoutservice.NewServer(new(CheckoutServiceImpl), opts...)
 
 	err := svr.Run()
 	if err != nil {

@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	auth "github.com/PengJingzhao/douyin-commerce/app/auth/kitex_gen/auth"
+	auth "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth"
+
 )
 
 type DeliverTokenByRPCService struct {
