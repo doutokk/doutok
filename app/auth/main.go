@@ -1,12 +1,11 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth/authservice"
 	"net"
 	"time"
 
 	"github.com/PengJingzhao/douyin-commerce/app/auth/conf"
-
-	"github.com/PengJingzhao/douyin-commerce/app/auth/kitex_gen/auth/authservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
