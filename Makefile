@@ -1,3 +1,4 @@
+export ROOT_MOD=github.com/PengJingzhao/douyin-commerce
 # 项目相关变量
 SERVICE_NAME := douyin-commerce      # 微服务名称
 MODULE_NAME := douyin-commerce       # Go 模块名称
@@ -65,3 +66,9 @@ lint:
 docker:
 	@echo "Building Docker image..."
 	docker build -t $(SERVICE_NAME):latest .
+
+
+.PHONY: gen-cart
+gen-cart:
+	@cd cart-service && cwgo server --type RPC  --server_name cart --module  ${ROOT_MOD}/cart-service  --pass "-use  ${ROOT_MOD}/rpc_gen/kitex_gen" -I ../idl  --idl ../idl/cart.proto
+	@cd rpc_gen && cwgo client --type RPC  --server_name cart --module  ${ROOT_MOD}/rpc_gen --I ../idl --idl ../idl/cart.proto
