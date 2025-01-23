@@ -3,8 +3,8 @@ package redis
 import (
 	"context"
 
-	"github.com/PengJingzhao/douyin-commerce/app/auth/conf"
-
+	"github.com/PengJingzhao/douyin-commerce/app/cart/conf"
+	
 )
 
 var (
