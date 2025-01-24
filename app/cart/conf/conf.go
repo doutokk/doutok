@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/joho/godotenv"
 	"github.com/kr/pretty"
 	"github.com/spf13/viper"
 	"gopkg.in/validator.v2"
@@ -24,7 +25,10 @@ type Config struct {
 }
 
 type MySQL struct {
-	DSN string `yaml:"dsn"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
 }
 
 type Redis struct {
@@ -57,6 +61,12 @@ func GetConf() *Config {
 }
 
 func initConf() {
+	// Load .env file
+	err := godotenv.Load()
+	if err != nil {
+		klog.Warn("Error loading .env file")
+	}
+
 	prefix := "conf"
 	confFileRelPath := filepath.Join(prefix, "conf.yaml")
 
@@ -66,7 +76,28 @@ func initConf() {
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
 	}
-	err := viper.Unmarshal(conf)
+
+	// Enable automatic environment variable reading
+	viper.AutomaticEnv()
+
+	// Set environment variable keys to match the configuration keys
+	viper.SetEnvPrefix("APP") // Optional: set a prefix for environment variables
+	viper.BindEnv("kitex.service", "APP_KITEX_SERVICE")
+	viper.BindEnv("kitex.address", "APP_KITEX_ADDRESS")
+	viper.BindEnv("kitex.log_level", "APP_KITEX_LOG_LEVEL")
+	viper.BindEnv("mysql.host", "APP_MYSQL_HOST")
+	viper.BindEnv("mysql.port", "APP_MYSQL_PORT")
+	viper.BindEnv("mysql.username", "APP_MYSQL_USERNAME")
+	viper.BindEnv("mysql.password", "APP_MYSQL_PASSWORD")
+	viper.BindEnv("redis.address", "APP_REDIS_ADDRESS")
+	viper.BindEnv("redis.username", "APP_REDIS_USERNAME")
+	viper.BindEnv("redis.password", "APP_REDIS_PASSWORD")
+	viper.BindEnv("redis.db", "APP_REDIS_DB")
+	viper.BindEnv("registry.registry_address", "APP_REGISTRY_REGISTRY_ADDRESS")
+	viper.BindEnv("registry.username", "APP_REGISTRY_USERNAME")
+	viper.BindEnv("registry.password", "APP_REGISTRY_PASSWORD")
+
+	err = viper.Unmarshal(conf)
 	if err != nil {
 		panic(err)
 	}
