@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
+	"github.com/cloudwego/kitex/pkg/klog"
 )
 
 type GetCartService struct {
@@ -15,6 +16,12 @@ func NewGetCartService(ctx context.Context) *GetCartService {
 // Run create note info
 func (s *GetCartService) Run(req *cart.GetCartReq) (resp *cart.GetCartResp, err error) {
 	// Finish your business logic.
-
+	klog.Warn("GetCartService Run")
+	resp = &cart.GetCartResp{
+		Cart: &cart.Cart{
+			UserId: req.UserId,
+			Items:  nil,
+		},
+	}
 	return
 }
