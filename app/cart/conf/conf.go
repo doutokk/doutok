@@ -1,15 +1,13 @@
 package conf
 
 import (
-	"io/ioutil"
-	"os"
 	"path/filepath"
 	"sync"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/kr/pretty"
+	"github.com/spf13/viper"
 	"gopkg.in/validator.v2"
-	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -60,31 +58,24 @@ func GetConf() *Config {
 
 func initConf() {
 	prefix := "conf"
-	confFileRelPath := filepath.Join(prefix, filepath.Join(GetEnv(), "conf.yaml"))
-	content, err := ioutil.ReadFile(confFileRelPath)
-	if err != nil {
-		panic(err)
-	}
+	confFileRelPath := filepath.Join(prefix, "conf.yaml")
+
 	conf = new(Config)
-	err = yaml.Unmarshal(content, conf)
-	if err != nil {
-		klog.Error("parse yaml error - %v", err)
+	viper.SetConfigFile(confFileRelPath)
+	viper.SetConfigType("yaml")
+	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
 	}
+	err := viper.Unmarshal(conf)
+	if err != nil {
+		panic(err)
+	}
+
 	if err := validator.Validate(conf); err != nil {
 		klog.Error("validate config error - %v", err)
 		panic(err)
 	}
-	conf.Env = GetEnv()
 	pretty.Printf("%+v\n", conf)
-}
-
-func GetEnv() string {
-	e := os.Getenv("GO_ENV")
-	if len(e) == 0 {
-		return "test"
-	}
-	return e
 }
 
 func LogLevel() klog.Level {
