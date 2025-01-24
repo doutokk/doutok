@@ -14,7 +14,7 @@ registry:
   password: ""
 
 mysql:
-  dsn: "root:puzzle@tcp(10.21.32.14:3306)/doutok?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "%s:%s@tcp(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
   address: "10.21.32.14:6379"

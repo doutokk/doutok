@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/dal"
 	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth/authservice"
+	"github.com/joho/godotenv"
 	consul "github.com/kitex-contrib/registry-consul"
 	"log"
 	"net"
@@ -18,11 +20,19 @@ import (
 )
 
 func main() {
+	// load env
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+	//connect to mysql and redis
+	dal.Init()
+
 	opts := kitexInit()
 
 	svr := authservice.NewServer(new(AuthServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}

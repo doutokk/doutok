@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal"
+	"github.com/joho/godotenv"
 	consul "github.com/kitex-contrib/registry-consul"
 	"log"
 	"net"
@@ -17,11 +19,19 @@ import (
 )
 
 func main() {
+	// load env
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+	//connect to mysql and redis
+	dal.Init()
+
 	opts := kitexInit()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
