@@ -6,6 +6,7 @@ package query
 
 import (
 	"context"
+	"strings"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -31,9 +32,9 @@ func newCartItem(db *gorm.DB, opts ...gen.DOOption) cartItem {
 	_cartItem.CreatedAt = field.NewTime(tableName, "created_at")
 	_cartItem.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_cartItem.DeletedAt = field.NewField(tableName, "deleted_at")
-	_cartItem.UserId = field.NewUint(tableName, "user_id")
-	_cartItem.ItemId = field.NewUint(tableName, "item_id")
-	_cartItem.Quantity = field.NewUint(tableName, "quantity")
+	_cartItem.UserId = field.NewUint32(tableName, "user_id")
+	_cartItem.ProductId = field.NewUint32(tableName, "product_id")
+	_cartItem.Quantity = field.NewUint32(tableName, "quantity")
 
 	_cartItem.fillFieldMap()
 
@@ -48,9 +49,9 @@ type cartItem struct {
 	CreatedAt field.Time
 	UpdatedAt field.Time
 	DeletedAt field.Field
-	UserId    field.Uint
-	ItemId    field.Uint
-	Quantity  field.Uint
+	UserId    field.Uint32
+	ProductId field.Uint32
+	Quantity  field.Uint32
 
 	fieldMap map[string]field.Expr
 }
@@ -71,9 +72,9 @@ func (c *cartItem) updateTableName(table string) *cartItem {
 	c.CreatedAt = field.NewTime(table, "created_at")
 	c.UpdatedAt = field.NewTime(table, "updated_at")
 	c.DeletedAt = field.NewField(table, "deleted_at")
-	c.UserId = field.NewUint(table, "user_id")
-	c.ItemId = field.NewUint(table, "item_id")
-	c.Quantity = field.NewUint(table, "quantity")
+	c.UserId = field.NewUint32(table, "user_id")
+	c.ProductId = field.NewUint32(table, "product_id")
+	c.Quantity = field.NewUint32(table, "quantity")
 
 	c.fillFieldMap()
 
@@ -96,7 +97,7 @@ func (c *cartItem) fillFieldMap() {
 	c.fieldMap["updated_at"] = c.UpdatedAt
 	c.fieldMap["deleted_at"] = c.DeletedAt
 	c.fieldMap["user_id"] = c.UserId
-	c.fieldMap["item_id"] = c.ItemId
+	c.fieldMap["product_id"] = c.ProductId
 	c.fieldMap["quantity"] = c.Quantity
 }
 
@@ -171,6 +172,44 @@ type ICartItemDo interface {
 	Returning(value interface{}, columns ...string) ICartItemDo
 	UnderlyingDB() *gorm.DB
 	schema.Tabler
+
+	GetByUserId(userId uint32) (result []*model.CartItem, err error)
+	GetByUserIdAndProductId(userId uint32, productId uint32) (result *model.CartItem, err error)
+}
+
+// GetByUserId get cart items by user id
+//
+// SELECT * FROM @@table WHERE user_id = @userId
+func (c cartItemDo) GetByUserId(userId uint32) (result []*model.CartItem, err error) {
+	var params []interface{}
+
+	var generateSQL strings.Builder
+	params = append(params, userId)
+	generateSQL.WriteString("SELECT * FROM cart_items WHERE user_id = ? ")
+
+	var executeSQL *gorm.DB
+	executeSQL = c.UnderlyingDB().Raw(generateSQL.String(), params...).Find(&result) // ignore_security_alert
+	err = executeSQL.Error
+
+	return
+}
+
+// GetByUserIdAndProductId get cart item by user id and item id
+//
+// SELECT * FROM @@table WHERE user_id = @userId AND product_id = @productId
+func (c cartItemDo) GetByUserIdAndProductId(userId uint32, productId uint32) (result *model.CartItem, err error) {
+	var params []interface{}
+
+	var generateSQL strings.Builder
+	params = append(params, userId)
+	params = append(params, productId)
+	generateSQL.WriteString("SELECT * FROM cart_items WHERE user_id = ? AND product_id = ? ")
+
+	var executeSQL *gorm.DB
+	executeSQL = c.UnderlyingDB().Raw(generateSQL.String(), params...).Take(&result) // ignore_security_alert
+	err = executeSQL.Error
+
+	return
 }
 
 func (c cartItemDo) Debug() ICartItemDo {

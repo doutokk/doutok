@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal"
+	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/mysql"
+	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/query"
 	"github.com/PengJingzhao/douyin-commerce/app/cart/conf"
 	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -12,6 +15,8 @@ import (
 )
 
 func main() {
+	dal.Init()
+	query.SetDefault(mysql.DB)
 	opts := kitexInit()
 
 	svr := cartservice.NewServer(new(CartServiceImpl), opts...)
