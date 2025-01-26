@@ -1,7 +1,8 @@
 package conf
 
 import (
-	"path/filepath"
+	"bytes"
+	_ "embed"
 	"sync"
 
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -12,8 +13,10 @@ import (
 )
 
 var (
-	conf *Config
-	once sync.Once
+	//go:embed conf.yaml
+	configFile []byte
+	conf       *Config
+	once       sync.Once
 )
 
 type Config struct {
@@ -67,13 +70,10 @@ func initConf() {
 		klog.Warn("Error loading .env file")
 	}
 
-	prefix := "conf"
-	confFileRelPath := filepath.Join(prefix, "conf.yaml")
-
 	conf = new(Config)
-	viper.SetConfigFile(confFileRelPath)
 	viper.SetConfigType("yaml")
-	if err := viper.ReadInConfig(); err != nil {
+	err = viper.ReadConfig(bytes.NewBuffer(configFile))
+	if err != nil {
 		panic(err)
 	}
 
