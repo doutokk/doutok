@@ -179,13 +179,13 @@ type ICartItemDo interface {
 
 // GetByUserId get cart items by user id
 //
-// SELECT * FROM @@table WHERE user_id = @userId
+// SELECT * FROM @@table WHERE user_id = @userId and deleted_at is null
 func (c cartItemDo) GetByUserId(userId uint32) (result []*model.CartItem, err error) {
 	var params []interface{}
 
 	var generateSQL strings.Builder
 	params = append(params, userId)
-	generateSQL.WriteString("SELECT * FROM cart_items WHERE user_id = ? ")
+	generateSQL.WriteString("SELECT * FROM cart_items WHERE user_id = ? and deleted_at is null ")
 
 	var executeSQL *gorm.DB
 	executeSQL = c.UnderlyingDB().Raw(generateSQL.String(), params...).Find(&result) // ignore_security_alert
@@ -196,14 +196,14 @@ func (c cartItemDo) GetByUserId(userId uint32) (result []*model.CartItem, err er
 
 // GetByUserIdAndProductId get cart item by user id and item id
 //
-// SELECT * FROM @@table WHERE user_id = @userId AND product_id = @productId
+// SELECT * FROM @@table WHERE user_id = @userId AND product_id = @productId and deleted_at is null
 func (c cartItemDo) GetByUserIdAndProductId(userId uint32, productId uint32) (result *model.CartItem, err error) {
 	var params []interface{}
 
 	var generateSQL strings.Builder
 	params = append(params, userId)
 	params = append(params, productId)
-	generateSQL.WriteString("SELECT * FROM cart_items WHERE user_id = ? AND product_id = ? ")
+	generateSQL.WriteString("SELECT * FROM cart_items WHERE user_id = ? AND product_id = ? and deleted_at is null ")
 
 	var executeSQL *gorm.DB
 	executeSQL = c.UnderlyingDB().Raw(generateSQL.String(), params...).Take(&result) // ignore_security_alert
