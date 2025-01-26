@@ -44,7 +44,11 @@ func kitexInit() (opts []server.Option) {
 	if err != nil {
 		panic(err)
 	}
+
+	//rpc
 	opts = append(opts, server.WithServiceAddr(addr))
+
+	//http
 
 	// service info
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
