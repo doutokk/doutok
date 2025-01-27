@@ -11,6 +11,7 @@ import (
 	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"strconv"
+	"sync"
 )
 
 type CheckoutService struct {
@@ -21,7 +22,6 @@ func NewCheckoutService(ctx context.Context) *CheckoutService {
 }
 
 // Run create note info
-// todo: 事务？
 func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.CheckoutResp, err error) {
 	// Finish your business logic.
 
@@ -31,13 +31,20 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	})
 	if err != nil {
 		klog.Error()
+		return
+	}
+	if getCartResp.GetCart() == nil {
+		err = fmt.Errorf("getCartResp.Cart is nil")
+		klog.Error(err)
+		return
 	}
 
-	cartItems := getCartResp.GetCart().Items
+	// 计算价格
 	var (
 		oi    []*order.OrderItem
 		price float32 = 0
 	)
+	cartItems := getCartResp.GetCart().Items
 	for _, cartItem := range cartItems {
 		productId := cartItem.ProductId
 		productResp, err := rpc.ProductClient.GetProduct(s.ctx, &product.GetProductReq{
@@ -45,8 +52,11 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 		})
 
 		if err != nil {
-			klog.Error()
+			klog.Error(err)
 			return
+		}
+		if productResp.GetProduct() == nil {
+			continue
 		}
 		cost := productResp.GetProduct().Price * float32(cartItem.Quantity)
 		price += cost
@@ -83,16 +93,6 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	}
 	klog.Info("PlaceOrder.resp:", orderResp)
 
-	// 3. 清空购物车
-	_, err = rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{
-		UserId: req.GetUserId(),
-	})
-	if err != nil {
-		err = fmt.Errorf("EmptyCart.err:%v", err)
-		klog.Error()
-		return
-	}
-
 	// 4. 支付
 	chargeReq := &payment.ChargeReq{
 		Amount:  price,
@@ -108,22 +108,48 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	}
 	chargeresp, err := rpc.PaymentClient.Charge(s.ctx, chargeReq)
 	if err != nil {
-		err = fmt.Errorf("Charge.err:%v", err)
-		klog.Error()
+		klog.Error("Charge.err:%v", err)
 		return
 	}
-	klog.Info("Charge.resp:", chargeresp)
+	klog.Info("Charge.resp:%s", chargeresp)
 
-	// 5. 标注订单已支付
-	_, err = rpc.OrderClient.MarkOrderPaid(s.ctx, &order.MarkOrderPaidReq{
-		OrderId: orderResp.Order.OrderId,
-		UserId:  req.GetUserId(),
-	})
+	var wg sync.WaitGroup
+	errChan := make(chan error, 2)
 
-	if err != nil {
-		err = fmt.Errorf("MarkOrderPaid.err:%v", err)
-		klog.Error()
-		return
+	// 下面貌似可以后台异步，但是要考虑失败怎么补偿
+	// 清空购物车
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		_, err := rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{
+			UserId: req.GetUserId(),
+		})
+		if err != nil {
+			errChan <- fmt.Errorf("EmptyCart.err:%v", err)
+		}
+	}()
+
+	// 标记已支付
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		_, err := rpc.OrderClient.MarkOrderPaid(s.ctx, &order.MarkOrderPaidReq{
+			OrderId: orderResp.Order.OrderId,
+			UserId:  req.GetUserId(),
+		})
+		if err != nil {
+			errChan <- fmt.Errorf("MarkOrderPaid.err:%v", err)
+		}
+	}()
+
+	wg.Wait()
+	close(errChan)
+
+	for err := range errChan {
+		if err != nil {
+			klog.Error(err)
+			return
+		}
 	}
 
 	return &checkout.CheckoutResp{
