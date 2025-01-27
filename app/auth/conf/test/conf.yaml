@@ -1,6 +1,6 @@
 kitex:
   service: "auth"
-  address: ":12001"
+  address: "127.0.0.1:12001"
   log_level: info
   log_file_name: "log/kitex.log"
   log_max_size: 10
@@ -9,7 +9,7 @@ kitex:
 
 registry:
   registry_address:
-    - 10.21.32.14:8600
+    - 127.0.0.1:8500
   username: ""
   password: ""
 

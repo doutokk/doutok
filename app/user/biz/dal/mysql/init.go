@@ -2,7 +2,9 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/model"
 	"github.com/PengJingzhao/douyin-commerce/app/user/conf"
+	"log"
 	"os"
 
 	"gorm.io/driver/mysql"
@@ -28,5 +30,10 @@ func Init() {
 	)
 	if err != nil {
 		panic(err)
+	}
+	// AutoMigrate User Table
+	err = DB.AutoMigrate(&model.User{})
+	if err != nil {
+		log.Fatal(err)
 	}
 }

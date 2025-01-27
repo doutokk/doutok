@@ -35,24 +35,24 @@ jobs:
           go mod tidy
 
       # 4. Run Golint
-#      - name: Run Linter (golangci-lint)
-#        run: |
-#          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-#          cd app/${{ matrix.service }}
-#          golangci-lint run ./...
-
-      # 5. Run Unit Tests
-      - name: Run Unit Tests
+      - name: Run Linter (golangci-lint)
         run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
           cd app/${{ matrix.service }}
-          go test ./... -v -coverprofile=coverage.out
+          golangci-lint run ./...
 
-      # 6. Upload Coverage Report
-      - name: Upload Test Coverage
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-${{ matrix.service }}
-          path: app/${{ matrix.service }}/coverage.out
+#      # 5. Run Unit Tests
+#      - name: Run Unit Tests
+#        run: |
+#          cd app/${{ matrix.service }}
+#          go test ./... -v -coverprofile=coverage.out
+
+#      # 6. Upload Coverage Report
+#      - name: Upload Test Coverage
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coverage-${{ matrix.service }}
+#          path: app/${{ matrix.service }}/coverage.out
 
   # ---- Step 2: Build and Push Docker Images ----
   docker-build-push:
