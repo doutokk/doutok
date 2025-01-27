@@ -23,3 +23,7 @@ tidy:
 .PHONY: run
 run:
 	@cd app/${svc} && go run .
+
+.PHONY: g
+run:
+	@cd app/order && cwgo server --type RPC --service order --module github.com/PengJingzhao/douyin-commerce/app/order --pass "-use github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/order.proto --template https://github.com/suyiiyii/cwgo-template.git
