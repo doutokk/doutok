@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/PengJingzhao/douyin-commerce/app/product/biz/model"
 	"github.com/PengJingzhao/douyin-commerce/app/product/conf"
 	"os"
 
@@ -26,6 +27,12 @@ func Init() {
 			SkipDefaultTransaction: true,
 		},
 	)
+	if err != nil {
+		panic(err)
+	}
+
+	// AutoMigrate Models
+	err = DB.AutoMigrate(&model.Product{}, &model.ProductCategory{})
 	if err != nil {
 		panic(err)
 	}
