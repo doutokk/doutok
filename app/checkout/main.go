@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/app/checkout/infra/rpc"
+	"github.com/joho/godotenv"
 	"net"
 	"time"
 
@@ -15,6 +17,9 @@ import (
 )
 
 func main() {
+	_ = godotenv.Load()
+	rpc.InitClient()
+
 	opts := kitexInit()
 
 	svr := checkoutservice.NewServer(new(CheckoutServiceImpl), opts...)
