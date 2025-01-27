@@ -7,7 +7,9 @@ import (
 
 type MarkOrderPaidService struct {
 	ctx context.Context
-} // NewMarkOrderPaidService new MarkOrderPaidService
+}
+
+// NewMarkOrderPaidService new MarkOrderPaidService
 func NewMarkOrderPaidService(ctx context.Context) *MarkOrderPaidService {
 	return &MarkOrderPaidService{ctx: ctx}
 }

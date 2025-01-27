@@ -12,6 +12,10 @@ gen-client: ## gen client code of {svc}. example: make gen-client svc=product �
 gen-server: ## gen service code of {svc}. example: make gen-server svc=product 不加这个--pass会生成一个kitex_gen
 	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/PengJingzhao/douyin-commerce/app/${svc} --pass "-use github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto
 
+.PHONY: gen-server-suyiiyii
+gen-server-suyiiyii: ## gen service code of {svc}. example: make gen-server svc=product 不加这个--pass会生成一个kitex_gen
+	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/PengJingzhao/douyin-commerce/app/${svc} --pass "-use github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto --template https://github.com/suyiiyii/cwgo-template.git
+
 .PHONY: work
 work:
 	@cd app/${svc} && go work use .
@@ -23,7 +27,3 @@ tidy:
 .PHONY: run
 run:
 	@cd app/${svc} && go run .
-
-.PHONY: g
-run:
-	@cd app/order && cwgo server --type RPC --service order --module github.com/PengJingzhao/douyin-commerce/app/order --pass "-use github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/order.proto --template https://github.com/suyiiyii/cwgo-template.git

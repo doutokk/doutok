@@ -7,7 +7,9 @@ import (
 
 type ListOrderService struct {
 	ctx context.Context
-} // NewListOrderService new ListOrderService
+}
+
+// NewListOrderService new ListOrderService
 func NewListOrderService(ctx context.Context) *ListOrderService {
 	return &ListOrderService{ctx: ctx}
 }

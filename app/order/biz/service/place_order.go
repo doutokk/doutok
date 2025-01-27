@@ -7,7 +7,9 @@ import (
 
 type PlaceOrderService struct {
 	ctx context.Context
-} // NewPlaceOrderService new PlaceOrderService
+}
+
+// NewPlaceOrderService new PlaceOrderService
 func NewPlaceOrderService(ctx context.Context) *PlaceOrderService {
 	return &PlaceOrderService{ctx: ctx}
 }

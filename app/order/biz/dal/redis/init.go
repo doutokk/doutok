@@ -4,7 +4,8 @@ import (
 	"context"
 
 	"github.com/PengJingzhao/douyin-commerce/app/order/conf"
-	
+
+	"github.com/redis/go-redis/v9"
 )
 
 var (
