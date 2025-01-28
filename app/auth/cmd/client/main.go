@@ -10,11 +10,11 @@ import (
 )
 
 func main() {
-	r, err := consul.NewConsulResolver("10.21.32.14:8600")
+	r, err := consul.NewConsulResolver("127.0.0.1:8500")
 	if err != nil {
 		log.Fatal(err)
 	}
-	cli, err := authservice.NewClient("auth.server", client2.WithResolver(r))
+	cli, err := authservice.NewClient("auth", client2.WithResolver(r))
 	if err != nil {
 		log.Fatal(err)
 	}

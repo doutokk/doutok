@@ -3,8 +3,9 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/model"
 	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/mysql"
+	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/query"
+	"github.com/PengJingzhao/douyin-commerce/app/user/biz/model"
 	user "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/user"
 )
 
@@ -23,11 +24,15 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 		return nil, errors.New("password do not match")
 	}
 	// 检查用户是否存在
-	var existingUser model.User
-	if err = mysql.DB.Where("email = ?", req.Email).First(&existingUser).Error; err == nil {
-		// 数据库查询到该邮箱
+	_, err = query.Q.User.GetOneByEmail(req.Email)
+	if err == nil {
 		return nil, errors.New("email already register")
 	}
+	//var existingUser model.User
+	//if err = mysql.DB.Where("email = ?", req.Email).First(&existingUser).Error; err == nil {
+	//	// 数据库查询到该邮箱
+	//	return nil, errors.New("email already register")
+	//}
 
 	// 创建用户
 	newUser := model.User{
