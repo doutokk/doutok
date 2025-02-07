@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/model"
+	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal/model"
 	"github.com/PengJingzhao/douyin-commerce/app/payment/conf"
 	"os"
 
@@ -23,8 +23,8 @@ func Init() {
 			SkipDefaultTransaction: true,
 		},
 	)
-	DB.AutoMigrate(&model.PaymentLog{})
 	if err != nil {
 		panic(err)
 	}
+	err = DB.AutoMigrate(&model.PaymentLog{})
 }

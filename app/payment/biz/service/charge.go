@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
+	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal/model"
 	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal/mysql"
-	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/model"
 	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
@@ -20,7 +20,7 @@ func NewChargeService(ctx context.Context) *ChargeService {
 // Run create note info
 func (s *ChargeService) Run(req *payment.ChargeReq) (resp *payment.ChargeResp, err error) {
 	_ = godotenv.Load()
-	// 略检测信用卡有效
+	//todo: 略检测信用卡有效，扣款
 	translationId, err := uuid.NewRandom()
 	if err != nil {
 		return nil, err
@@ -38,5 +38,4 @@ func (s *ChargeService) Run(req *payment.ChargeReq) (resp *payment.ChargeResp, e
 		return nil, err
 	}
 	return &payment.ChargeResp{TransactionId: translationId.String()}, nil
-	return
 }
