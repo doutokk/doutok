@@ -7,7 +7,11 @@ import (
 
 func main() {
 	mysql.Init()
-	err := mysql.DB.AutoMigrate(&model.User{})
+	err := mysql.DB.AutoMigrate(&model.Order{})
+	if err != nil {
+		panic(err)
+	}
+	err = mysql.DB.AutoMigrate(&model.OrderItem{})
 	if err != nil {
 		panic(err)
 	}

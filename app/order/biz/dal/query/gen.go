@@ -16,34 +16,39 @@ import (
 )
 
 var (
-	Q    = new(Query)
-	User *user
+	Q         = new(Query)
+	Order     *order
+	OrderItem *orderItem
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
-	User = &Q.User
+	Order = &Q.Order
+	OrderItem = &Q.OrderItem
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:   db,
-		User: newUser(db, opts...),
+		db:        db,
+		Order:     newOrder(db, opts...),
+		OrderItem: newOrderItem(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	User user
+	Order     order
+	OrderItem orderItem
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:   db,
-		User: q.User.clone(db),
+		db:        db,
+		Order:     q.Order.clone(db),
+		OrderItem: q.OrderItem.clone(db),
 	}
 }
 
@@ -57,18 +62,21 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:   db,
-		User: q.User.replaceDB(db),
+		db:        db,
+		Order:     q.Order.replaceDB(db),
+		OrderItem: q.OrderItem.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	User IUserDo
+	Order     IOrderDo
+	OrderItem IOrderItemDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		User: q.User.WithContext(ctx),
+		Order:     q.Order.WithContext(ctx),
+		OrderItem: q.OrderItem.WithContext(ctx),
 	}
 }
 
