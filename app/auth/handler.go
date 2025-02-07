@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/service"
-	"github.com/PengJingzhao/douyin-commerce/app/auth/kitex_gen/auth"
+	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth"
 )
 
 // AuthServiceImpl implements the last service interface defined in the IDL.

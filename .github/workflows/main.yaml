@@ -1,0 +1,116 @@
+name: Multi-service CI-CD with Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # ---- Step 1: Build, Lint, and Test ----
+  build-test-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # 设置作业超时时间为 30 分钟
+    strategy:
+      matrix:
+        service: [ auth, user, product, cart, checkout, payment ] # 针对每个服务分别执行任务
+    steps:
+      # 1. Checkout the code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2. Set up Go environment
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.4  # 修改为你的 Go 版本
+
+      # 3. Synchronize go.work dependencies
+      - name: Synchronize Dependencies
+        run: |
+          go work sync
+          cd app/${{ matrix.service }}
+          go mod tidy
+
+      # 4. Run Golint
+      - name: Run Linter (golangci-lint)
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          cd app/${{ matrix.service }}
+          golangci-lint run ./...
+
+#      # 5. Run Unit Tests
+#      - name: Run Unit Tests
+#        run: |
+#          cd app/${{ matrix.service }}
+#          go test ./... -v -coverprofile=coverage.out
+
+#      # 6. Upload Coverage Report
+#      - name: Upload Test Coverage
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coverage-${{ matrix.service }}
+#          path: app/${{ matrix.service }}/coverage.out
+
+  # ---- Step 2: Build and Push Docker Images ----
+  docker-build-push:
+    runs-on: ubuntu-latest
+    needs: build-test-lint
+    timeout-minutes: 30  # 设置作业超时时间为 30 分钟
+    strategy:
+      matrix:
+        service: [ auth, user, product, cart, checkout, payment ] # 针对每个服务分别执行任务
+    steps:
+      # 1. Checkout the code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2. Log in to DockerHub
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 3. Build Docker Image Using docker-compose
+      - name: Build Docker Image with docker-compose
+        run: |
+          cd app/${{ matrix.service }}
+          docker-compose build
+
+      # 4. Push Docker Image
+      - name: Push Docker Image
+        run: |
+          docker-compose push
+
+  # ---- Step 3: Deploy to Kubernetes or Production ----
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker-build-push
+    timeout-minutes: 30  # 设置作业超时时间为 30 分钟
+    strategy:
+      matrix:
+        service: [ auth, user, product, cart, checkout, payment ] # 针对每个服务分别执行任务
+    steps:
+      # 1. Checkout the code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2. Set up kubectl
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      # 3. Configure kubeconfig
+      - name: Configure kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+          export KUBECONFIG=$(pwd)/kubeconfig.yaml
+
+      # 4. Deploy services to Kubernetes
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/${{ matrix.service }}-deployment.yaml
