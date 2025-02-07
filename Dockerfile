@@ -9,17 +9,18 @@
 ################################################################################
 # Create a stage for building the application.
 ARG GO_VERSION=1.23.4
-ARG SVC=order
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS build
 WORKDIR /src
 
+ARG SVC=order
+ENV SERVICE=${SVC}
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
 # Leverage bind mounts to go.sum and go.mod to avoid having to copy them into
 # the container.
 RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,source=./app/order/go.sum,target=go.sum \
-    --mount=type=bind,source=./app/order/go.mod,target=go.mod \
+    --mount=type=bind,source=./app/${SERVICE}/go.sum,target=go.sum \
+    --mount=type=bind,source=./app/${SERVICE}/go.mod,target=go.mod \
     go mod download -x
 
 # This is the architecture you're building for, which is passed in by the builder.
@@ -32,7 +33,7 @@ ARG TARGETARCH
 # source code into the container.
 RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,target=. \
-    CGO_ENABLED=0 GOARCH=$TARGETARCH cd ./app/order && go build -o /bin/server .
+    CGO_ENABLED=0 GOARCH=$TARGETARCH cd ./app/${SERVICE} && go build -o /bin/server -mod=readonly .
 
 ################################################################################
 # Create a new stage for running the application that contains the minimal
