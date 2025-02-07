@@ -29,10 +29,9 @@ ARG TARGETARCH
 
 # Build the application.
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
-# Leverage a bind mount to the current directory to avoid having to copy the
 # source code into the container.
+COPY . .
 RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,target=. \
     CGO_ENABLED=0 GOARCH=$TARGETARCH cd ./app/${SERVICE} && go build -o /bin/server -mod=readonly .
 
 ################################################################################
