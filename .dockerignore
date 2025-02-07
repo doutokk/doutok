@@ -29,6 +29,6 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 LICENSE
-README.md
+app/order/readme.md
 
 **/*.exe
