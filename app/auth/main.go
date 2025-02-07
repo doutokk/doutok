@@ -1,12 +1,15 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/dal"
+	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth/authservice"
+	"github.com/joho/godotenv"
+	consul "github.com/kitex-contrib/registry-consul"
+	"log"
 	"net"
 	"time"
 
 	"github.com/PengJingzhao/douyin-commerce/app/auth/conf"
-
-	"github.com/PengJingzhao/douyin-commerce/app/auth/kitex_gen/auth/authservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -17,11 +20,19 @@ import (
 )
 
 func main() {
+	// load env
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+	//connect to mysql and redis
+	dal.Init()
+
 	opts := kitexInit()
 
 	svr := authservice.NewServer(new(AuthServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
@@ -33,12 +44,23 @@ func kitexInit() (opts []server.Option) {
 	if err != nil {
 		panic(err)
 	}
+
+	//rpc
 	opts = append(opts, server.WithServiceAddr(addr))
+
+	//http
 
 	// service info
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
+
+	//consul
+	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	if err != nil {
+		log.Fatal(err)
+	}
+	opts = append(opts, server.WithRegistry(r))
 
 	// klog
 	logger := kitexlogrus.NewLogger()
