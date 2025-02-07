@@ -28,7 +28,10 @@ func newOrderItem(db *gorm.DB, opts ...gen.DOOption) orderItem {
 
 	tableName := _orderItem.orderItemDo.TableName()
 	_orderItem.ALL = field.NewAsterisk(tableName)
-	_orderItem.ID = field.NewInt64(tableName, "id")
+	_orderItem.ID = field.NewUint(tableName, "id")
+	_orderItem.CreatedAt = field.NewTime(tableName, "created_at")
+	_orderItem.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_orderItem.DeletedAt = field.NewField(tableName, "deleted_at")
 	_orderItem.OrderID = field.NewString(tableName, "order_id")
 	_orderItem.ProductID = field.NewUint32(tableName, "product_id")
 	_orderItem.Quantity = field.NewInt32(tableName, "quantity")
@@ -43,7 +46,10 @@ type orderItem struct {
 	orderItemDo
 
 	ALL       field.Asterisk
-	ID        field.Int64
+	ID        field.Uint
+	CreatedAt field.Time
+	UpdatedAt field.Time
+	DeletedAt field.Field
 	OrderID   field.String
 	ProductID field.Uint32
 	Quantity  field.Int32
@@ -64,7 +70,10 @@ func (o orderItem) As(alias string) *orderItem {
 
 func (o *orderItem) updateTableName(table string) *orderItem {
 	o.ALL = field.NewAsterisk(table)
-	o.ID = field.NewInt64(table, "id")
+	o.ID = field.NewUint(table, "id")
+	o.CreatedAt = field.NewTime(table, "created_at")
+	o.UpdatedAt = field.NewTime(table, "updated_at")
+	o.DeletedAt = field.NewField(table, "deleted_at")
 	o.OrderID = field.NewString(table, "order_id")
 	o.ProductID = field.NewUint32(table, "product_id")
 	o.Quantity = field.NewInt32(table, "quantity")
@@ -85,8 +94,11 @@ func (o *orderItem) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (o *orderItem) fillFieldMap() {
-	o.fieldMap = make(map[string]field.Expr, 5)
+	o.fieldMap = make(map[string]field.Expr, 8)
 	o.fieldMap["id"] = o.ID
+	o.fieldMap["created_at"] = o.CreatedAt
+	o.fieldMap["updated_at"] = o.UpdatedAt
+	o.fieldMap["deleted_at"] = o.DeletedAt
 	o.fieldMap["order_id"] = o.OrderID
 	o.fieldMap["product_id"] = o.ProductID
 	o.fieldMap["quantity"] = o.Quantity
@@ -168,7 +180,7 @@ type IOrderItemDo interface {
 	GetByUserId(userId uint32) (result []*model.Order, err error)
 }
 
-// GetByUserId 根据用户ID获取订单列表
+// GetByUserId 根据用户 ID 获取订单列表
 //
 // SELECT * FROM orders WHERE user_id = @userId AND deleted_at is null
 func (o orderItemDo) GetByUserId(userId uint32) (result []*model.Order, err error) {

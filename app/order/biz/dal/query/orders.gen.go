@@ -28,6 +28,10 @@ func newOrder(db *gorm.DB, opts ...gen.DOOption) order {
 
 	tableName := _order.orderDo.TableName()
 	_order.ALL = field.NewAsterisk(tableName)
+	_order.ID = field.NewUint(tableName, "id")
+	_order.CreatedAt = field.NewInt32(tableName, "created_at")
+	_order.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_order.DeletedAt = field.NewField(tableName, "deleted_at")
 	_order.OrderID = field.NewString(tableName, "order_id")
 	_order.UserID = field.NewUint32(tableName, "user_id")
 	_order.UserCurrency = field.NewString(tableName, "user_currency")
@@ -37,7 +41,6 @@ func newOrder(db *gorm.DB, opts ...gen.DOOption) order {
 	_order.State = field.NewString(tableName, "state")
 	_order.Country = field.NewString(tableName, "country")
 	_order.ZipCode = field.NewInt32(tableName, "zip_code")
-	_order.CreatedAt = field.NewInt32(tableName, "created_at")
 	_order.PaidStatus = field.NewBool(tableName, "paid_status")
 	_order.OrderItems = orderHasManyOrderItems{
 		db: db.Session(&gorm.Session{}),
@@ -54,6 +57,10 @@ type order struct {
 	orderDo
 
 	ALL           field.Asterisk
+	ID            field.Uint
+	CreatedAt     field.Int32
+	UpdatedAt     field.Time
+	DeletedAt     field.Field
 	OrderID       field.String
 	UserID        field.Uint32
 	UserCurrency  field.String
@@ -63,7 +70,6 @@ type order struct {
 	State         field.String
 	Country       field.String
 	ZipCode       field.Int32
-	CreatedAt     field.Int32
 	PaidStatus    field.Bool
 	OrderItems    orderHasManyOrderItems
 
@@ -82,6 +88,10 @@ func (o order) As(alias string) *order {
 
 func (o *order) updateTableName(table string) *order {
 	o.ALL = field.NewAsterisk(table)
+	o.ID = field.NewUint(table, "id")
+	o.CreatedAt = field.NewInt32(table, "created_at")
+	o.UpdatedAt = field.NewTime(table, "updated_at")
+	o.DeletedAt = field.NewField(table, "deleted_at")
 	o.OrderID = field.NewString(table, "order_id")
 	o.UserID = field.NewUint32(table, "user_id")
 	o.UserCurrency = field.NewString(table, "user_currency")
@@ -91,7 +101,6 @@ func (o *order) updateTableName(table string) *order {
 	o.State = field.NewString(table, "state")
 	o.Country = field.NewString(table, "country")
 	o.ZipCode = field.NewInt32(table, "zip_code")
-	o.CreatedAt = field.NewInt32(table, "created_at")
 	o.PaidStatus = field.NewBool(table, "paid_status")
 
 	o.fillFieldMap()
@@ -109,7 +118,11 @@ func (o *order) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (o *order) fillFieldMap() {
-	o.fieldMap = make(map[string]field.Expr, 12)
+	o.fieldMap = make(map[string]field.Expr, 15)
+	o.fieldMap["id"] = o.ID
+	o.fieldMap["created_at"] = o.CreatedAt
+	o.fieldMap["updated_at"] = o.UpdatedAt
+	o.fieldMap["deleted_at"] = o.DeletedAt
 	o.fieldMap["order_id"] = o.OrderID
 	o.fieldMap["user_id"] = o.UserID
 	o.fieldMap["user_currency"] = o.UserCurrency
@@ -119,7 +132,6 @@ func (o *order) fillFieldMap() {
 	o.fieldMap["state"] = o.State
 	o.fieldMap["country"] = o.Country
 	o.fieldMap["zip_code"] = o.ZipCode
-	o.fieldMap["created_at"] = o.CreatedAt
 	o.fieldMap["paid_status"] = o.PaidStatus
 
 }
@@ -270,7 +282,7 @@ type IOrderDo interface {
 	GetByUserId(userId uint32) (result []*model.Order, err error)
 }
 
-// GetByUserId 根据用户ID获取订单列表
+// GetByUserId 根据用户 ID 获取订单列表
 //
 // SELECT * FROM orders WHERE user_id = @userId AND deleted_at is null
 func (o orderDo) GetByUserId(userId uint32) (result []*model.Order, err error) {
