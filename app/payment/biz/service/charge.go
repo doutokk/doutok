@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal/model"
 	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal/mysql"
+	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/model"
 	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
