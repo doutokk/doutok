@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal"
+	"github.com/joho/godotenv"
 	"net"
 	"time"
 
@@ -10,16 +12,28 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
+	registryconsul "github.com/kitex-contrib/registry-consul"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
+	_ = godotenv.Load()
+
 	opts := kitexInit()
+	dal.Init()
+
+	// 添加注册中心
+	r, err := registryconsul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	if err != nil {
+		klog.Fatal(err)
+	}
+
+	opts = append(opts, server.WithRegistry(r))
 
 	svr := paymentservice.NewServer(new(PaymentServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
