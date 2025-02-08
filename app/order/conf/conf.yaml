@@ -1,0 +1,22 @@
+kitex:
+  service: "order"
+  address: ":8888"
+  log_level: info
+
+registry:
+  registry_address:
+    - 127.0.0.1:2379
+  username: ""
+  password: ""
+
+mysql:
+  host: ""
+  port: ""
+  username: ""
+  password: ""
+
+redis:
+  address: "127.0.0.1:6379"
+  username: ""
+  password: ""
+  db: 0

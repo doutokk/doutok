@@ -1,7 +1,7 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250127132023-b75fcc2c0312 h1:HwJaY2hn5f7zZ9qRO+pr/zcChwZAbvJ05Kn5AVNyM8g=
-github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250127132023-b75fcc2c0312/go.mod h1:jKhqx6Oo9AjnJd2n8wEexSKP9uZKouW0CuhdeWmW/PE=
+github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250128130054-c886daaef4ef h1:WXF1aYshIuT8bsHhSJz/vNoYUFM2K4b20R0eVAoR+aI=
+github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250128130054-c886daaef4ef/go.mod h1:jKhqx6Oo9AjnJd2n8wEexSKP9uZKouW0CuhdeWmW/PE=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=
 github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da h1:8GUt8eRujhVEGZFFEjBj46YV4rDjvGrNxb0KMWYkL2I=
 github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmVTwzkszR9V5SSuryQ31EELlFMUz1kKyl939pY=
