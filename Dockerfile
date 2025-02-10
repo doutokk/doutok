@@ -21,7 +21,7 @@ ENV SERVICE=${SVC}
 RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,source=./app/${SERVICE}/go.sum,target=go.sum \
     --mount=type=bind,source=./app/${SERVICE}/go.mod,target=go.mod \
-    go mod download -x
+    go mod download -x -mod=readonly
 
 # This is the architecture you're building for, which is passed in by the builder.
 # Placing it here allows the previous steps to be cached across architectures.
