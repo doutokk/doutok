@@ -28,10 +28,10 @@ jobs:
           # 查找所有包含 go.mod 的子目录并执行 go mod tidy
           find . -name 'go.mod' -execdir go mod tidy \;
 
-#      - name: 执行 go work sync
-#        shell: bash
-#        run: |
-#          find . -name 'go.work' -execdir go work sync \;
+      - name: 执行 go work sync
+        shell: bash
+        run: |
+          find . -name 'go.work' -execdir go work sync \;
 
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@v5.0.1
