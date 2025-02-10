@@ -3,6 +3,7 @@ package conf
 import (
 	"bytes"
 	_ "embed"
+	"strings"
 	"sync"
 
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -96,6 +97,12 @@ func initConf() {
 	err = viper.Unmarshal(conf)
 	if err != nil {
 		panic(err)
+	}
+
+	// Manually parse the registry address environment variable
+	registryAddress := viper.GetString("registry.registry_address")
+	if registryAddress != "" {
+		conf.Registry.RegistryAddress = strings.Split(registryAddress, ",")
 	}
 
 	if err := validator.Validate(conf); err != nil {

@@ -9,6 +9,7 @@ import (
 	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal/mysql"
 	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal/query"
 	"github.com/PengJingzhao/douyin-commerce/app/order/conf"
+	"github.com/PengJingzhao/douyin-commerce/common/serversuite"
 	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order/orderservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -44,6 +45,13 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
+
+	// registry
+	opts = append(opts,
+		server.WithSuite(serversuite.CommonServerSuite{
+			CurrentServiceName: conf.GetConf().Kitex.Service,
+			RegistryAddr:       conf.GetConf().Registry.RegistryAddress[0],
+		}))
 
 	// klog
 	logger := kitexlogrus.NewLogger()
