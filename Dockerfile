@@ -18,10 +18,9 @@ ENV SERVICE=${SVC}
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
 # Leverage bind mounts to go.sum and go.mod to avoid having to copy them into
 # the container.
+COPY ./app/${SERVICE}/go.mod ./app/${SERVICE}/go.sum ./app/${SERVICE}/
 RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,source=./app/${SERVICE}/go.sum,target=go.sum \
-    --mount=type=bind,source=./app/${SERVICE}/go.mod,target=go.mod \
-    go mod download -x -mod=readonly
+    cd ./app/${SERVICE} && go mod download -x
 
 # This is the architecture you're building for, which is passed in by the builder.
 # Placing it here allows the previous steps to be cached across architectures.
