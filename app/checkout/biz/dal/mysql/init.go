@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"fmt"
 	"github.com/PengJingzhao/douyin-commerce/app/checkout/conf"
 
 	"gorm.io/driver/mysql"
@@ -10,10 +11,13 @@ import (
 var (
 	DB  *gorm.DB
 	err error
+	c   = conf.GetConf()
 )
 
 func Init() {
-	DB, err = gorm.Open(mysql.Open(conf.GetConf().MySQL.DSN),
+	dsn := "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+
+	DB, err = gorm.Open(mysql.Open(fmt.Sprintf(dsn, c.MySQL.Username, c.MySQL.Password, c.MySQL.Host, c.MySQL.Port, c.Kitex.Service)),
 		&gorm.Config{
 			PrepareStmt:            true,
 			SkipDefaultTransaction: true,
