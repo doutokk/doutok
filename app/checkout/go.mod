@@ -15,6 +15,7 @@ require (
 	gopkg.in/validator.v2 v2.0.1
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.5.7
+	gorm.io/gen v0.3.26
 	gorm.io/gorm v1.25.12
 )
 
@@ -41,6 +42,7 @@ require (
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/pprof v0.0.0-20240727154555-813a5fbdbec8 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/jhump/protoreflect v1.8.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -63,13 +65,18 @@ require (
 	go.opentelemetry.io/otel/trace v1.25.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.6.0 // indirect
+	golang.org/x/mod v0.22.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/tools v0.29.0 // indirect
 	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240401170217-c3f982113cda // indirect
 	google.golang.org/grpc v1.63.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gorm.io/datatypes v1.2.5 // indirect
+	gorm.io/hints v1.1.2 // indirect
+	gorm.io/plugin/dbresolver v1.5.3 // indirect
 )
