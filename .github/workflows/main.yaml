@@ -2,11 +2,8 @@ name: Multi-service CI-CD with Docker Compose
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    tags: 
+      - foo
 
 jobs:
   # ---- Step 1: Build, Lint, and Test ----
