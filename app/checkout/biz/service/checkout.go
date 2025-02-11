@@ -53,7 +53,7 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 
 		if err != nil {
 			klog.Error(err)
-			return
+			return nil, err
 		}
 		if productResp.GetProduct() == nil {
 			continue
@@ -148,7 +148,7 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	for err := range errChan {
 		if err != nil {
 			klog.Error(err)
-			return
+			return nil, err
 		}
 	}
 
