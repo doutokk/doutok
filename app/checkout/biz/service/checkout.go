@@ -47,13 +47,14 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	cartItems := getCartResp.GetCart().Items
 	for _, cartItem := range cartItems {
 		productId := cartItem.ProductId
-		productResp, err := rpc.ProductClient.GetProduct(s.ctx, &product.GetProductReq{
+		productResp, resultErr := rpc.ProductClient.GetProduct(s.ctx, &product.GetProductReq{
 			Id: productId,
 		})
 
-		if err != nil {
+		if resultErr != nil {
+			err = resultErr
 			klog.Error(err)
-			return nil, err
+			return
 		}
 		if productResp.GetProduct() == nil {
 			continue
@@ -121,11 +122,11 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		_, err := rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{
+		_, resultErr := rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{
 			UserId: req.GetUserId(),
 		})
-		if err != nil {
-			errChan <- fmt.Errorf("EmptyCart.err:%v", err)
+		if resultErr != nil {
+			errChan <- fmt.Errorf("EmptyCart.err:%v", resultErr)
 		}
 	}()
 
@@ -133,20 +134,21 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		_, err := rpc.OrderClient.MarkOrderPaid(s.ctx, &order.MarkOrderPaidReq{
+		_, resultErr := rpc.OrderClient.MarkOrderPaid(s.ctx, &order.MarkOrderPaidReq{
 			OrderId: orderResp.Order.OrderId,
 			UserId:  req.GetUserId(),
 		})
-		if err != nil {
-			errChan <- fmt.Errorf("MarkOrderPaid.err:%v", err)
+		if resultErr != nil {
+			errChan <- fmt.Errorf("MarkOrderPaid.err:%v", resultErr)
 		}
 	}()
 
 	wg.Wait()
 	close(errChan)
 
-	for err := range errChan {
-		if err != nil {
+	for resultErr := range errChan {
+		if resultErr != nil {
+			err = resultErr
 			klog.Error(err)
 			return nil, err
 		}
