@@ -3,7 +3,9 @@ module github.com/PengJingzhao/douyin-commerce/common
 go 1.23.4
 
 require (
+	github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250211104842-5903a00cecf5
 	github.com/cloudwego/kitex v0.12.1
+	github.com/golang/mock v1.6.0
 	github.com/hertz-contrib/obs-opentelemetry/provider v0.3.0
 	github.com/kitex-contrib/monitor-prometheus v0.2.0
 	github.com/kitex-contrib/obs-opentelemetry v0.2.9
@@ -69,7 +71,6 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.48.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/tidwall/gjson v1.17.3 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
