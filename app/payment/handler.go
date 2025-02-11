@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/service"
-	
+	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
 )
 
 // PaymentServiceImpl implements the last service interface defined in the IDL.

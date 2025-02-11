@@ -4,9 +4,11 @@ use (
 	./app/auth
 	./app/cart
 	./app/checkout
+	./app/order
 	./app/payment
 	./app/product
 	./app/user
+	common
 	rpc_gen
 )
 

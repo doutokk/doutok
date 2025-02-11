@@ -2,11 +2,11 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/PengJingzhao/douyin-commerce/app/user/biz/model"
 	"github.com/PengJingzhao/douyin-commerce/app/user/conf"
-	"os"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"log"
 )
 
 var (
@@ -15,11 +15,16 @@ var (
 )
 
 func Init() {
+	//dsn := fmt.Sprintf(conf.GetConf().MySQL.DSN,
+	//	os.Getenv("MYSQL_USER"),
+	//	os.Getenv("MYSQL_PASSWORD"),
+	//	os.Getenv("MYSQL_HOST"),
+	//	os.Getenv("MYSQL_DATABASE"))
 	dsn := fmt.Sprintf(conf.GetConf().MySQL.DSN,
-		os.Getenv("MYSQL_USER"),
-		os.Getenv("MYSQL_PASSWORD"),
-		os.Getenv("MYSQL_HOST"),
-		os.Getenv("MYSQL_DATABASE"))
+		"root",
+		"2048711712P!",
+		"127.0.0.1",
+		"doutok")
 	DB, err = gorm.Open(mysql.Open(dsn),
 		&gorm.Config{
 			PrepareStmt:            true,
@@ -28,5 +33,10 @@ func Init() {
 	)
 	if err != nil {
 		panic(err)
+	}
+	// AutoMigrate User Table
+	err = DB.AutoMigrate(&model.User{})
+	if err != nil {
+		log.Fatal(err)
 	}
 }
