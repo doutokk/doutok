@@ -5,8 +5,8 @@ go 1.23.4
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
-	github.com/PengJingzhao/douyin-commerce/common v0.0.0-20250210090436-f42dc0a7533b
-	github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250210090436-f42dc0a7533b
+	github.com/PengJingzhao/douyin-commerce/common v0.0.0-20250212063211-6aaa210e9aa4
+	github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250211104842-5903a00cecf5
 	github.com/brianvoe/gofakeit/v6 v6.16.0
 	github.com/cloudwego/kitex v0.12.1
 	github.com/golang/mock v1.6.0

@@ -1,5 +1,5 @@
 kitex:
-  service: "order"
+  service: "checkout"
   address: ":8888"
   log_level: info
 
