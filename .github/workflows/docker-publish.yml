@@ -110,29 +110,31 @@ jobs:
     outputs:
       version: ${{ steps.meta.outputs.version }}
 
-#  update-manifest:
-#    runs-on: ubuntu-latest
-#    needs: [ "build" ]
-#    permissions:
-#      contents: write
-#    steps:
-#      - name: Checkout manifest
-#        if: github.event_name == 'push'
-#        uses: actions/checkout@v4
-#        with:
-#          ref: manifest
-#          token: ${{ secrets.GITHUBTOKEN }}
-#      - name: Update manifest
-#        if: github.event_name == 'push'
-#        uses: mikefarah/yq@master
-#        with:
-#          cmd: yq eval '.tag = "${{ needs.build.outputs.version }}"' -i values.yaml
-#      - name: Git Auto Commit
-#        if: github.event_name == 'push'
-#        uses: stefanzweifel/git-auto-commit-action@v5.0.1
-#        with:
-#          commit_message: "Update deployment image tag to ${{ needs.build.outputs.version }}"
-#          branch: manifest
-#          commit_user_name: "github-actions[bot]"
-#          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-#          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+  update-manifest:
+    runs-on: ubuntu-latest
+    needs: [ "build" ]
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout manifest
+        if: github.event_name == 'push'
+        uses: actions/checkout@v4
+        with:
+          repository: suyiiyii/doutok-manifest
+          ref: main
+          token: ${{ secrets.GH_TOKEN }}
+      - name: Update manifest
+        if: github.event_name == 'push'
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq eval '.tag = "${{ needs.build.outputs.version }}"' -i values.yaml
+      - name: Git Auto Commit
+        if: github.event_name == 'push'
+        uses: stefanzweifel/git-auto-commit-action@v5.0.1
+        with:
+          commit_message: "Update deployment image tag to ${{ needs.build.outputs.version }}"
+          branch: main
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
