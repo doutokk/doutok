@@ -27,3 +27,8 @@ tidy:
 .PHONY: run
 run:
 	@cd app/${svc} && go run .
+
+.PHONY: mock
+source ?= ${svc}"service"
+mock:
+	@cd app/${svc} && mockgen -source=../../rpc_gen/kitex_gen/${svc}/${source}/client.go -destination=../../common/mocks/${svc}"clientMock".go -package=mocks -mock_names "Client"="Mock"${svc}"Client"
