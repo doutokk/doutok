@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/doutokk/doutok/common/mtl"
 	"net"
 	"os"
 
@@ -18,6 +19,9 @@ import (
 )
 
 func main() {
+	serviceName := conf.GetConf().Kitex.Service
+	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
+	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	// use go run cmd/gorm/main.go to migrate the database
 	dal.Init()
 	// use go run cmd/gorm_gen/main.go to generate the code
