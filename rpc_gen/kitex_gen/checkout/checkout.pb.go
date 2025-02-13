@@ -8,7 +8,7 @@ package checkout
 
 import (
 	context "context"
-	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
+	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

@@ -3,8 +3,8 @@
 package orderservice
 
 import (
-	order "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order"
 	server "github.com/cloudwego/kitex/server"
+	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
 // NewInvoker creates a server.Invoker with the given handler and options.

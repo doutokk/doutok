@@ -4,9 +4,9 @@ package paymentservice
 
 import (
 	"context"
-	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
+	
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.

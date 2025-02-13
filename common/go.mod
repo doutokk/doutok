@@ -1,9 +1,9 @@
-module github.com/PengJingzhao/douyin-commerce/common
+module github.com/doutokk/doutok/common
 
 go 1.23.4
 
 require (
-	github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250211104842-5903a00cecf5
+	github.com/doutokk/doutok/rpc_gen v0.0.0-20250211104842-5903a00cecf5
 	github.com/cloudwego/kitex v0.12.1
 	github.com/golang/mock v1.6.0
 	github.com/hertz-contrib/obs-opentelemetry/provider v0.3.0

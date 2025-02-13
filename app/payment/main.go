@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal"
-	"github.com/PengJingzhao/douyin-commerce/app/payment/conf"
-	"github.com/PengJingzhao/douyin-commerce/common/mtl"
-	"github.com/PengJingzhao/douyin-commerce/common/serversuite"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment/paymentservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
+	"github.com/doutokk/doutok/app/payment/biz/dal"
+	"github.com/doutokk/doutok/app/payment/conf"
+	"github.com/doutokk/doutok/common/mtl"
+	"github.com/doutokk/doutok/common/serversuite"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
 	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"net"

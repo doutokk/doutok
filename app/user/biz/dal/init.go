@@ -1,8 +1,8 @@
 package dal
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/mysql"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/redis"
+	"github.com/doutokk/doutok/app/user/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/user/biz/dal/redis"
 )
 
 func Init() {

@@ -2,16 +2,16 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/common/mtl"
+	"github.com/doutokk/doutok/common/mtl"
 	"net"
 	"os"
 
-	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal"
-	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal/mysql"
-	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal/query"
-	"github.com/PengJingzhao/douyin-commerce/app/order/conf"
-	"github.com/PengJingzhao/douyin-commerce/common/serversuite"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order/orderservice"
+	"github.com/doutokk/doutok/app/order/biz/dal"
+	"github.com/doutokk/doutok/app/order/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/order/biz/dal/query"
+	"github.com/doutokk/doutok/app/order/conf"
+	"github.com/doutokk/doutok/common/serversuite"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"

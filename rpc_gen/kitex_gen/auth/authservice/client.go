@@ -4,9 +4,9 @@ package authservice
 
 import (
 	"context"
-	auth "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
+	auth "github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.

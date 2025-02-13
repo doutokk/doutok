@@ -3,7 +3,7 @@ package mysql
 import (
 	"fmt"
 
-	"github.com/PengJingzhao/douyin-commerce/app/order/conf"
+	"github.com/doutokk/doutok/app/order/conf"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

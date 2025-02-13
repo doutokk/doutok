@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/auth/biz/dal/mysql"
 	"gorm.io/gen"
 )
 

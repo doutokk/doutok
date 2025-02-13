@@ -5,10 +5,10 @@ package checkoutservice
 import (
 	"context"
 	"errors"
-	checkout "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	streaming "github.com/cloudwego/kitex/pkg/streaming"
+	checkout "github.com/doutokk/doutok/rpc_
 	proto "google.golang.org/protobuf/proto"
 )
 

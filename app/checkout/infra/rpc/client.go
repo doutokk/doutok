@@ -1,11 +1,11 @@
 package rpc
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/checkout/conf"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart/cartservice"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order/orderservice"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment/paymentservice"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product/productcatalogservice"
+	"github.com/doutokk/doutok/app/checkout/conf"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 
 	"sync"
 )

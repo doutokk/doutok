@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/conf"
+	"github.com/doutokk/doutok/app/cart/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

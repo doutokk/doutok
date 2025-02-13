@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/model"
+	"github.com/doutokk/doutok/app/cart/biz/dal/model"
 )
 
 func newCartItem(db *gorm.DB, opts ...gen.DOOption) cartItem {

@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth/authservice"
 	client2 "github.com/cloudwego/kitex/client"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	consul "github.com/kitex-contrib/registry-consul"
 	"log"
 )

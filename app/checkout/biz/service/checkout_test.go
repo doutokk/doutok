@@ -2,14 +2,14 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/checkout/infra/rpc"
-	"github.com/PengJingzhao/douyin-commerce/common/mocks"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
-	checkout "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product"
 	"github.com/brianvoe/gofakeit/v6"
+	"github.com/doutokk/doutok/app/checkout/infra/rpc"
+	"github.com/doutokk/doutok/common/mocks"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
+	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 	"github.com/golang/mock/gomock"
 	"strconv"
 	"testing"
@@ -18,7 +18,7 @@ import (
 func TestCheckout_Run(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	ctx := context.Background()
-	// 初始化mock对象
+	// 初始化 mock 对象
 	cartClient := mocks.NewMockcartClient(ctrl)
 	productClient := mocks.NewMockproductClient(ctrl)
 	orderClient := mocks.NewMockorderClient(ctrl)
@@ -28,7 +28,7 @@ func TestCheckout_Run(t *testing.T) {
 	rpc.OrderClient = orderClient
 	rpc.PaymentClient = paymentClient
 
-	// 设置mock返回逻辑
+	// 设置 mock 返回逻辑
 	cartItems := []*cart.CartItem{
 		{
 			ProductId: 1,
@@ -57,7 +57,7 @@ func TestCheckout_Run(t *testing.T) {
 	// 创建订单结果
 	odResult := &order.OrderResult{}
 	var orderId int = gofakeit.Number(100000, 999999)
-	odResult.OrderId = strconv.Itoa(orderId) // 生成随机订单ID
+	odResult.OrderId = strconv.Itoa(orderId) // 生成随机订单 ID
 	orderClient.EXPECT().
 		PlaceOrder(ctx, gomock.Any()).
 		Return(&order.PlaceOrderResp{
@@ -68,7 +68,7 @@ func TestCheckout_Run(t *testing.T) {
 	paymentClient.EXPECT().
 		Charge(ctx, gomock.Any()).
 		Return(&payment.ChargeResp{
-			TransactionId: "123", // 返回的交易ID
+			TransactionId: "123", // 返回的交易 ID
 		}, nil)
 
 	// 标记订单已付款

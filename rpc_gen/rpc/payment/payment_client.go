@@ -2,11 +2,11 @@ package payment
 
 import (
 	"context"
-	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
+	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment/paymentservice"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
 )
 
 type RPCClient interface {

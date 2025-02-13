@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/dal"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth/authservice"
+	"github.com/doutokk/doutok/app/auth/biz/dal"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	"github.com/joho/godotenv"
 	consul "github.com/kitex-contrib/registry-consul"
 	"log"
 	"net"
 	"time"
 
-	"github.com/PengJingzhao/douyin-commerce/app/auth/conf"
+	"github.com/doutokk/doutok/app/auth/conf"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"

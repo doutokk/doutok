@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal/query"
-	order "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order"
+	"github.com/doutokk/doutok/app/order/biz/dal/query"
+	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
 type MarkOrderPaidService struct {

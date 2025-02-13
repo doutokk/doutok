@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/mysql"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/query"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/model"
-	user "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/user"
+	"github.com/doutokk/doutok/app/user/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/user/biz/dal/query"
+	"github.com/doutokk/doutok/app/user/biz/model"
+	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 
 type RegisterService struct {

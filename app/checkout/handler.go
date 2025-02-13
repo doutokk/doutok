@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/checkout/biz/service"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout"
+	"github.com/doutokk/doutok/app/checkout/biz/service"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
 )
 
 // CheckoutServiceImpl implements the last service interface defined in the IDL.

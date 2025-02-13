@@ -8,7 +8,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	order "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order"
+	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	callopt "github.com/cloudwego/kitex/client/callopt"
 	gomock "github.com/golang/mock/gomock"
 )

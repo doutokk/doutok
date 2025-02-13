@@ -1,16 +1,16 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/mysql"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/query"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/conf"
-	"github.com/PengJingzhao/douyin-commerce/common/mtl"
-	"github.com/PengJingzhao/douyin-commerce/common/serversuite"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/doutokk/doutok/app/cart/biz/dal"
+	"github.com/doutokk/doutok/app/cart/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/cart/biz/dal/query"
+	"github.com/doutokk/doutok/app/cart/conf"
+	"github.com/doutokk/doutok/common/mtl"
+	"github.com/doutokk/doutok/common/serversuite"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"net"
 	"os"

@@ -2,8 +2,8 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/model"
-	"github.com/PengJingzhao/douyin-commerce/app/user/conf"
+	"github.com/doutokk/doutok/app/user/biz/model"
+	"github.com/doutokk/doutok/app/user/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"

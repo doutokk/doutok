@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/query"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
+	"github.com/doutokk/doutok/app/cart/biz/dal/query"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 )
 
 type EmptyCartService struct {

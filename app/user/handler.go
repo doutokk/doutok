@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/service"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/user"
+	"github.com/doutokk/doutok/app/user/biz/service"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 
 // UserServiceImpl implements the last service interface defined in the IDL.

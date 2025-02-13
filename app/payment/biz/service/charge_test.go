@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment/paymentservice"
 	"github.com/cloudwego/kitex/client"
+	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
 	consul "github.com/kitex-contrib/registry-consul"
 	"testing"
 )
@@ -14,7 +14,7 @@ func TestCharge_Run(t *testing.T) {
 	ctx := context.Background()
 	// init req and assert value
 
-	// 连consul
+	// 连 consul
 	r, err := consul.NewConsulResolver("127.0.0.1:8500")
 	cli, err := paymentservice.NewClient("payment", client.WithResolver(r))
 

@@ -6,10 +6,10 @@ package query
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/user/biz/dal/mysql"
 	"strings"
 
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/model"
+	"github.com/doutokk/doutok/app/user/biz/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"

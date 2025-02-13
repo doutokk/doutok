@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/utils"
-	auth "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth"
+	"github.com/doutokk/doutok/app/auth/biz/utils"
+	auth "github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	"time"
 )
 
@@ -14,7 +14,7 @@ func NewDeliverTokenByRPCService(ctx context.Context) *DeliverTokenByRPCService 
 	return &DeliverTokenByRPCService{ctx: ctx}
 }
 
-// 分发token
+// 分发 token
 func (s *DeliverTokenByRPCService) Run(req *auth.DeliverTokenReq) (resp *auth.DeliveryResp, err error) {
 	// Finish your business logic.
 	userId := req.UserId

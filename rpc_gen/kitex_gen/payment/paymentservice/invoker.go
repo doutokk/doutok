@@ -3,8 +3,8 @@
 package paymentservice
 
 import (
-	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
 	server "github.com/cloudwego/kitex/server"
+	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 )
 
 // NewInvoker creates a server.Invoker with the given handler and options.

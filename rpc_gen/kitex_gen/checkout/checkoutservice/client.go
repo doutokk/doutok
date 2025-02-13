@@ -4,9 +4,9 @@ package checkoutservice
 
 import (
 	"context"
-	checkout "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
+	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.

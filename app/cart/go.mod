@@ -1,12 +1,10 @@
-module github.com/PengJingzhao/douyin-commerce/app/cart
+module github.com/doutokk/doutok/app/cart
 
 go 1.23.4
 
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
-	github.com/PengJingzhao/douyin-commerce/common v0.0.0-20250208011330-af1614c0d78c
-	github.com/PengJingzhao/douyin-commerce/rpc_gen v0.0.0-20250124024131-19d40727ba32
 	github.com/cloudwego/kitex v0.12.1
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b

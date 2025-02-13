@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal/model"
-	"github.com/PengJingzhao/douyin-commerce/app/payment/biz/dal/mysql"
-	"github.com/PengJingzhao/douyin-commerce/app/payment/conf"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/doutokk/doutok/app/payment/biz/dal/model"
+	"github.com/doutokk/doutok/app/payment/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/payment/conf"
 	mysqldb "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

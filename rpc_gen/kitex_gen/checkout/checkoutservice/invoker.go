@@ -3,8 +3,8 @@
 package checkoutservice
 
 import (
-	checkout "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout"
 	server "github.com/cloudwego/kitex/server"
+	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
 )
 
 // NewInvoker creates a server.Invoker with the given handler and options.

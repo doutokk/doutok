@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	"testing"
 )
 

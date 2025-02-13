@@ -3,13 +3,13 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/PengJingzhao/douyin-commerce/app/checkout/infra/rpc"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
-	checkout "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/doutokk/doutok/app/checkout/infra/rpc"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
+	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 	"strconv"
 	"sync"
 )
@@ -156,7 +156,7 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 
 	return &checkout.CheckoutResp{
 		OrderId: orderResp.Order.OrderId,
-		// 交易生成的id
+		// 交易生成的 id
 		TransactionId: chargeresp.TransactionId,
 	}, nil
 }

@@ -1,7 +1,7 @@
 package dal
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/order/biz/dal/mysql"
 )
 
 func Init() {

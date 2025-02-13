@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/PengJingzhao/douyin-commerce/app/user/biz/dal/query"
-	user "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/user"
+	"github.com/doutokk/doutok/app/user/biz/dal/query"
+	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 
 type LoginService struct {

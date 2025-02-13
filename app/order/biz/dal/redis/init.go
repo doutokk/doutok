@@ -3,7 +3,7 @@ package redis
 import (
 	"context"
 
-	"github.com/PengJingzhao/douyin-commerce/app/order/conf"
+	"github.com/doutokk/doutok/app/order/conf"
 
 	"github.com/redis/go-redis/v9"
 )

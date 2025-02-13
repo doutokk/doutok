@@ -2,11 +2,11 @@ package order
 
 import (
 	"context"
-	order "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order"
+	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order/orderservice"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
 )
 
 type RPCClient interface {

@@ -2,9 +2,9 @@ package payment
 
 import (
 	"context"
-	payment "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/payment"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
+	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 )
 
 func Charge(ctx context.Context, req *payment.ChargeReq, callOptions ...callopt.Option) (resp *payment.ChargeResp, err error) {

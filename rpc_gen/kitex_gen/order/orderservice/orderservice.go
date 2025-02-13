@@ -5,10 +5,10 @@ package orderservice
 import (
 	"context"
 	"errors"
-	order "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/order"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	streaming "github.com/cloudwego/kitex/pkg/streaming"
+	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	proto "google.golang.org/protobuf/proto"
 )
 

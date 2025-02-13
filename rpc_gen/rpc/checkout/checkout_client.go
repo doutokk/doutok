@@ -2,11 +2,11 @@ package checkout
 
 import (
 	"context"
-	checkout "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout"
+	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
 
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/checkout/checkoutservice"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout/checkoutservice"
 )
 
 type RPCClient interface {

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/model"
-	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/cart/biz/dal/model"
+	"github.com/doutokk/doutok/app/cart/biz/dal/mysql"
 	"gorm.io/gen"
 )
 

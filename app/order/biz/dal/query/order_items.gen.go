@@ -17,7 +17,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/PengJingzhao/douyin-commerce/app/order/biz/dal/model"
+	"github.com/doutokk/doutok/app/order/biz/dal/model"
 )
 
 func newOrderItem(db *gorm.DB, opts ...gen.DOOption) orderItem {

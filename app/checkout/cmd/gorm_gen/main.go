@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/checkout/biz/dal/model"
+	"github.com/doutokk/doutok/app/checkout/biz/dal/model"
 
 	"gorm.io/gen"
 )

@@ -1,7 +1,7 @@
 package serversuite
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/common/mtl"
+	"github.com/doutokk/doutok/common/mtl"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -23,7 +23,7 @@ func (s CommonServerSuite) Options() []server.Option {
 		server.WithMetaHandler(transmeta.ServerHTTP2Handler),
 	}
 
-	// 注册到consul
+	// 注册到 consul
 	r, err := registryconsul.NewConsulRegister(s.RegistryAddr)
 	if err != nil {
 		klog.Fatal(err)

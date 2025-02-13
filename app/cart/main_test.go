@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/client"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/kr/pretty"
 	"testing"
 )

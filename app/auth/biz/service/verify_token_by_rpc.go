@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/auth/biz/utils"
-	auth "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/auth"
+	"github.com/doutokk/doutok/app/auth/biz/utils"
+	auth "github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 )
 
 type VerifyTokenByRPCService struct {

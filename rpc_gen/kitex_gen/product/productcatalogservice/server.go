@@ -2,8 +2,8 @@
 package productcatalogservice
 
 import (
-	product "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product"
 	server "github.com/cloudwego/kitex/server"
+	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 // NewServer creates a server.Server with the given handler and options.
