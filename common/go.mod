@@ -3,8 +3,8 @@ module github.com/doutokk/doutok/common
 go 1.23.4
 
 require (
-	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
 	github.com/cloudwego/kitex v0.12.1
+	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
 	github.com/golang/mock v1.6.0
 	github.com/hertz-contrib/obs-opentelemetry/provider v0.3.0
 	github.com/kitex-contrib/monitor-prometheus v0.2.0
