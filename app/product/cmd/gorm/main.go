@@ -4,10 +4,9 @@ import (
 	"fmt"
 
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/do
 	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
-	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/doutokk/doutok/app/product/conf"
 	mysqldb "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -38,7 +37,7 @@ func main() {
 	// migrate the database
 	mysql.Init()
 
-	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.User{})
+	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.Product{}, &model.ProductCategory{})
 	if err != nil {
 		panic(err)
 	}

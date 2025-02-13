@@ -4,14 +4,23 @@ import (
 	"gorm.io/gorm"
 )
 
-type User struct {
+type Product struct {
 	gorm.Model
-	UserId uint32 `gorm:"type:int(11);not null;index"`
+	Name        string            `gorm:"type:varchar(128) not null"`
+	Description string            `gorm:"type:varchar(256) not null"`
+	Picture     string            `gorm:"type:varchar(256) not null"`
+	Price       float32           `gorm:"type:decimal(10,2) not null"`
+	Categories  []ProductCategory `gorm:"many2many:product_categories;"`
+}
+
+type ProductCategory struct {
+	gorm.Model
+	Name string `gorm:"unique;not null"`
 }
 
 type Querier interface {
 	// GetByUserId get user by user id
 	//
 	// SELECT * FROM @@table WHERE user_id = @userId and deleted_at is null
-	GetByUserId(userId uint32) ([]*User, error)
+	GetByUserId(userId uint32) ([]*Product, error)
 }
