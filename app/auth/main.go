@@ -1,83 +1,49 @@
 package main
 
 import (
-	"github.com/doutokk/doutok/app/auth/biz/dal"
+	"github.com/doutokk/doutok/app/auth/conf"
+	"github.com/doutokk/doutok/common/mtl"
+	"github.com/doutokk/doutok/common/serversuite"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	"github.com/joho/godotenv"
-	consul "github.com/kitex-contrib/registry-consul"
-	"log"
 	"net"
-	"time"
-
-	"github.com/doutokk/doutok/app/auth/conf"
+	"os"
 
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func main() {
-	// load env
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
-	//connect to mysql and redis
-	dal.Init()
+var serviceName = conf.GetConf().Kitex.Service
 
+func main() {
+	_ = godotenv.Load()
+	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
+	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	opts := kitexInit()
 
 	svr := authservice.NewServer(new(AuthServiceImpl), opts...)
 
-	err = svr.Run()
+	err := svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
 }
 
 func kitexInit() (opts []server.Option) {
-	// address
-	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
-	if err != nil {
-		panic(err)
-	}
-
-	//rpc
-	opts = append(opts, server.WithServiceAddr(addr))
-
-	//http
-
-	// service info
-	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
-		ServiceName: conf.GetConf().Kitex.Service,
-	}))
-
-	//consul
-	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		log.Fatal(err)
-	}
-	opts = append(opts, server.WithRegistry(r))
-
 	// klog
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)
 	klog.SetLevel(conf.LogLevel())
-	asyncWriter := &zapcore.BufferedWriteSyncer{
-		WS: zapcore.AddSync(&lumberjack.Logger{
-			Filename:   conf.GetConf().Kitex.LogFileName,
-			MaxSize:    conf.GetConf().Kitex.LogMaxSize,
-			MaxBackups: conf.GetConf().Kitex.LogMaxBackups,
-			MaxAge:     conf.GetConf().Kitex.LogMaxAge,
-		}),
-		FlushInterval: time.Minute,
+	klog.SetOutput(os.Stdout)
+
+	// address
+	address := conf.GetConf().Kitex.Address
+	addr, err := net.ResolveTCPAddr("tcp", address)
+	if err != nil {
+		panic(err)
 	}
-	klog.SetOutput(asyncWriter)
-	server.RegisterShutdownHook(func() {
-		asyncWriter.Sync()
-	})
+	opts = append(opts, server.WithServiceAddr(addr))
+	opts = append(opts, server.WithSuite(serversuite.CommonServerSuite{CurrentServiceName: serviceName, RegistryAddr: conf.GetConf().Registry.RegistryAddress[0]}))
 	return
 }

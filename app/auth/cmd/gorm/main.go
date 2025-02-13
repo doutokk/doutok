@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/auth/biz/dal/model"
 	"github.com/doutokk/doutok/app/auth/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/auth/conf"
-	"github.com/cloudwego/kitex/pkg/klog"
 	mysqldb "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
