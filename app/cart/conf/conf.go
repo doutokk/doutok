@@ -43,13 +43,10 @@ type Redis struct {
 }
 
 type Kitex struct {
-	Service       string `yaml:"service"`
-	Address       string `yaml:"address"`
-	LogLevel      string `yaml:"log_level"`
-	LogFileName   string `yaml:"log_file_name"`
-	LogMaxSize    int    `yaml:"log_max_size"`
-	LogMaxBackups int    `yaml:"log_max_backups"`
-	LogMaxAge     int    `yaml:"log_max_age"`
+	Service  string `yaml:"service"`
+	Address  string `yaml:"address"`
+	LogLevel string `yaml:"log_level"`
+	OtlpAddr string `yaml:"otlp_address"`
 }
 
 type Registry struct {
@@ -86,6 +83,7 @@ func initConf() {
 	viper.BindEnv("kitex.service", "APP_KITEX_SERVICE")
 	viper.BindEnv("kitex.address", "APP_KITEX_ADDRESS")
 	viper.BindEnv("kitex.log_level", "APP_KITEX_LOG_LEVEL")
+	viper.BindEnv("kitex.otlp_address", "APP_KITEX_OTLP_ADDRESS")
 	viper.BindEnv("mysql.host", "APP_MYSQL_HOST")
 	viper.BindEnv("mysql.port", "APP_MYSQL_PORT")
 	viper.BindEnv("mysql.username", "APP_MYSQL_USERNAME")
