@@ -17,7 +17,7 @@ var serviceName = conf.GetConf().Kitex.Service
 
 func main() {
 	_ = godotenv.Load()
-	mtl.InitTracing(serviceName)
+	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	opts := kitexInit()
 

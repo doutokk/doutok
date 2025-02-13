@@ -12,8 +12,8 @@ import (
 
 var TracerProvider *tracesdk.TracerProvider
 
-func InitTracing(serviceName string) {
-	exporter, err := otlptracegrpc.New(context.Background())
+func InitTracing(serviceName string, endpoint string) {
+	exporter, err := otlptracegrpc.New(context.Background(), otlptracegrpc.WithEndpoint(endpoint), otlptracegrpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
