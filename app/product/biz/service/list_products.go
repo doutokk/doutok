@@ -37,7 +37,7 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 			cats[i] = cat.Name
 		}
 		resp.Products[i] = &product.Product{
-			Id:          uint32(uint(prod.ID)),
+			Id:          uint32(prod.ID),
 			Name:        prod.Name,
 			Description: prod.Description,
 			Picture:     prod.Picture,

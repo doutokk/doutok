@@ -28,7 +28,7 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 		cats[i] = cat.Name
 	}
 	resp = &product.GetProductResp{Product: &product.Product{
-		Id:          uint32(uint(prod.ID)),
+		Id:          uint32(prod.ID),
 		Name:        prod.Name,
 		Description: prod.Description,
 		Picture:     prod.Picture,

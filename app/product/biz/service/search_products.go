@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
@@ -17,6 +18,25 @@ func NewSearchProductsService(ctx context.Context) *SearchProductsService {
 // Run create note info
 func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *product.SearchProductsResp, err error) {
 	// Finish your business logic.
-
+	p := query.Product
+	prods, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Preload(p.Categories).Find()
+	if err != nil {
+		return
+	}
+	resp = &product.SearchProductsResp{Results: make([]*product.Product, len(prods))}
+	for i, prod := range prods {
+		cats := make([]string, len(prod.Categories))
+		for i, cat := range prod.Categories {
+			cats[i] = cat.Name
+		}
+		resp.Results[i] = &product.Product{
+			Id:          uint32(prod.ID),
+			Name:        prod.Name,
+			Description: prod.Description,
+			Picture:     prod.Picture,
+			Price:       prod.Price,
+			Categories:  cats,
+		}
+	}
 	return
 }
