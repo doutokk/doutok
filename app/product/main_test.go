@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product/productcatalogservice"
 	"github.com/cloudwego/kitex/client"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 	consul "github.com/kitex-contrib/registry-consul"
 	"github.com/stretchr/testify/assert"
 	"testing"

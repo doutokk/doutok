@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/PengJingzhao/douyin-commerce/app/product/biz/dal"
+	"github.com/doutokk/doutok/app/product/biz/dal"
 	"github.com/joho/godotenv"
 	consul "github.com/kitex-contrib/registry-consul"
 	"log"
 	"net"
 	"time"
 
-	"github.com/PengJingzhao/douyin-commerce/app/product/conf"
-	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product/productcatalogservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/doutokk/doutok/app/product/conf"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"

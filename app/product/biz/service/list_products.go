@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/PengJingzhao/douyin-commerce/app/product/biz/dal/mysql"
-	"github.com/PengJingzhao/douyin-commerce/app/product/biz/model"
-	product "github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/product"
+	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/product/biz/model"
+	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 type ListProductsService struct {
