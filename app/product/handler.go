@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/doutokk/doutok/app/product/biz/service"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	
 )
 
 // ProductCatalogServiceImpl implements the last service interface defined in the IDL.
