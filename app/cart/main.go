@@ -5,6 +5,7 @@ import (
 	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/mysql"
 	"github.com/PengJingzhao/douyin-commerce/app/cart/biz/dal/query"
 	"github.com/PengJingzhao/douyin-commerce/app/cart/conf"
+	"github.com/PengJingzhao/douyin-commerce/common/mtl"
 	"github.com/PengJingzhao/douyin-commerce/common/serversuite"
 	"github.com/PengJingzhao/douyin-commerce/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -15,9 +16,15 @@ import (
 	"os"
 )
 
+var serviceName = conf.GetConf().Kitex.Service
+
 func main() {
+	// use go run cmd/gorm/main.go to migrate the database
 	dal.Init()
+	// use go run cmd/gorm_gen/main.go to generate the code
 	query.SetDefault(mysql.DB)
+	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
+	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	opts := kitexInit()
 
 	svr := cartservice.NewServer(new(CartServiceImpl), opts...)

@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/PengJingzhao/douyin-commerce/common/mtl"
 	"net"
 	"os"
 
@@ -18,11 +19,15 @@ import (
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 )
 
+var serviceName = conf.GetConf().Kitex.Service
+
 func main() {
 	// use go run cmd/gorm/main.go to migrate the database
 	dal.Init()
 	// use go run cmd/gorm_gen/main.go to generate the code
 	query.SetDefault(mysql.DB)
+	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
+	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	opts := kitexInit()
 
 	svr := orderservice.NewServer(new(OrderServiceImpl), opts...)
