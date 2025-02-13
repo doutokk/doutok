@@ -5,7 +5,7 @@ package order
 import (
 	fmt "fmt"
 	fastpb "github.com/cloudwego/fastpb"
-	
+	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 )
 
 var (
