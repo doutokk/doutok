@@ -10,7 +10,7 @@ type Product struct {
 	Description string            `gorm:"type:varchar(256) not null"`
 	Picture     string            `gorm:"type:varchar(256) not null"`
 	Price       float32           `gorm:"type:decimal(10,2) not null"`
-	Categories  []ProductCategory `gorm:"many2many:product_categories;"`
+	Categories  []ProductCategory `gorm:"many2many:r_product_categories;"`
 }
 
 type ProductCategory struct {

@@ -37,7 +37,11 @@ func main() {
 	// migrate the database
 	mysql.Init()
 
-	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.Product{}, &model.ProductCategory{})
+	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.ProductCategory{})
+	if err != nil {
+		panic(err)
+	}
+	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.Product{})
 	if err != nil {
 		panic(err)
 	}
