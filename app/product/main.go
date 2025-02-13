@@ -3,6 +3,7 @@ package main
 
 import (
 	"github.com/doutokk/doutok/common/mtl"
+	"github.com/doutokk/doutok/common/serversuite"
 	"net"
 	"os"
 
@@ -48,6 +49,13 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
+
+	// registry
+	opts = append(opts,
+		server.WithSuite(serversuite.CommonServerSuite{
+			CurrentServiceName: conf.GetConf().Kitex.Service,
+			RegistryAddr:       conf.GetConf().Registry.RegistryAddress[0],
+		}))
 
 	// klog
 	logger := kitexlogrus.NewLogger()
