@@ -353,8 +353,8 @@ github.com/hertz-contrib/obs-opentelemetry/tracing v0.4.1 h1:YOv/UcSHjeAg1CwvcXi
 github.com/hertz-contrib/obs-opentelemetry/tracing v0.4.1/go.mod h1:u+EVWM4dDcudoXY4bCia0EyhaBOsPgRah+FvM75DM7s=
 github.com/hertz-contrib/pprof v0.1.2 h1:eC4jpg8ToSi+9YEOPIr3jki8e/ix3aFPtphCgJ36T6Q=
 github.com/hertz-contrib/pprof v0.1.2/go.mod h1:OKXw5wCUcy1OVwgQLsoCS9JzfcdjoofP+7Uk4c7P9Po=
-github.com/hertz-contrib/registry/consul v0.0.0-20250120124521-8751bc5be5c3 h1:NNogKIlxF2wZGerH11XPFIv+k+DPja7d4gQS3PfHO7s=
-github.com/hertz-contrib/registry/consul v0.0.0-20250120124521-8751bc5be5c3/go.mod h1:bjNZ+0osz/GmRMEXZAMeme+qE7WV6g4DEtX/TdfXzvo=
+github.com/hertz-contrib/registry/consul v0.0.0-20231110170354-519baf74ea6b h1:DIfogbZyBmOYUkkS0jGDNT03jqVPtHypQrZ0mhcASUE=
+github.com/hertz-contrib/registry/consul v0.0.0-20231110170354-519baf74ea6b/go.mod h1:bjNZ+0osz/GmRMEXZAMeme+qE7WV6g4DEtX/TdfXzvo=
 github.com/hertz-contrib/sessions v1.0.3 h1:lXBcmpPlMUhVSua54lxrIzJwhKXaI6zZcc+RgQx8xrE=
 github.com/hertz-contrib/sessions v1.0.3/go.mod h1:46/DHSScV2EcK08er3IFvGHbh6a7VLMMiMlI+30QXoA=
 github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=
