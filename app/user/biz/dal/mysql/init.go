@@ -2,7 +2,9 @@ package mysql
 
 import (
 	"fmt"
+
 	"github.com/doutokk/doutok/app/user/conf"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
