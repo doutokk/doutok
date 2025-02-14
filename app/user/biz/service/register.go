@@ -29,16 +29,26 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 	if err != nil {
 		return
 	}
-	u := &model.User{
+
+	u := query.User
+	count, err := query.Q.User.Where(u.Email.Eq(req.Email)).Count()
+	if err != nil {
+		return nil, err
+	}
+	if count > 0 {
+		return nil, errors.New("email already exists")
+	}
+
+	nu := &model.User{
 		Email:          req.Email,
 		HashedPassword: string(hashedPassword),
 	}
-	err = query.Q.User.Create(u)
+	err = query.Q.User.Create(nu)
 	if err != nil {
 		return
 	}
 	resp = &user.RegisterResp{
-		UserId: int32(u.ID),
+		UserId: int32(nu.ID),
 	}
 
 	return
