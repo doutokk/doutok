@@ -4,8 +4,10 @@ import (
 	"context"
 	"embed"
 	"html/template"
+	"io/fs"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	hertzzap "github.com/hertz-contrib/logger/zap"
@@ -35,8 +37,44 @@ import (
 //go:embed template/*
 var templateFS embed.FS
 
+//go:embed static/*
+var staticFS embed.FS
+
+// releaseStaticFiles 将嵌入的 static 文件释放到目标目录，若目录不存在则创建
+func releaseStaticFiles(targetDir string) error {
+	// 如果目标文件夹存在则跳过释放，可以根据需要检测是否为空
+	if info, err := os.Stat("static"); err == nil && info.IsDir() {
+		return nil
+	} else if os.IsNotExist(err) {
+		if err := os.MkdirAll("static", 0755); err != nil {
+			return err
+		}
+	}
+
+	// 遍历 embedded 的 static 文件夹
+	return fs.WalkDir(staticFS, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		destPath := filepath.Join(".", path)
+		if d.IsDir() {
+			return os.MkdirAll(destPath, 0755)
+		}
+		content, err := staticFS.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		return os.WriteFile(destPath, content, 0644)
+	})
+}
+
 func main() {
 	_ = godotenv.Load()
+
+	// 释放 static 文件到本地文件夹（仅在启动时生效）
+	if err := releaseStaticFiles("./static"); err != nil {
+		log.Fatalf("释放 static 文件失败: %v", err)
+	}
 
 	mtl.InitMtl()
 	rpc.InitClient()
