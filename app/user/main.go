@@ -2,14 +2,16 @@
 package main
 
 import (
-	"github.com/doutokk/doutok/common/mtl"
-	"github.com/doutokk/doutok/common/serversuite"
 	"github.com/joho/godotenv"
 	"net"
 	"os"
 
 	"github.com/doutokk/doutok/app/user/biz/dal"
+	"github.com/doutokk/doutok/app/user/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/user/biz/dal/query"
 	"github.com/doutokk/doutok/app/user/conf"
+	"github.com/doutokk/doutok/common/mtl"
+	"github.com/doutokk/doutok/common/serversuite"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user/userservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -21,9 +23,10 @@ var serviceName = conf.GetConf().Kitex.Service
 
 func main() {
 	_ = godotenv.Load()
+	dal.Init()
+	query.SetDefault(mysql.DB)
 	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
-	dal.Init()
 	opts := kitexInit()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
