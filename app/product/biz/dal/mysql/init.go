@@ -2,9 +2,8 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/doutokk/doutok/app/product/biz/model"
+
 	"github.com/doutokk/doutok/app/product/conf"
-	"os"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -13,26 +12,18 @@ import (
 var (
 	DB  *gorm.DB
 	err error
+	c   = conf.GetConf()
 )
 
 func Init() {
-	dsn := fmt.Sprintf(conf.GetConf().MySQL.DSN,
-		os.Getenv("MYSQL_USER"),
-		os.Getenv("MYSQL_PASSWORD"),
-		os.Getenv("MYSQL_HOST"),
-		os.Getenv("MYSQL_DATABASE"))
-	DB, err = gorm.Open(mysql.Open(dsn),
+	dsn := "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+
+	DB, err = gorm.Open(mysql.Open(fmt.Sprintf(dsn, c.MySQL.Username, c.MySQL.Password, c.MySQL.Host, c.MySQL.Port, c.Kitex.Service)),
 		&gorm.Config{
 			PrepareStmt:            true,
 			SkipDefaultTransaction: true,
 		},
 	)
-	if err != nil {
-		panic(err)
-	}
-
-	// AutoMigrate Models
-	err = DB.AutoMigrate(&model.Product{}, &model.ProductCategory{})
 	if err != nil {
 		panic(err)
 	}

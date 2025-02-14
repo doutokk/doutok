@@ -2,14 +2,15 @@ package service
 
 import (
 	"context"
-	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
-	"github.com/doutokk/doutok/app/product/biz/model"
+	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 type SearchProductsService struct {
 	ctx context.Context
-} // NewSearchProductsService new SearchProductsService
+}
+
+// NewSearchProductsService new SearchProductsService
 func NewSearchProductsService(ctx context.Context) *SearchProductsService {
 	return &SearchProductsService{ctx: ctx}
 }
@@ -17,27 +18,25 @@ func NewSearchProductsService(ctx context.Context) *SearchProductsService {
 // Run create note info
 func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *product.SearchProductsResp, err error) {
 	// Finish your business logic.
-	var products []model.Product
-
-	// Search products by name or description
-	if err := mysql.DB.Where("name LIKE ?", "%"+req.Query+"%").
-		Or("description LIKE ?", "%"+req.Query+"%").
-		Preload("Categories").Find(&products).Error; err != nil {
-		return nil, err
+	p := query.Product
+	prods, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Preload(p.Categories).Find()
+	if err != nil {
+		return
 	}
-
-	// Map models.Product to product.Product
-	respResults := make([]*product.Product, len(products))
-	for i, p := range products {
-		respResults[i] = &product.Product{
-			Id:          uint32(p.ID),
-			Name:        p.Name,
-			Description: p.Description,
-			Picture:     p.Picture,
-			Price:       p.Price,
-			Categories:  mapCategoriesToString(p.Categories),
+	resp = &product.SearchProductsResp{Results: make([]*product.Product, len(prods))}
+	for i, prod := range prods {
+		cats := make([]string, len(prod.Categories))
+		for i, cat := range prod.Categories {
+			cats[i] = cat.Name
+		}
+		resp.Results[i] = &product.Product{
+			Id:          uint32(prod.ID),
+			Name:        prod.Name,
+			Description: prod.Description,
+			Picture:     prod.Picture,
+			Price:       prod.Price,
+			Categories:  cats,
 		}
 	}
-
-	return &product.SearchProductsResp{Results: respResults}, nil
+	return
 }
