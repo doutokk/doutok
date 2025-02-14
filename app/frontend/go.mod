@@ -17,7 +17,7 @@ require (
 	github.com/hertz-contrib/obs-opentelemetry/provider v0.3.0
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.4.1
 	github.com/hertz-contrib/pprof v0.1.2
-	github.com/hertz-contrib/registry/consul v0.0.0-20250120124521-8751bc5be5c3
+	github.com/hertz-contrib/registry/consul v0.0.0-20231110170354-519baf74ea6b
 	github.com/hertz-contrib/sessions v1.0.3
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/monitor-prometheus v0.2.0

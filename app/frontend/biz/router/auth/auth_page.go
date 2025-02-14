@@ -18,7 +18,7 @@ package auth
 
 import (
 	"github.com/cloudwego/hertz/pkg/app/server"
-	
+	"github.com/doutokk/doutok/app/frontend/biz/handler/auth"
 )
 
 /*
