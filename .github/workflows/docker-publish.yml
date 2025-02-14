@@ -32,6 +32,8 @@ jobs:
           - payment
           - product
           - checkout
+          - user
+          - auth
     permissions:
       contents: read
       packages: write

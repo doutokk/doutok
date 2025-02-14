@@ -28,11 +28,6 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 	if err == nil {
 		return nil, errors.New("email already register")
 	}
-	//var existingUser model.User
-	//if err = mysql.DB.Where("email = ?", req.Email).First(&existingUser).Error; err == nil {
-	//	// 数据库查询到该邮箱
-	//	return nil, errors.New("email already register")
-	//}
 
 	// 创建用户
 	newUser := model.User{

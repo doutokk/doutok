@@ -2,30 +2,21 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/doutokk/doutok/app/user/biz/model"
 	"github.com/doutokk/doutok/app/user/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
 )
 
 var (
 	DB  *gorm.DB
 	err error
+	c   = conf.GetConf()
 )
 
 func Init() {
-	//dsn := fmt.Sprintf(conf.GetConf().MySQL.DSN,
-	//	os.Getenv("MYSQL_USER"),
-	//	os.Getenv("MYSQL_PASSWORD"),
-	//	os.Getenv("MYSQL_HOST"),
-	//	os.Getenv("MYSQL_DATABASE"))
-	dsn := fmt.Sprintf(conf.GetConf().MySQL.DSN,
-		"root",
-		"2048711712P!",
-		"127.0.0.1",
-		"doutok")
-	DB, err = gorm.Open(mysql.Open(dsn),
+	dsn := "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+
+	DB, err = gorm.Open(mysql.Open(fmt.Sprintf(dsn, c.MySQL.Username, c.MySQL.Password, c.MySQL.Host, c.MySQL.Port, c.Kitex.Service)),
 		&gorm.Config{
 			PrepareStmt:            true,
 			SkipDefaultTransaction: true,
@@ -33,10 +24,5 @@ func Init() {
 	)
 	if err != nil {
 		panic(err)
-	}
-	// AutoMigrate User Table
-	err = DB.AutoMigrate(&model.User{})
-	if err != nil {
-		log.Fatal(err)
 	}
 }
