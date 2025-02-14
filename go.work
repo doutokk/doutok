@@ -4,11 +4,11 @@ use (
 	./app/auth
 	./app/cart
 	./app/checkout
+	./app/frontend
 	./app/order
 	./app/payment
 	./app/product
 	./app/user
-	./app/frontend
 	common
 	rpc_gen
 )
