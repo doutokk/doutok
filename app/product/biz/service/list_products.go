@@ -2,54 +2,49 @@ package service
 
 import (
 	"context"
-	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
-	"github.com/doutokk/doutok/app/product/biz/model"
+	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 type ListProductsService struct {
 	ctx context.Context
-} // NewListProductsService new ListProductsService
+}
+
+// NewListProductsService new ListProductsService
 func NewListProductsService(ctx context.Context) *ListProductsService {
 	return &ListProductsService{ctx: ctx}
 }
 
-// 查询商品列表
+// Run create note info
 func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.ListProductsResp, err error) {
 	// Finish your business logic.
-	var products []*model.Product
-	query := mysql.DB
-
-	// Filter by category_name if provided
-	query = query.Joins("JOIN product_categories ON product_categories.id = products.id").
-		Where("product_categories.name = ?", req.CategoryName)
-
-	// Pagination
-	offset := (req.PageSize - 1) * req.PageSize
-	if err := query.Offset(int(offset)).Limit(int(req.PageSize)).Preload("Categories").Find(&products).Error; err != nil {
-		return nil, err
+	p := query.Product
+	var q query.IProductDo
+	if req.CategoryName != "" {
+		q = query.Q.Product.Where(query.ProductCategory.Name.In(req.CategoryName)).Preload(p.Categories)
+	} else {
+		q = query.Q.Product.Preload(p.Categories)
 	}
-
-	// map
-	respProducts := make([]*product.Product, len(products))
-	for i, p := range products {
-		respProducts[i] = &product.Product{
-			Id:          uint32(p.ID),
-			Name:        p.Name,
-			Description: p.Description,
-			Picture:     p.Picture,
-			Price:       p.Price,
-			Categories:  mapCategoriesToString(p.Categories),
+	q.Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1)))
+	products, err := q.Find()
+	if err != nil {
+		return
+	}
+	resp = &product.ListProductsResp{Products: make([]*product.Product, len(products))}
+	for i, prod := range products {
+		cats := make([]string, len(prod.Categories))
+		for i, cat := range prod.Categories {
+			cats[i] = cat.Name
+		}
+		resp.Products[i] = &product.Product{
+			Id:          uint32(prod.ID),
+			Name:        prod.Name,
+			Description: prod.Description,
+			Picture:     prod.Picture,
+			Price:       prod.Price,
+			Categories:  cats,
 		}
 	}
-	return &product.ListProductsResp{Products: respProducts}, nil
-}
 
-// Helper function to map categories to a list of strings
-func mapCategoriesToString(categories []model.ProductCategory) []string {
-	strCategories := make([]string, len(categories))
-	for i, c := range categories {
-		strCategories[i] = c.Name
-	}
-	return strCategories
+	return
 }
