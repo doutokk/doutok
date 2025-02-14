@@ -2,26 +2,28 @@
 package main
 
 import (
+	"github.com/doutokk/doutok/common/mtl"
+	"github.com/doutokk/doutok/common/serversuite"
+	"github.com/joho/godotenv"
 	"net"
 	"os"
 
 	"github.com/doutokk/doutok/app/user/biz/dal"
-	"github.com/doutokk/doutok/app/user/biz/dal/mysql"
-	"github.com/doutokk/doutok/app/user/biz/dal/query"
 	"github.com/doutokk/doutok/app/user/conf"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user/userservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 )
 
+var serviceName = conf.GetConf().Kitex.Service
+
 func main() {
-	// use go run cmd/gorm/main.go to migrate the database
+	_ = godotenv.Load()
+	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
+	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	dal.Init()
-	// use go run cmd/gorm_gen/main.go to generate the code
-	query.SetDefault(mysql.DB)
 	opts := kitexInit()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
@@ -33,22 +35,19 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
-	// address
-	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
-	if err != nil {
-		panic(err)
-	}
-	opts = append(opts, server.WithServiceAddr(addr))
-
-	// service info
-	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
-		ServiceName: conf.GetConf().Kitex.Service,
-	}))
-
 	// klog
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)
 	klog.SetLevel(conf.LogLevel())
 	klog.SetOutput(os.Stdout)
+
+	// address
+	address := conf.GetConf().Kitex.Address
+	addr, err := net.ResolveTCPAddr("tcp", address)
+	if err != nil {
+		panic(err)
+	}
+	opts = append(opts, server.WithServiceAddr(addr))
+	opts = append(opts, server.WithSuite(serversuite.CommonServerSuite{CurrentServiceName: serviceName, RegistryAddr: conf.GetConf().Registry.RegistryAddress[0]}))
 	return
 }
