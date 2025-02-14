@@ -5,26 +5,35 @@ import (
 	"errors"
 	"github.com/doutokk/doutok/app/user/biz/dal/query"
 	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginService struct {
 	ctx context.Context
-} // NewLoginService new LoginService
+}
+
+// NewLoginService new LoginService
 func NewLoginService(ctx context.Context) *LoginService {
 	return &LoginService{ctx: ctx}
 }
 
 // Run create note info
 func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error) {
-	// 通过邮件查找用户
-	existingUser, err := query.Q.User.GetOneByEmail(req.Email)
+	// Finish your business logic.
+
+	u := query.User
+	us, err := query.Q.User.Where(u.Email.Eq(req.Email)).First()
 	if err != nil {
-		return nil, errors.New("invalid email or password")
+		return nil, errors.New("user not found")
 	}
 
-	// 比对密码是否正确
-	if existingUser.Password != req.Password {
-		return nil, errors.New("password error")
+	if bcrypt.CompareHashAndPassword([]byte(us.HashedPassword), []byte(req.Password)) != nil {
+		return nil, errors.New("password is incorrect")
 	}
-	return &user.LoginResp{UserId: int32(existingUser.ID)}, nil
+
+	resp = &user.LoginResp{
+		UserId: int32(us.ID),
+	}
+
+	return
 }

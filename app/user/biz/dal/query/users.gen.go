@@ -6,10 +6,8 @@ package query
 
 import (
 	"context"
-	"github.com/doutokk/doutok/app/user/biz/dal/mysql"
 	"strings"
 
-	"github.com/doutokk/doutok/app/user/biz/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
@@ -18,6 +16,8 @@ import (
 	"gorm.io/gen/field"
 
 	"gorm.io/plugin/dbresolver"
+
+	"github.com/doutokk/doutok/app/user/biz/dal/model"
 )
 
 func newUser(db *gorm.DB, opts ...gen.DOOption) user {
@@ -29,8 +29,11 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	tableName := _user.userDo.TableName()
 	_user.ALL = field.NewAsterisk(tableName)
 	_user.ID = field.NewUint(tableName, "id")
+	_user.CreatedAt = field.NewTime(tableName, "created_at")
+	_user.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_user.DeletedAt = field.NewField(tableName, "deleted_at")
 	_user.Email = field.NewString(tableName, "email")
-	_user.Password = field.NewString(tableName, "password")
+	_user.HashedPassword = field.NewString(tableName, "hashed_password")
 
 	_user.fillFieldMap()
 
@@ -40,10 +43,13 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 type user struct {
 	userDo
 
-	ALL      field.Asterisk
-	ID       field.Uint
-	Email    field.String
-	Password field.String
+	ALL            field.Asterisk
+	ID             field.Uint
+	CreatedAt      field.Time
+	UpdatedAt      field.Time
+	DeletedAt      field.Field
+	Email          field.String
+	HashedPassword field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -61,8 +67,11 @@ func (u user) As(alias string) *user {
 func (u *user) updateTableName(table string) *user {
 	u.ALL = field.NewAsterisk(table)
 	u.ID = field.NewUint(table, "id")
+	u.CreatedAt = field.NewTime(table, "created_at")
+	u.UpdatedAt = field.NewTime(table, "updated_at")
+	u.DeletedAt = field.NewField(table, "deleted_at")
 	u.Email = field.NewString(table, "email")
-	u.Password = field.NewString(table, "password")
+	u.HashedPassword = field.NewString(table, "hashed_password")
 
 	u.fillFieldMap()
 
@@ -79,10 +88,13 @@ func (u *user) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (u *user) fillFieldMap() {
-	u.fieldMap = make(map[string]field.Expr, 3)
+	u.fieldMap = make(map[string]field.Expr, 6)
 	u.fieldMap["id"] = u.ID
+	u.fieldMap["created_at"] = u.CreatedAt
+	u.fieldMap["updated_at"] = u.UpdatedAt
+	u.fieldMap["deleted_at"] = u.DeletedAt
 	u.fieldMap["email"] = u.Email
-	u.fieldMap["password"] = u.Password
+	u.fieldMap["hashed_password"] = u.HashedPassword
 }
 
 func (u user) clone(db *gorm.DB) user {
@@ -157,23 +169,21 @@ type IUserDo interface {
 	UnderlyingDB() *gorm.DB
 	schema.Tabler
 
-	GetOneByEmail(email string) (result *model.User, err error)
+	GetByUserId(userId uint32) (result []*model.User, err error)
 }
 
-// GetOneByEmail
+// GetByUserId get user by user id
 //
-// SELECT * FROM @@table WHERE email = @email LIMIT 1
-func (u userDo) GetOneByEmail(email string) (result *model.User, err error) {
+// SELECT * FROM @@table WHERE user_id = @userId and deleted_at is null
+func (u userDo) GetByUserId(userId uint32) (result []*model.User, err error) {
 	var params []interface{}
 
 	var generateSQL strings.Builder
-	params = append(params, email)
-	generateSQL.WriteString("SELECT * FROM users WHERE email = ? LIMIT 1 ")
+	params = append(params, userId)
+	generateSQL.WriteString("SELECT * FROM users WHERE user_id = ? and deleted_at is null ")
 
 	var executeSQL *gorm.DB
-	db := u.UnderlyingDB()
-	db = mysql.DB
-	executeSQL = db.Raw(generateSQL.String(), params...).Take(&result) // ignore_security_alert
+	executeSQL = u.UnderlyingDB().Raw(generateSQL.String(), params...).Find(&result) // ignore_security_alert
 	err = executeSQL.Error
 
 	return
