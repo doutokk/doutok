@@ -4,10 +4,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// rename to create your own model
 type User struct {
 	gorm.Model
-	UserId uint32 `gorm:"type:int(11);not null;index"`
+	Email          string `gorm:"type:varchar(255);not null;index"`
+	HashedPassword string `gorm:"type:varchar(255);not null"`
 }
 
 // Querier is the interface for the query, you can implement it with your own query logic
