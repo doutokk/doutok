@@ -87,19 +87,7 @@ func initConf() {
 
 	// Set environment variable keys to match the configuration keys
 	viper.SetEnvPrefix("APP") // Optional: set a prefix for environment variables
-	viper.BindEnv("kitex.service", "APP_KITEX_SERVICE")
-	viper.BindEnv("kitex.address", "APP_KITEX_ADDRESS")
-	viper.BindEnv("kitex.log_level", "APP_KITEX_LOG_LEVEL")
-	viper.BindEnv("kitex.otlp_address", "APP_KITEX_OTLP_ADDRESS")
-	viper.BindEnv("mysql.host", "APP_MYSQL_HOST")
-	viper.BindEnv("mysql.port", "APP_MYSQL_PORT")
-	viper.BindEnv("mysql.username", "APP_MYSQL_USERNAME")
-	viper.BindEnv("mysql.password", "APP_MYSQL_PASSWORD")
-	viper.BindEnv("redis.address", "APP_REDIS_ADDRESS")
-	viper.BindEnv("redis.username", "APP_REDIS_USERNAME")
-	viper.BindEnv("redis.password", "APP_REDIS_PASSWORD")
-	viper.BindEnv("redis.db", "APP_REDIS_DB")
-	viper.BindEnv("registry.registry_address", "APP_REGISTRY_REGISTRY_ADDRESS")
+
 	viper.BindEnv("registry.username", "APP_REGISTRY_USERNAME")
 	viper.BindEnv("registry.password", "APP_REGISTRY_PASSWORD")
 

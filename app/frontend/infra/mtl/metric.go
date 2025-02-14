@@ -20,7 +20,6 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/doutokk/doutok/app/frontend/conf"
 	"github.com/doutokk/doutok/common/utils"
 
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
@@ -40,14 +39,14 @@ func initMetric() route.CtxCallback {
 	Registry.MustRegister(collectors.NewGoCollector())
 	Registry.MustRegister(collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}))
 	config := consulapi.DefaultConfig()
-	config.Address = conf.GetConf().Hertz.RegistryAddr
+	config.Address = "consul:8500"
 	consulClient, _ := consulapi.NewClient(config)
 	r := consul.NewConsulRegister(consulClient, consul.WithAdditionInfo(&consul.AdditionInfo{
 		Tags: []string{"service:frontend"},
 	}))
 
 	localIp := utils.MustGetLocalIPv4()
-	ip, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", localIp, conf.GetConf().Hertz.MetricsPort))
+	ip, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", localIp, 8))
 	if err != nil {
 		hlog.Error(err)
 	}
@@ -58,7 +57,7 @@ func initMetric() route.CtxCallback {
 	}
 
 	http.Handle("/metrics", promhttp.HandlerFor(Registry, promhttp.HandlerOpts{}))
-	go http.ListenAndServe(fmt.Sprintf(":%d", conf.GetConf().Hertz.MetricsPort), nil) //nolint:errcheck
+	go http.ListenAndServe(fmt.Sprintf(":%d", "8383"), nil) //nolint:errcheck
 	return func(ctx context.Context) {
 		r.Deregister(registryInfo) //nolint:errcheck
 	}

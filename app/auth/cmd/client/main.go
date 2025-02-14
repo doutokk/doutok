@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	client2 "github.com/cloudwego/kitex/client"
+	"github.com/doutokk/doutok/app/auth/conf"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	consul "github.com/kitex-contrib/registry-consul"
@@ -10,7 +11,7 @@ import (
 )
 
 func main() {
-	r, err := consul.NewConsulResolver("127.0.0.1:8500")
+	r, err := consul.NewConsulResolver(conf.GetConf().Registry.RegistryAddress[0])
 	if err != nil {
 		log.Fatal(err)
 	}

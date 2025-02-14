@@ -22,7 +22,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/circuitbreak"
 	"github.com/cloudwego/kitex/pkg/fallback"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"github.com/doutokk/doutok/app/frontend/conf"
 	"github.com/doutokk/doutok/app/frontend/infra/mtl"
 	frontendutils "github.com/doutokk/doutok/app/frontend/utils"
 	"github.com/doutokk/doutok/common/clientsuite"
@@ -49,7 +48,7 @@ var (
 
 func InitClient() {
 	once.Do(func() {
-		registryAddr = conf.GetConf().Hertz.RegistryAddr
+		registryAddr = "consul:8500"
 		commonSuite = client.WithSuite(clientsuite.CommonGrpcClientSuite{
 			RegistryAddr:       registryAddr,
 			CurrentServiceName: frontendutils.ServiceName,
