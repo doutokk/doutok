@@ -2,15 +2,13 @@ module github.com/doutokk/doutok/app/frontend
 
 go 1.23.4
 
-replace (
-	github.com/apache/thrift => github.com/apache/thrift v0.13.0
-)
+replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
 	github.com/cloudwego/hertz v0.9.5
 	github.com/cloudwego/kitex v0.12.1
-	github.com/doutokk/doutok/common v0.0.0-00010101000000-000000000000
-	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
+	github.com/doutokk/doutok/common v0.0.0-20250214102652-89eec21c321b
+	github.com/doutokk/doutok/rpc_gen v0.0.0-20250214102652-89eec21c321b
 	github.com/hashicorp/consul/api v1.31.1
 	github.com/hertz-contrib/cors v0.1.0
 	github.com/hertz-contrib/gzip v0.0.3
@@ -19,7 +17,7 @@ require (
 	github.com/hertz-contrib/obs-opentelemetry/provider v0.3.0
 	github.com/hertz-contrib/obs-opentelemetry/tracing v0.4.1
 	github.com/hertz-contrib/pprof v0.1.2
-	github.com/hertz-contrib/registry/consul v0.0.0-20231110170354-519baf74ea6b
+	github.com/hertz-contrib/registry/consul v0.0.0-20250120124521-8751bc5be5c3
 	github.com/hertz-contrib/sessions v1.0.3
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/monitor-prometheus v0.2.0
@@ -39,7 +37,6 @@ require (
 )
 
 require (
-	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/gopkg v0.1.1 // indirect
@@ -66,7 +63,7 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-sql-driver/mysql v1.8.1 // indirect
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/gomodule/redigo v1.8.9 // indirect
 	github.com/google/pprof v0.0.0-20240727154555-813a5fbdbec8 // indirect
