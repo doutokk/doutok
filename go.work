@@ -8,6 +8,7 @@ use (
 	./app/payment
 	./app/product
 	./app/user
+	./app/frontend
 	common
 	rpc_gen
 )
