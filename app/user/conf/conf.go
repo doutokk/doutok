@@ -21,38 +21,32 @@ var (
 )
 
 type Config struct {
-	Env      string
-	Kitex    Kitex    `yaml:"kitex"`
-	MySQL    MySQL    `yaml:"mysql"`
-	Redis    Redis    `yaml:"redis"`
-	Registry Registry `yaml:"registry"`
-}
+	Kitex struct {
+		Service  string `mapstructure:"service"`
+		Address  string `mapstructure:"address"`
+		LogLevel string `mapstructure:"log_level"`
+		OtlpAddr string `mapstructure:"otlp_address"`
+	} `mapstructure:"kitex"`
 
-type MySQL struct {
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-}
+	Registry struct {
+		RegistryAddress []string `mapstructure:"registry_address"`
+		Username        string   `mapstructure:"username"`
+		Password        string   `mapstructure:"password"`
+	} `mapstructure:"registry"`
 
-type Redis struct {
-	Address  string `yaml:"address"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	DB       int    `yaml:"db"`
-}
+	MySQL struct {
+		Host     string `mapstructure:"host"`
+		Port     string `mapstructure:"port"`
+		Username string `mapstructure:"username"`
+		Password string `mapstructure:"password"`
+	} `mapstructure:"mysql"`
 
-type Kitex struct {
-	Service  string `yaml:"service"`
-	Address  string `yaml:"address"`
-	LogLevel string `yaml:"log_level"`
-	OtlpAddr string `yaml:"otlp_address"`
-}
-
-type Registry struct {
-	RegistryAddress []string `yaml:"registry_address"`
-	Username        string   `yaml:"username"`
-	Password        string   `yaml:"password"`
+	Redis struct {
+		Address  string `mapstructure:"address"`
+		Username string `mapstructure:"username"`
+		Password string `mapstructure:"password"`
+		DB       int    `mapstructure:"db"`
+	} `mapstructure:"redis"`
 }
 
 // GetConf gets configuration instance
@@ -76,35 +70,13 @@ func initConf() {
 	}
 
 	// Enable automatic environment variable reading
+	viper.SetEnvPrefix("APP")
 	viper.AutomaticEnv()
-
-	// Set environment variable keys to match the configuration keys
-	viper.SetEnvPrefix("APP") // Optional: set a prefix for environment variables
-	viper.BindEnv("kitex.service", "APP_KITEX_SERVICE")
-	viper.BindEnv("kitex.address", "APP_KITEX_ADDRESS")
-	viper.BindEnv("kitex.log_level", "APP_KITEX_LOG_LEVEL")
-	viper.BindEnv("kitex.otlp_address", "APP_KITEX_OTLP_ADDRESS")
-	viper.BindEnv("mysql.host", "APP_MYSQL_HOST")
-	viper.BindEnv("mysql.port", "APP_MYSQL_PORT")
-	viper.BindEnv("mysql.username", "APP_MYSQL_USERNAME")
-	viper.BindEnv("mysql.password", "APP_MYSQL_PASSWORD")
-	viper.BindEnv("redis.address", "APP_REDIS_ADDRESS")
-	viper.BindEnv("redis.username", "APP_REDIS_USERNAME")
-	viper.BindEnv("redis.password", "APP_REDIS_PASSWORD")
-	viper.BindEnv("redis.db", "APP_REDIS_DB")
-	viper.BindEnv("registry.registry_address", "APP_REGISTRY_REGISTRY_ADDRESS")
-	viper.BindEnv("registry.username", "APP_REGISTRY_USERNAME")
-	viper.BindEnv("registry.password", "APP_REGISTRY_PASSWORD")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	err = viper.Unmarshal(conf)
 	if err != nil {
 		panic(err)
-	}
-
-	// Manually parse the registry address environment variable
-	registryAddress := viper.GetString("registry.registry_address")
-	if registryAddress != "" {
-		conf.Registry.RegistryAddress = strings.Split(registryAddress, ",")
 	}
 
 	if err := validator.Validate(conf); err != nil {
