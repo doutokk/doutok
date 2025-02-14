@@ -3,10 +3,10 @@ package cart
 import (
 	"context"
 	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	
 )
 
 type RPCClient interface {

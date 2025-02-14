@@ -4,6 +4,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
 	"github.com/doutokk/doutok/app/checkout/conf"
+	"github.com/doutokk/doutok/app/checkout/infra/rpc"
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/common/serversuite"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout/checkoutservice"
@@ -19,6 +20,7 @@ func main() {
 	_ = godotenv.Load()
 	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
+	rpc.InitClient()
 	opts := kitexInit()
 
 	svr := checkoutservice.NewServer(new(CheckoutServiceImpl), opts...)
