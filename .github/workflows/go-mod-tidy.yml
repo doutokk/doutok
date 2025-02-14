@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+        with:
+          token: '${{ secrets.GH_TOKEN_DOUTOK }}'
 
       - name: 设置 Go 环境
         uses: actions/setup-go@v2
