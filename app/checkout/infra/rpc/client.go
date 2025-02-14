@@ -1,7 +1,10 @@
 package rpc
 
 import (
+	"github.com/cloudwego/kitex/client"
 	"github.com/doutokk/doutok/app/checkout/conf"
+	"github.com/doutokk/doutok/common/clientsuite"
+	"github.com/doutokk/doutok/common/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
@@ -17,14 +20,17 @@ var (
 	PaymentClient paymentservice.Client
 	once          sync.Once
 	err           error
-	registryAddr  string
-	serviceName   string
+	commonSuite   client.Option
 )
 
 func InitClient() {
 	once.Do(func() {
-		registryAddr = conf.GetConf().Registry.RegistryAddress[0]
-		serviceName = conf.GetConf().Kitex.Service
+		registryAddr := conf.GetConf().Registry.RegistryAddress[0]
+		serviceName := conf.GetConf().Kitex.Service
+		commonSuite = client.WithSuite(clientsuite.CommonGrpcClientSuite{
+			RegistryAddr:       registryAddr,
+			CurrentServiceName: serviceName,
+		})
 		initCartClient()
 		initProductClient()
 		initOrderClient()
@@ -32,17 +38,21 @@ func InitClient() {
 }
 
 func initCartClient() {
-	CartClient, err = cartservice.NewClient("cart")
+	CartClient, err = cartservice.NewClient("cart", commonSuite)
+	utils.PassOrPanic(err)
 }
 
 func initProductClient() {
-	ProductClient, err = productcatalogservice.NewClient("product")
+	ProductClient, err = productcatalogservice.NewClient("product", commonSuite)
+	utils.PassOrPanic(err)
 }
 
 func initOrderClient() {
-	OrderClient, err = orderservice.NewClient("order")
+	OrderClient, err = orderservice.NewClient("order", commonSuite)
+	utils.PassOrPanic(err)
 }
 
 func initPaymentClient() {
-	PaymentClient, err = paymentservice.NewClient("payment")
+	PaymentClient, err = paymentservice.NewClient("payment", commonSuite)
+	utils.PassOrPanic(err)
 }
