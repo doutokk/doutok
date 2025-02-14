@@ -26,7 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ "cart", "order","payment","checkout","user","product","auth" ]
+        service:
+          - cart
+          - order
+          - payment
+          - product
+          - checkout
+          - user
+          - auth
     permissions:
       contents: read
       packages: write
