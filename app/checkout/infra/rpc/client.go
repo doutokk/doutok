@@ -31,6 +31,7 @@ func InitClient() {
 			RegistryAddr:       registryAddr,
 			CurrentServiceName: serviceName,
 		})
+		initPaymentClient()
 		initCartClient()
 		initProductClient()
 		initOrderClient()
