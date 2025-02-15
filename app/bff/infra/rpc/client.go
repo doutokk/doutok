@@ -16,6 +16,7 @@ package rpc
 
 import (
 	"context"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
 	"sync"
 
 	"github.com/cloudwego/kitex/client"
@@ -41,10 +42,12 @@ var (
 	CartClient     cartservice.Client
 	CheckoutClient checkoutservice.Client
 	OrderClient    orderservice.Client
-	once           sync.Once
-	err            error
-	registryAddr   string
-	commonSuite    client.Option
+	PaymentClient  paymentservice.Client
+
+	once         sync.Once
+	err          error
+	registryAddr string
+	commonSuite  client.Option
 )
 
 func InitClient() {
@@ -59,6 +62,7 @@ func InitClient() {
 		initCartClient()
 		initCheckoutClient()
 		initOrderClient()
+		initPaymentClient()
 	})
 }
 
@@ -103,6 +107,11 @@ func initUserClient() {
 
 func initCartClient() {
 	CartClient, err = cartservice.NewClient("cart", commonSuite)
+	frontendutils.MustHandleError(err)
+}
+
+func initPaymentClient() {
+	PaymentClient, err = paymentservice.NewClient("payment", commonSuite)
 	frontendutils.MustHandleError(err)
 }
 
