@@ -12,7 +12,6 @@ service UserService {
 message RegisterReq {
   string email = 1;
   string password = 2;
-  string confirm_password = 3;
 }
 
 message RegisterResp {

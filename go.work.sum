@@ -323,8 +323,8 @@ github.com/chzyer/test v1.0.0/go.mod h1:2JlltgoNkt4TW/z9V/IzDdFaMTM2JPIi26O1pF38
 github.com/circonus-labs/circonus-gometrics v2.3.1+incompatible h1:C29Ae4G5GtYyYMm1aztcyj/J5ckgJm2zwdDajFbx1NY=
 github.com/circonus-labs/circonusllhist v0.1.3 h1:TJH+oke8D16535+jHExHj4nQvzlZrj7ug5D7I/orNUA=
 github.com/client9/misspell v0.3.4 h1:ta993UF76GwbvJcIo3Y68y/M3WxlpEHPWIGDkJYwzJI=
-github.com/cloudwego/biz-demo/gomall/app/checkout v0.0.0-20240419092035-96ff37f3792b h1:ryZ/twE2CY0hF51pPNAwx4lMadtNugHWAN2ePS0sboA=
-github.com/cloudwego/biz-demo/gomall/app/checkout v0.0.0-20240419092035-96ff37f3792b/go.mod h1:giB+5/6VNHhYKWKmgcFHANgKVNKC98M/KCFZ6QW88AQ=
+github.com/doutokk/doutok/app/checkout v0.0.0-20240419092035-96ff37f3792b h1:ryZ/twE2CY0hF51pPNAwx4lMadtNugHWAN2ePS0sboA=
+github.com/doutokk/doutok/app/checkout v0.0.0-20240419092035-96ff37f3792b/go.mod h1:giB+5/6VNHhYKWKmgcFHANgKVNKC98M/KCFZ6QW88AQ=
 github.com/cloudwego/dynamicgo v0.4.0/go.mod h1:zgWk2oz56EyH790LJSxrTz1j01GJBO964jJQ/y7qjJc=
 github.com/cloudwego/frugal v0.2.0/go.mod h1:cpnV6kdRMjN3ylxRo63RNbZ9rBK6oxs70Zk6QZ4Enj4=
 github.com/cloudwego/gopkg v0.0.0-20240731030152-5e0df5ad4e40/go.mod h1:32yKw2zkpTMtuX6amJR0EMK79f0vGPr67UcArCOlZLU=

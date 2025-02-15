@@ -3,8 +3,8 @@ module github.com/doutokk/doutok/app/auth
 go 1.23.4
 
 replace (
-	github.com/cloudwego/biz-demo/gomall/common => ../../common
-	github.com/cloudwego/biz-demo/gomall/rpc_gen => ../../rpc_gen
+	github.com/doutokk/doutok/common => ../../common
+	github.com/doutokk/doutok/rpc_gen => ../../rpc_gen
 )
 
 require (
