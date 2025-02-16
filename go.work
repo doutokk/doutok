@@ -9,7 +9,6 @@ use (
 	./app/payment
 	./app/product
 	./app/user
-	./app/bff
 	common
 	rpc_gen
 )
