@@ -4,10 +4,9 @@ package user
 
 import (
 	"context"
-	"github.com/doutokk/doutok/app/user/biz/service"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/doutokk/doutok/app/user/biz/service"
 	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 

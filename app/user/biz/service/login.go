@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/doutokk/doutok/app/user/biz/dal/query"
+	"github.com/doutokk/doutok/app/user/infra/rpc"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -31,8 +33,16 @@ func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error)
 		return nil, errors.New("password is incorrect")
 	}
 
+	authReq := new(auth.DeliverTokenReq)
+	authReq.UserId = int32(us.ID)
+
+	authResp, err := rpc.AuthClient.DeliverTokenByRPC(s.ctx, authReq)
+	if err != nil {
+		return nil, err
+	}
+
 	resp = &user.LoginResp{
-		UserId: int32(us.ID),
+		Token: authResp.Token,
 	}
 
 	return
