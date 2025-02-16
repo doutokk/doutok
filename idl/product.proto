@@ -11,10 +11,10 @@ service ProductCatalogService {
     option(api.post) = "/product";
   }
   rpc GetProduct(GetProductReq) returns (GetProductResp) {
-   option(api.get) = "/product/{id}";
+   option(api.get) = "/product/:id";
   }
   rpc SearchProducts(SearchProductsReq) returns (SearchProductsResp) {
-    option(api.get) = "product";
+    option(api.get) = "/product";
   }
 }
 
@@ -43,13 +43,13 @@ message ListProductsResp {
 }
 
 message GetProductReq {
-  uint32 id = 1;
+  uint32 id = 1[(api.path)="id"];
 }
 
 
 
 message SearchProductsReq {
-  string query = 1;
+  string query = 1[(api.query)="query"];
 }
 
 message SearchProductsResp {
