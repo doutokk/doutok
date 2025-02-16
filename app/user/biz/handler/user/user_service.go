@@ -25,6 +25,10 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	s := service.NewRegisterService(ctx)
 	resp, err := s.Run(&req)
 
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
 
@@ -41,5 +45,10 @@ func Login(ctx context.Context, c *app.RequestContext) {
 
 	s := service.NewLoginService(ctx)
 	resp, err := s.Run(&req)
+
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, err.Error())
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }
