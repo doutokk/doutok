@@ -19,11 +19,11 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
+	rpccheckout "github.com/doutokk/doutok/app/checkout/kitex_gen/checkout"
 	"github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/checkout"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
 	frontendutils "github.com/doutokk/doutok/app/frontend/utils"
-	rpccheckout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
-	rpcpayment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
+	rpcpayment "github.com/doutokk/doutok/app/payment/kitex_gen/payment"
 )
 
 type CheckoutWaitingService struct {

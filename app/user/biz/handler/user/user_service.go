@@ -7,7 +7,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/doutokk/doutok/app/user/biz/service"
-	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
+	user "github.com/doutokk/doutok/app/user/kitex_gen/user"
 )
 
 // Register .
@@ -42,8 +42,12 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	s := service.NewLoginService(ctx)
-	resp, err := s.Run(&req)
+	//s := service.NewLoginService(ctx)
+	//resp, err := s.Run(&req)
+
+	// 测试看看
+	resp := new(user.LoginResp)
+	resp.Token = "1234"
 
 	if err != nil {
 		c.JSON(consts.StatusInternalServerError, err.Error())

@@ -20,11 +20,11 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
+	rpccart "github.com/doutokk/doutok/app/cart/kitex_gen/cart"
 	common "github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/common"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
 	frontendutils "github.com/doutokk/doutok/app/frontend/utils"
-	rpccart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
-	rpcproduct "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	rpcproduct "github.com/doutokk/doutok/app/product/kitex_gen/product"
 )
 
 type GetCartService struct {

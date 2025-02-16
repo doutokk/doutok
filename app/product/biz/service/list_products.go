@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
-	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	product "github.com/doutokk/doutok/app/product/kitex_gen/product"
 )
 
 type ListProductsService struct {
@@ -30,13 +30,13 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	if err != nil {
 		return
 	}
-	resp = &product.ListProductsResp{Products: make([]*product.Product, len(products))}
+	resp = &product.ListProductsResp{Item: make([]*product.Product, len(products))}
 	for i, prod := range products {
 		cats := make([]string, len(prod.Categories))
 		for i, cat := range prod.Categories {
 			cats[i] = cat.Name
 		}
-		resp.Products[i] = &product.Product{
+		resp.Item[i] = &product.Product{
 			Id:          uint32(prod.ID),
 			Name:        prod.Name,
 			Description: prod.Description,

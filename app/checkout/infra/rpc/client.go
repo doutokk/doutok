@@ -2,13 +2,13 @@ package rpc
 
 import (
 	"github.com/cloudwego/kitex/client"
+	"github.com/doutokk/doutok/app/cart/kitex_gen/cart/cartservice"
 	"github.com/doutokk/doutok/app/checkout/conf"
+	"github.com/doutokk/doutok/app/order/kitex_gen/order/orderservice"
+	"github.com/doutokk/doutok/app/payment/kitex_gen/payment/paymentservice"
+	"github.com/doutokk/doutok/app/product/kitex_gen/product/productcatalogservice"
 	"github.com/doutokk/doutok/common/clientsuite"
 	"github.com/doutokk/doutok/common/utils"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 
 	"sync"
 )

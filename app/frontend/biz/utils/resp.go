@@ -17,9 +17,9 @@ package utils
 import (
 	"context"
 
+	"github.com/doutokk/doutok/app/cart/kitex_gen/cart"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
 	frontendutils "github.com/doutokk/doutok/app/frontend/utils"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 
 	"github.com/cloudwego/hertz/pkg/app"
 )

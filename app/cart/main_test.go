@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"github.com/cloudwego/kitex/client"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
+	"github.com/doutokk/doutok/app/cart/kitex_gen/cart"
+	"github.com/doutokk/doutok/app/cart/kitex_gen/cart/cartservice"
 	"github.com/kr/pretty"
 	"testing"
 )

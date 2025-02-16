@@ -2,11 +2,9 @@ package user
 
 import (
 	"context"
-	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
-
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	
+	"github.com/doutokk/doutok/app/user/kitex_gen/user"
 )
 
 type RPCClient interface {

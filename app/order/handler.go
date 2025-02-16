@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/doutokk/doutok/app/order/biz/service"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	"github.com/doutokk/doutok/app/order/kitex_gen/order"
 )
 
 // OrderServiceImpl implements the last service interface defined in the IDL.

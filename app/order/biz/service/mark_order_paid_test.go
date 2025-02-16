@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	order "github.com/doutokk/doutok/app/order/kitex_gen/order"
 	"testing"
 )
 

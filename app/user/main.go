@@ -10,9 +10,9 @@ import (
 	"github.com/doutokk/doutok/app/user/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/user/biz/dal/query"
 	"github.com/doutokk/doutok/app/user/conf"
+	"github.com/doutokk/doutok/app/user/kitex_gen/user/userservice"
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/common/serversuite"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user/userservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"

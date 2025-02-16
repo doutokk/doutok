@@ -11,7 +11,7 @@ import (
 	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	"github.com/doutokk/doutok/app/product/conf"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
+	"github.com/doutokk/doutok/app/product/kitex_gen/product/productcatalogservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -38,6 +38,8 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
+	opts = append(opts, server.WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
+
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
 	if err != nil {

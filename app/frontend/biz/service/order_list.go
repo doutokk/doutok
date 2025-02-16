@@ -24,8 +24,8 @@ import (
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
 	"github.com/doutokk/doutok/app/frontend/types"
 	frontendutils "github.com/doutokk/doutok/app/frontend/utils"
-	rpcorder "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
-	rpcproduct "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	rpcorder "github.com/doutokk/doutok/app/order/kitex_gen/order"
+	rpcproduct "github.com/doutokk/doutok/app/product/kitex_gen/product"
 )
 
 type OrderListService struct {

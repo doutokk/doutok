@@ -22,7 +22,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	common "github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/common"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	"github.com/doutokk/doutok/app/product/kitex_gen/product"
 )
 
 type HomeService struct {

@@ -10,8 +10,8 @@ import (
 	"github.com/doutokk/doutok/app/order/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
 	"github.com/doutokk/doutok/app/order/conf"
+	"github.com/doutokk/doutok/app/order/kitex_gen/order/orderservice"
 	"github.com/doutokk/doutok/common/serversuite"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"

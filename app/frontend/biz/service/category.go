@@ -21,7 +21,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	category "github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/category"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	"github.com/doutokk/doutok/app/product/kitex_gen/product"
 )
 
 type CategoryService struct {

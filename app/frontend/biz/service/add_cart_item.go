@@ -18,11 +18,11 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	rpccart "github.com/doutokk/doutok/app/cart/kitex_gen/cart"
 	"github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/cart"
 	common "github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/common"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
 	frontendutils "github.com/doutokk/doutok/app/frontend/utils"
-	rpccart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 )
 
 type AddCartItemService struct {

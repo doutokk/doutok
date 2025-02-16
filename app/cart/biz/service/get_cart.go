@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/cart/biz/dal/query"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
+	"github.com/doutokk/doutok/app/cart/kitex_gen/cart"
 )
 
 type GetCartService struct {

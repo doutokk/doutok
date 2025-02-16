@@ -21,7 +21,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	product "github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/product"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
-	rpcproduct "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	rpcproduct "github.com/doutokk/doutok/app/product/kitex_gen/product"
 )
 
 type SearchProducsService struct {

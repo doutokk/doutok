@@ -2,11 +2,9 @@ package order
 
 import (
 	"context"
-	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
-
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	
+	"github.com/doutokk/doutok/app/order/kitex_gen/order"
 )
 
 type RPCClient interface {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	"github.com/doutokk/doutok/app/order/kitex_gen/order"
 )
 
 func PlaceOrder(ctx context.Context, req *order.PlaceOrderReq, callOptions ...callopt.Option) (resp *order.PlaceOrderResp, err error) {

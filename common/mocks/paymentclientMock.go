@@ -8,8 +8,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 	callopt "github.com/cloudwego/kitex/client/callopt"
+	payment "github.com/doutokk/doutok/app/payment/kitex_gen/payment"
 	gomock "github.com/golang/mock/gomock"
 )
 

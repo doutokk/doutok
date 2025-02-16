@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 	"errors"
+	"github.com/doutokk/doutok/app/auth/kitex_gen/auth"
 	"github.com/doutokk/doutok/app/user/biz/dal/query"
 	"github.com/doutokk/doutok/app/user/infra/rpc"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
-	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
+	user "github.com/doutokk/doutok/app/user/kitex_gen/user"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -21,7 +21,7 @@ import (
 	auth "github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/auth"
 	common "github.com/doutokk/doutok/app/frontend/hertz_gen/frontend/common"
 	"github.com/doutokk/doutok/app/frontend/infra/rpc"
-	rpcuser "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
+	rpcuser "github.com/doutokk/doutok/app/user/kitex_gen/user"
 	"github.com/hertz-contrib/sessions"
 )
 

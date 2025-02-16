@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
+	"github.com/doutokk/doutok/app/cart/kitex_gen/cart"
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 
-	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	order "github.com/doutokk/doutok/app/order/kitex_gen/order"
 )
 
 type ListOrderService struct {
