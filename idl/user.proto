@@ -4,9 +4,15 @@ package user;
 
 option go_package="/user";
 
+import "api.proto";
+
 service UserService {
-  rpc Register(RegisterReq) returns (RegisterResp) {}
-  rpc Login(LoginReq) returns (LoginResp) {}
+  rpc Register(RegisterReq) returns (RegisterResp) {
+    option(api.post) = "/register";
+  }
+  rpc Login(LoginReq) returns (LoginResp) {
+    option(api.post) = "/login";
+  }
 }
 
 message RegisterReq {
@@ -24,5 +30,5 @@ message LoginReq {
 }
 
 message LoginResp {
-  int32 user_id = 1;
+  string token = 1;
 }

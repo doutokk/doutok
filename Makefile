@@ -16,9 +16,9 @@ gen-server: ## gen service code of {svc}. example: make gen-server svc=product �
 gen-server-suyiiyii: ## gen service code of {svc}. example: make gen-server svc=product 不加这个--pass会生成一个kitex_gen
 	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/doutokk/doutok/app/${svc} --pass "-use github.com/doutokk/doutok/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto --template https://github.com/suyiiyii/cwgo-template.git
 
-.PHONY: gen-server-hertz
+.PHONY: gen-server-hex
 gen-server-hertz:
-	@cd app/${svc} && cwgo server --type RPC --service ${svc}
+	@cd app/${svc} && cwgo  server --type RPC -I /develop/app/kill_system/idl  --idl /develop/app/kill_system/idl/user.proto --server_name ${{svc}} --module "github.com/doutokk/doutok/app/"${{svc}} --hex
 
 .PHONY: work
 work:
