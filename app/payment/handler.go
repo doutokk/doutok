@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/doutokk/doutok/app/payment/biz/service"
-	"github.com/doutokk/doutok/app/payment/kitex_gen/payment"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 )
 
 // PaymentServiceImpl implements the last service interface defined in the IDL.

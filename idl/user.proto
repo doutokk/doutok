@@ -8,10 +8,10 @@ import "api.proto";
 
 service UserService {
   rpc Register(RegisterReq) returns (RegisterResp) {
-    option(api.post) = "/register";
+    option(api.post) = "/user/register";
   }
   rpc Login(LoginReq) returns (LoginResp) {
-    option(api.post) = "/login";
+    option(api.post) = "/user/login";
   }
 }
 

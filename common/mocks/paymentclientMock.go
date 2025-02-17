@@ -9,7 +9,7 @@ import (
 	reflect "reflect"
 
 	callopt "github.com/cloudwego/kitex/client/callopt"
-	payment "github.com/doutokk/doutok/app/payment/kitex_gen/payment"
+	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 	gomock "github.com/golang/mock/gomock"
 )
 

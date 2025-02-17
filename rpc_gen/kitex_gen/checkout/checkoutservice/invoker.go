@@ -4,7 +4,7 @@ package checkoutservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	checkout "github.com/doutokk/doutok/app/checkout/kitex_gen/checkout"
+	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
 )
 
 // NewInvoker creates a server.Invoker with the given handler and options.

@@ -6,7 +6,7 @@ import (
 	"context"
 	client "github.com/cloudwego/kitex/client"
 	callopt "github.com/cloudwego/kitex/client/callopt"
-	checkout "github.com/doutokk/doutok/app/checkout/kitex_gen/checkout"
+	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
 )
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
