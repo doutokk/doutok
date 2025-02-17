@@ -18,7 +18,7 @@ gen-server-suyiiyii: ## gen service code of {svc}. example: make gen-server svc=
 
 .PHONY: hex
 hex:
-	@cd app/${svc} && cwgo  server --type RPC -I /develop/app/douyin-commerce/idl  --idl /develop/app/douyin-commerce/idl/${svc}".proto" --server_name ${svc} --module github.com/doutokk/doutok/app/${svc} --hex
+	@cd app/${svc} && cwgo  server --type RPC -I /develop/app/douyin-commerce/idl  --idl /develop/app/douyin-commerce/idl/${svc}".proto" --pass "-use github.com/doutokk/doutok/rpc_gen/kitex_gen" --server_name ${svc} --module github.com/doutokk/doutok/app/${svc} --hex
 
 .PHONY: work
 work:

@@ -7,7 +7,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/doutokk/doutok/app/user/biz/service"
-	user "github.com/doutokk/doutok/app/user/kitex_gen/user"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 
 // Register .

@@ -6,7 +6,7 @@ option go_package = "/product";
 
 import "api.proto";
 
-service ProductCatalogService {
+service ProductService {
   rpc ListProducts(ListProductsReq) returns (ListProductsResp) {
     option(api.post) = "/product";
   }

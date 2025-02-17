@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/doutokk/doutok/app/user/kitex_gen/user"
+	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 
 func Register(ctx context.Context, req *user.RegisterReq, callOptions ...callopt.Option) (resp *user.RegisterResp, err error) {

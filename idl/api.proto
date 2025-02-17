@@ -5,7 +5,7 @@ package api;
 
 import "google/protobuf/descriptor.proto";
 
-option go_package = "cwgo/http/api";
+option go_package = "github.com/doutokk/doutok/rpc_gen/kitex_gen/cwgo/http/api";
 
 extend google.protobuf.FieldOptions {
   optional string raw_body = 50101;

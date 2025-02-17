@@ -6,7 +6,7 @@ import (
 	"context"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/service"
-	"github.com/doutokk/doutok/app/product/kitex_gen/product"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"

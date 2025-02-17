@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/doutokk/doutok/app/product/kitex_gen/product"
+	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 func ListProducts(ctx context.Context, req *product.ListProductsReq, callOptions ...callopt.Option) (resp *product.ListProductsResp, err error) {

@@ -4,9 +4,15 @@ package cart;
 
 option go_package = '/cart';
 
+import "api.proto";
+
 service CartService {
-  rpc AddItem(AddItemReq) returns (AddItemResp) {}
-  rpc GetCart(GetCartReq) returns (GetCartResp) {}
+  rpc AddItem(AddItemReq) returns (AddItemResp) {
+    option(api.post) = "/cart/edit";
+  }
+  rpc GetCart(GetCartReq) returns (GetCartResp) {
+    option(api.get) = "/cart";
+  }
   rpc EmptyCart(EmptyCartReq) returns (EmptyCartResp) {}
 }
 

@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
-	product "github.com/doutokk/doutok/app/product/kitex_gen/product"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 type GetProductService struct {

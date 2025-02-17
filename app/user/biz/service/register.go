@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/doutokk/doutok/app/user/biz/dal/model"
 	"github.com/doutokk/doutok/app/user/biz/dal/query"
-	user "github.com/doutokk/doutok/app/user/kitex_gen/user"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 
 	"golang.org/x/crypto/bcrypt"
 )
