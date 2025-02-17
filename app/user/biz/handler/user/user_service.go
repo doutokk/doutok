@@ -11,7 +11,7 @@ import (
 )
 
 // Register .
-// @router /register [POST]
+// @router /user/register [POST]
 func Register(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.RegisterReq
@@ -32,7 +32,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 }
 
 // Login .
-// @router /login [POST]
+// @router /user/login [POST]
 func Login(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.LoginReq

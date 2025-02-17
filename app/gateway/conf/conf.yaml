@@ -6,7 +6,7 @@ kitex:
 
 registry:
   registry_address:
-    - 127.0.0.1:2379
+    - 10.21.32.14:8500
   username: ""
   password: ""
 

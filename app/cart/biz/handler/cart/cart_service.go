@@ -5,7 +5,7 @@ package cart
 import (
 	"context"
 	"github.com/doutokk/doutok/app/cart/biz/service"
-	"github.com/doutokk/doutok/app/frontend/infra/rpc"
+	"github.com/doutokk/doutok/app/gateway/infra/rpc"
 	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 
