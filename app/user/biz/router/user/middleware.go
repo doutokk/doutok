@@ -20,3 +20,8 @@ func _registerMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _userMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
