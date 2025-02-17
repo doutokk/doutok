@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
@@ -9,18 +10,39 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/doutokk/doutok/app/gateway/conf"
+	"github.com/doutokk/doutok/app/gateway/infra/proxyPool"
 	consulapi "github.com/hashicorp/consul/api"
 	"github.com/hertz-contrib/cors"
 	hertzzap "github.com/hertz-contrib/logger/zap"
 	"github.com/hertz-contrib/registry/consul"
-	"github.com/hertz-contrib/reverseproxy"
 	"log"
+	"net"
 	"os"
 	"strings"
 )
 
+func GetOutboundIP() (net.IP, error) {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	return localAddr.IP, nil
+}
+
 func main() {
 	// build a consul client
+	ip, err := GetOutboundIP()
+	addr := fmt.Sprintf("%s:8887", ip.String())
+
+	// 创建反向代理池子
+	proxyPool.Init()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	config := consulapi.DefaultConfig()
 	config.Address = conf.GetConf().Registry.RegistryAddress[0]
@@ -35,10 +57,9 @@ func main() {
 	// run Hertz with the consul register
 	h := server.New(
 		server.WithHostPorts(":8887"),
-		server.WithHandleMethodNotAllowed(true),
 		server.WithRegistry(r, &registry.Info{
-			ServiceName: "hertz.test.demo",
-			Addr:        utils.NewNetAddr("tcp", "localhost:8887"),
+			ServiceName: "gateway",
+			Addr:        utils.NewNetAddr("tcp", addr),
 			Weight:      10,
 			Tags:        nil,
 		}),
@@ -55,14 +76,10 @@ func main() {
 		c.JSON(consts.StatusOK, utils.H{"ping": "pong1"})
 	})
 
-	proxy, err := reverseproxy.NewSingleHostReverseProxy("http://10.21.32.14:8888/")
-
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, utils.H{"ping3": "pong1231231"})
 		req := c.GetRequest()
-		targetServiceUrl := getTargetServiceUrl(req.URI().String())
-		hlog.Info("targetServiceUrl: ", targetServiceUrl)
-
+		proxy := proxyPool.GetProxy(getTargetServiceName(req.URI().String()))
 		proxy.ServeHTTP(ctx, c)
 		c.Next(ctx)
 	})
@@ -82,14 +99,10 @@ func registerMiddleware(h *server.Hertz) {
 	h.Use(cors.Default())
 }
 
-func getTargetServiceUrl(uri string) string {
-	hlog.Info(uri)
+func getTargetServiceName(uri string) string {
+	// eg: http://10.21.32.14:8887/user/login
+	hlog.Info("req_uri:  " + uri)
 	parts := strings.Split(uri, "/")
-	targetServiceName := parts[3] + "-service"
-	hlog.Info(targetServiceName)
-	var targetUri string
-	for i := 3; i < len(parts); i++ {
-		targetUri += parts[i] + "/"
-	}
-	return "http://10.21.32.14" + ":8888/" + targetUri
+	targetServiceName := parts[3]
+	return targetServiceName
 }

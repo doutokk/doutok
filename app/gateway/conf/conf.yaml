@@ -10,6 +10,16 @@ registry:
   username: ""
   password: ""
 
+Gateway:
+  suffix: "-service:8888"
+  service_path:
+    - user-service:8888
+    - auth-service:8888
+    - checkout-service:8888
+    - order-service:8888
+    - payment-service:8888
+    - product-service:8888
+    - cart-service:8888
 mysql:
   host: ""
   port: ""

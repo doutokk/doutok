@@ -47,6 +47,11 @@ type Config struct {
 		Password string `mapstructure:"password"`
 		DB       int    `mapstructure:"db"`
 	} `mapstructure:"redis"`
+
+	Gateway struct {
+		ServicePath []string `mapstructure:"service_path"`
+		Suffix      string   `mapstructure:"suffix"`
+	} `mapstructure:"redis"`
 }
 
 // GetConf gets configuration instance
