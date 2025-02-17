@@ -41,9 +41,7 @@ func initMetric() route.CtxCallback {
 	config := consulapi.DefaultConfig()
 	config.Address = "consul:8500"
 	consulClient, _ := consulapi.NewClient(config)
-	r := consul.NewConsulRegister(consulClient, consul.WithAdditionInfo(&consul.AdditionInfo{
-		Tags: []string{"service:gateway"},
-	}))
+	r := consul.NewConsulRegister(consulClient)
 
 	localIp := utils.MustGetLocalIPv4()
 	ip, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", localIp, 8))

@@ -8,6 +8,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
+	"github.com/cloudwego/hertz/pkg/protocol"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/doutokk/doutok/app/gateway/conf"
 	"github.com/doutokk/doutok/app/gateway/infra/proxyPool"
@@ -19,6 +20,10 @@ import (
 	"net"
 	"os"
 	"strings"
+)
+
+var (
+	textCnt = 0
 )
 
 func GetOutboundIP() (net.IP, error) {
@@ -68,20 +73,30 @@ func main() {
 
 	h.Use(func(ctx context.Context, c *app.RequestContext) {
 		hlog.Info("孩子们这里我做了一些权限校验的东西，并且测试一下请求的顺序，1")
-		c.Next(ctx)
 	})
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
-
 		c.JSON(consts.StatusOK, utils.H{"ping": "pong1"})
 	})
 
+	if err != nil {
+		// 处理错误
+	}
+
+	// 设置 Director 函数，修改请求的 Host 头
+
+	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
-		c.JSON(consts.StatusOK, utils.H{"ping3": "pong1231231"})
-		req := c.GetRequest()
-		proxy := proxyPool.GetProxy(getTargetServiceName(req.URI().String()))
+		// 打印请求的 URI
+		hlog.Info("path: ", c.Request.URI())
+		serviceName := getTargetServiceName(c.Request.URI().String())
+		proxy := proxyPool.GetProxy(serviceName)
+		proxy.SetDirector(func(req *protocol.Request) {
+			req.SetHost(proxyPool.GetHost(serviceName))
+		})
+
+		// 调用反向代理处理请求
 		proxy.ServeHTTP(ctx, c)
-		c.Next(ctx)
 	})
 
 	h.Spin()
