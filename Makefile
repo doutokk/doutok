@@ -32,7 +32,3 @@ run:
 source ?= ${svc}"service"
 mock:
 	@cd app/${svc} && mockgen -source=../../rpc_gen/kitex_gen/${svc}/${source}/client.go -destination=../../common/mocks/${svc}"clientMock".go -package=mocks -mock_names "Client"="Mock"${svc}"Client"
-
-.PHONY: gen-gateway
-gen-gateway: ## gen gateway code of {svc}. example: make gen-gateway svc=product
-	@cd app/gateway && cwgo server --type HTTP --idl ../../idl/frontend/gateway.proto --server_name gateway --module github.com/doutokk/doutok/app/gateway
