@@ -3,6 +3,7 @@ package main
 
 import (
 	"github.com/doutokk/doutok/common/mtl"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
 	"net"
 	"os"
 
@@ -10,7 +11,6 @@ import (
 	"github.com/doutokk/doutok/app/order/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
 	"github.com/doutokk/doutok/app/order/conf"
-	"github.com/doutokk/doutok/app/order/kitex_gen/order/orderservice"
 	"github.com/doutokk/doutok/common/serversuite"
 
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -39,6 +39,8 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
+	opts = append(opts, server.WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
+
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
 	if err != nil {
@@ -54,8 +56,8 @@ func kitexInit() (opts []server.Option) {
 	// registry
 	opts = append(opts,
 		server.WithSuite(serversuite.CommonServerSuite{
-			CurrentServiceName: conf.GetConf().Kitex.Service,
-			RegistryAddr:       conf.GetConf().Registry.RegistryAddress[0],
+			CurrentServiceName:	conf.GetConf().Kitex.Service,
+			RegistryAddr:		conf.GetConf().Registry.RegistryAddress[0],
 		}))
 
 	// klog

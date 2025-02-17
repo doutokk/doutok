@@ -5,7 +5,8 @@ package order
 import (
 	fmt "fmt"
 	fastpb "github.com/cloudwego/fastpb"
-	"github.com/doutokk/doutok/app/cart/kitex_gen/cart"
+	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
+	api "github.com/doutokk/doutok/rpc_gen/kitex_gen/cwgo/http/api"
 )
 
 var (
@@ -1103,3 +1104,4 @@ var fieldIDToName_MarkOrderPaidReq = map[int32]string{
 var fieldIDToName_MarkOrderPaidResp = map[int32]string{}
 
 var _ = cart.File_cart_proto
+var _ = api.File_api_proto

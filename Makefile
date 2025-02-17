@@ -17,7 +17,7 @@ gen-server-suyiiyii: ## gen service code of {svc}. example: make gen-server svc=
 	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/doutokk/doutok/app/${svc} --pass "-use github.com/doutokk/doutok/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto --template https://github.com/suyiiyii/cwgo-template.git
 
 .PHONY: hex
-hex:
+hex:	## 这样子只生成服务端，一般不用动，改proto用gen-client就行了
 	@cd app/${svc} && cwgo  server --type RPC -I /develop/app/douyin-commerce/idl  --idl /develop/app/douyin-commerce/idl/${svc}".proto" --pass "-use github.com/doutokk/doutok/rpc_gen/kitex_gen" --server_name ${svc} --module github.com/doutokk/doutok/app/${svc} --hex
 
 .PHONY: work
