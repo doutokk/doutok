@@ -8,6 +8,7 @@ require (
 	github.com/doutokk/doutok/common v0.0.0-20250215020712-8ca923dc48e7
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213063132-1d342a229dad
 	github.com/hashicorp/consul/api v1.31.1
+	github.com/hertz-contrib/casbin v0.1.0
 	github.com/hertz-contrib/cors v0.1.0
 	github.com/hertz-contrib/logger/zap v1.1.0
 	github.com/hertz-contrib/registry/consul v0.0.0-20250120124521-8751bc5be5c3
@@ -26,11 +27,13 @@ require (
 )
 
 require (
+	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/gopkg v0.1.1 // indirect
 	github.com/bytedance/sonic v1.12.5 // indirect
 	github.com/bytedance/sonic/loader v0.2.0 // indirect
+	github.com/casbin/casbin/v2 v2.61.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/casbin/casbin/v2"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
@@ -35,6 +36,31 @@ func GetOutboundIP() (net.IP, error) {
 
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
 	return localAddr.IP, nil
+}
+
+// Casbin 中间件
+func CasbinMiddleware(e *casbin.Enforcer) app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// todo:不硬编码获取角色
+		sub := "alice"
+		obj := string(c.Request.RequestURI())
+		act := string(c.Request.Method())
+		hlog.Info("sub: ", sub, " obj: ", obj, " act: ", act)
+
+		ok, err := e.Enforce(sub, obj, act)
+		if err != nil {
+			c.AbortWithError(consts.StatusInternalServerError, err)
+			hlog.Error(err)
+			return
+		}
+
+		if !ok {
+			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
+			return
+		}
+
+		c.Next(ctx)
+	}
 }
 
 func main() {
@@ -83,10 +109,16 @@ func main() {
 		// 处理错误
 	}
 
-	// 设置 Director 函数，修改请求的 Host 头
+	// 鉴权中间件
+	enforcer, err := casbin.NewEnforcer("conf/model.conf", "conf/policy.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	h.Use(CasbinMiddleware(enforcer))
 
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
+
 		// 打印请求的 URI
 		hlog.Info("path: ", c.Request.URI())
 		serviceName := getTargetServiceName(c.Request.URI().String())
@@ -97,6 +129,14 @@ func main() {
 
 		// 调用反向代理处理请求
 		proxy.ServeHTTP(ctx, c)
+
+		// todo:后端服务需要把错误返回
+
+		// todo:鉴权
+
+		if c.Response.StatusCode() != 200 {
+			err = fmt.Errorf("请求失败，状态码：%d", c.Response.StatusCode())
+		}
 	})
 
 	h.Spin()
