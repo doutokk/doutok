@@ -135,7 +135,8 @@ func main() {
 		// todo:鉴权
 
 		if c.Response.StatusCode() != 200 {
-			err = fmt.Errorf("请求失败，状态码：%d", c.Response.StatusCode())
+			err = fmt.Errorf("请求失败，状态码：%d \n%s\n%s", c.Response.StatusCode(), c.Response.Body(), c.Errors)
+			c.Response.SetBody([]byte(err.Error()))
 		}
 	})
 

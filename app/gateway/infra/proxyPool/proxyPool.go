@@ -1,6 +1,7 @@
 package proxyPool
 
 import (
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/doutokk/doutok/app/gateway/conf"
 	"github.com/hertz-contrib/reverseproxy"
@@ -39,6 +40,17 @@ func Init() {
 		hostMap[name] = host
 		url := "http://" + host
 		proxy, _ := reverseproxy.NewSingleHostReverseProxy(url)
+
+		proxy.SetErrorHandler(func(c *app.RequestContext, err error) {
+			if strings.Contains(err.Error(), "connection refused") {
+				c.String(503, "Service Unavailable: Backend service is unavailable.")
+			} else if strings.Contains(err.Error(), "connection has been closed by peer") {
+				c.String(502, "Bad Gateway: The connection to the backend service was closed unexpectedly.")
+			} else {
+				c.String(502, "Bad Gateway: An error occurred while communicating with the backend service.")
+			}
+		})
+
 		if proxy == nil {
 			panic(name + "proxy is nil")
 		}

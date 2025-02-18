@@ -58,6 +58,10 @@ func ListProducts(ctx context.Context, c *app.RequestContext) {
 		klog.Info(bffProducts[len(bffProducts)-1])
 	}
 
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 	c.JSON(consts.StatusOK, bffProducts)
 }
 
