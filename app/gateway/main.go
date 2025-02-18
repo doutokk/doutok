@@ -66,7 +66,8 @@ func CasbinMiddleware(e *casbin.Enforcer) app.HandlerFunc {
 func main() {
 	// build a consul client
 	ip, err := GetOutboundIP()
-	addr := fmt.Sprintf("%s:8887", ip.String())
+	port := conf.GetConf().Kitex.Address
+	addr := fmt.Sprintf("%s"+port, ip.String())
 
 	// 创建反向代理池子
 	proxyPool.Init()
@@ -87,7 +88,7 @@ func main() {
 
 	// run Hertz with the consul register
 	h := server.New(
-		server.WithHostPorts(":8887"),
+		server.WithHostPorts(port),
 		server.WithRegistry(r, &registry.Info{
 			ServiceName: "gateway",
 			Addr:        utils.NewNetAddr("tcp", addr),

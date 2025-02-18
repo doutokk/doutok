@@ -1,6 +1,6 @@
 kitex:
   service: "cart"
-  address: ":8886"
+  address: ":8882"
   log_level: info
   otlp_address: "localhost:4317"
 

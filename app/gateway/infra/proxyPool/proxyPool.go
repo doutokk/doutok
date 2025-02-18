@@ -26,6 +26,9 @@ func Init() {
 		hostMap[name] = host
 		url := "http://" + host
 		proxy, _ := reverseproxy.NewSingleHostReverseProxy(url)
+		if proxy == nil {
+			panic(name + "proxy is nil")
+		}
 		pool[name] = proxy
 	}
 

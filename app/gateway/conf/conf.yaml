@@ -1,6 +1,6 @@
 kitex:
   service: "gateway"
-  address: ":8888"
+  address: ":8884"
   log_level: info
   otlp_address: "localhost:4317"
 
@@ -13,12 +13,12 @@ registry:
 Gateway:
   service_host:
     "user": "10.21.32.14:8888"
-    "auth": "10.21.32.14:8886"
-    "checkout": "checkout-service:8888"
-    "product": "product-service:8888"
-    "order": "order-service:8888"
-    "cart": "10.21.32.14:8886"
-    "payment": "payment-service:8888"
+    "auth": "10.21.32.14:8881"
+    "checkout": "10.21.32.14:8883"
+    "product": "10.21.32.14:8887"
+    "order": "10.21.32.14:8885"
+    "cart": "10.21.32.14:8882"
+    "payment": "10.21.32.14:8886"
 
 mysql:
   host: ""
