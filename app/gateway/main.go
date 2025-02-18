@@ -8,6 +8,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/hertz/pkg/common/json"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -22,9 +23,13 @@ import (
 	"os"
 )
 
-var (
-	textCnt = 0
-)
+// 自定义错误类型
+type BackendError struct {
+	StatusCode int    `json:"status_code"`
+	Message    string `json:"message"`
+	Body       string `json:"body"`
+	Errors     string `json:"errors,omitempty"` // 如果没有错误，则忽略该字段
+}
 
 func GetOutboundIP() (net.IP, error) {
 	conn, err := net.Dial("udp", "8.8.8.8:80")
@@ -135,8 +140,24 @@ func main() {
 		// todo:鉴权
 
 		if c.Response.StatusCode() != 200 {
-			err = fmt.Errorf("请求失败，状态码：%d \n%s\n%s", c.Response.StatusCode(), c.Response.Body(), c.Errors)
-			c.Response.SetBody([]byte(err.Error()))
+			// 读取响应 Body
+			bodyBytes := c.Response.Body()
+			bodyString := string(bodyBytes)
+
+			// 读取 Errors
+			errorsString := c.Errors.String()
+
+			// 创建自定义错误
+			backendErr := &BackendError{
+				StatusCode: c.Response.StatusCode(),
+				Message:    "Backend service returned an error",
+				Body:       bodyString,
+				Errors:     errorsString,
+			}
+
+			jsonErr, _ := json.Marshal(backendErr)
+			// 将错误存储到 context 中
+			c.Response.SetBody(jsonErr)
 		}
 	})
 
