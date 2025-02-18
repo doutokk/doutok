@@ -20,7 +20,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"strings"
 )
 
 var (
@@ -122,7 +121,7 @@ func main() {
 
 		// 打印请求的 URI
 		hlog.Info("path: ", c.Request.URI())
-		serviceName := getTargetServiceName(c.Request.URI().String())
+		serviceName := proxyPool.GetTargetServiceName(c.Request.URI().String())
 		proxy := proxyPool.GetProxy(serviceName)
 		proxy.SetDirector(func(req *protocol.Request) {
 			req.SetHost(proxyPool.GetHost(serviceName))
@@ -153,12 +152,4 @@ func registerMiddleware(h *server.Hertz) {
 
 	// cores
 	h.Use(cors.Default())
-}
-
-func getTargetServiceName(uri string) string {
-	// eg: http://10.21.32.14:8887/user/login
-	hlog.Info("req_uri:  " + uri)
-	parts := strings.Split(uri, "/")
-	targetServiceName := parts[3]
-	return targetServiceName
 }
