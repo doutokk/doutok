@@ -9,6 +9,7 @@ import (
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
 	"github.com/doutokk/doutok/app/order/biz/service"
 	"github.com/doutokk/doutok/common/utils"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
@@ -55,7 +56,7 @@ func ListOrder(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// GetOrder 给前端展示订单详情
+// GetOrder 给前端展示订单详情 todo:这里可以抽离代码，listorder哪
 // @router /order/:id [GET]
 func GetOrder(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -69,11 +70,39 @@ func GetOrder(ctx context.Context, c *app.RequestContext) {
 	userId := utils.GetUserIdRequest(c)
 
 	o := query.Q.Order
+	oi := query.Q.OrderItem
 	oneOrder, err := query.Q.Order.Where(o.OrderID.Eq(req.Id)).Where(o.UserID.Eq(uint32(userId))).First()
+
+	orderItems, err := oi.Where(oi.OrderID.Eq(oneOrder.OrderID)).Find()
+	orderItemsResp := make([]*order.OrderItem, 1)
+	for _, orderItem := range orderItems {
+		orderItemsResp = append(orderItemsResp, &order.OrderItem{
+			Item: &cart.CartItem{
+				ProductId: orderItem.ProductID,
+				Quantity:  orderItem.Quantity,
+			},
+			Cost: float32(orderItem.Cost),
+		})
+	}
+	resp := new(order.GetOrderResp)
+	resp.Order = &order.Order{
+		OrderId:      oneOrder.OrderID,
+		UserId:       oneOrder.UserID,
+		UserCurrency: oneOrder.UserCurrency,
+		Email:        oneOrder.Email,
+		Address: &order.Address{
+			StreetAddress: oneOrder.StreetAddress,
+			City:          oneOrder.City,
+			State:         oneOrder.State,
+			Country:       oneOrder.Country,
+			ZipCode:       oneOrder.ZipCode,
+		},
+		OrderItems: orderItemsResp,
+	}
+
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
-
-	c.JSON(consts.StatusOK, oneOrder)
+	c.JSON(consts.StatusOK, resp)
 }
