@@ -8,6 +8,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/service"
+	"github.com/doutokk/doutok/common/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
@@ -69,11 +70,8 @@ func ListProducts(ctx context.Context, c *app.RequestContext) {
 func GetProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.GetProductReq
+	utils.BindParamsToStruct(c, &req)
 	err = c.BindAndValidate(&req)
-
-	//id, _ := c.Params.Get("id")
-	//idInt, err := strconv.Atoi(id)
-	//req.Id = uint32(idInt)
 
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())

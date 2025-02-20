@@ -2,9 +2,9 @@ package order
 
 import (
 	"context"
-	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
+	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
 func PlaceOrder(ctx context.Context, req *order.PlaceOrderReq, callOptions ...callopt.Option) (resp *order.PlaceOrderResp, err error) {
@@ -20,6 +20,15 @@ func ListOrder(ctx context.Context, req *order.ListOrderReq, callOptions ...call
 	resp, err = defaultClient.ListOrder(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "ListOrder call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func GetOrder(ctx context.Context, req *order.GetOrderReq, callOptions ...callopt.Option) (resp *order.GetOrderResp, err error) {
+	resp, err = defaultClient.GetOrder(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "GetOrder call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil

@@ -5,6 +5,7 @@ package order
 import (
 	"context"
 	"github.com/doutokk/doutok/app/order/biz/service"
+	"github.com/doutokk/doutok/common/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -50,5 +51,22 @@ func ListOrder(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	c.JSON(consts.StatusOK, resp)
+}
+
+// GetOrder .
+// @router /order/:id [GET]
+func GetOrder(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req order.GetOrderReq
+	utils.BindParamsToStruct(c, &req)
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+
+	resp := new(order.GetOrderResp)
+
 	c.JSON(consts.StatusOK, resp)
 }

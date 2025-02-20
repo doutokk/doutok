@@ -15,6 +15,9 @@ service OrderService {
   rpc ListOrder(ListOrderReq) returns (ListOrderResp) {
     option(api.get) = "/order";
   }
+  rpc getOrder(getOrderReq) returns (getOrderResp){
+    option(api.get) = "/order/:id";
+  }
   rpc MarkOrderPaid(MarkOrderPaidReq) returns (MarkOrderPaidResp) {}
 }
 
@@ -60,6 +63,14 @@ message Order {
   Address address = 5;
   string email = 6;
   int32 created_at = 7;
+}
+
+message getOrderResp{
+  Order order=1;
+}
+
+message getOrderReq{
+  uint32 id = 1[(api.path)="id"];
 }
 
 message ListOrderResp {
