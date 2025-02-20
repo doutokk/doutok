@@ -2,10 +2,7 @@ module github.com/doutokk/doutok/app/auth
 
 go 1.23.4
 
-replace (
-	github.com/doutokk/doutok/common => ../../common
-	github.com/doutokk/doutok/rpc_gen => ../../rpc_gen
-)
+
 
 require (
 	github.com/cloudwego/fastpb v0.0.5
