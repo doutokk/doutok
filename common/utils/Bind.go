@@ -4,15 +4,18 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
+// todo:性能？还是改rest
 func BindParamsToStruct(c *app.RequestContext, req interface{}) error {
 	val := reflect.ValueOf(req).Elem()
 	typ := val.Type()
 
 	for i := 0; i < typ.NumField(); i++ {
 		field := typ.Field(i)
-		paramValue, exists := c.Params.Get(field.Name)
+		paramName := strings.ToLower(field.Name[:1]) + field.Name[1:]
+		paramValue, exists := c.Params.Get(paramName)
 		if !exists {
 			continue
 		}
