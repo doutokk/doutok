@@ -13,6 +13,7 @@ import (
 type Client interface {
 	PlaceOrder(ctx context.Context, Req *order.PlaceOrderReq, callOptions ...callopt.Option) (r *order.PlaceOrderResp, err error)
 	ListOrder(ctx context.Context, Req *order.ListOrderReq, callOptions ...callopt.Option) (r *order.ListOrderResp, err error)
+	GetOrder(ctx context.Context, Req *order.GetOrderReq, callOptions ...callopt.Option) (r *order.GetOrderResp, err error)
 	MarkOrderPaid(ctx context.Context, Req *order.MarkOrderPaidReq, callOptions ...callopt.Option) (r *order.MarkOrderPaidResp, err error)
 }
 
@@ -53,6 +54,11 @@ func (p *kOrderServiceClient) PlaceOrder(ctx context.Context, Req *order.PlaceOr
 func (p *kOrderServiceClient) ListOrder(ctx context.Context, Req *order.ListOrderReq, callOptions ...callopt.Option) (r *order.ListOrderResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.ListOrder(ctx, Req)
+}
+
+func (p *kOrderServiceClient) GetOrder(ctx context.Context, Req *order.GetOrderReq, callOptions ...callopt.Option) (r *order.GetOrderResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetOrder(ctx, Req)
 }
 
 func (p *kOrderServiceClient) MarkOrderPaid(ctx context.Context, Req *order.MarkOrderPaidReq, callOptions ...callopt.Option) (r *order.MarkOrderPaidResp, err error) {

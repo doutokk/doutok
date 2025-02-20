@@ -15,6 +15,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/doutokk/doutok/app/gateway/conf"
 	"github.com/doutokk/doutok/app/gateway/infra/proxyPool"
+	"github.com/doutokk/doutok/app/user/infra/rpc"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	consulapi "github.com/hashicorp/consul/api"
 	"github.com/hertz-contrib/cors"
 	hertzzap "github.com/hertz-contrib/logger/zap"
@@ -52,7 +54,7 @@ func GetOutboundIP() (net.IP, error) {
 	return localAddr.IP, nil
 }
 
-// Casbin 中间件
+// Casbin 中间件todo:应该给auth做这件事
 func CasbinMiddleware(e *casbin.Enforcer) app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// todo:不硬编码获取角色
@@ -104,8 +106,23 @@ func writeFile(filePath string, byteFile []byte) {
 	}
 }
 
+func checkAuth(ctx context.Context, c *app.RequestContext) {
+	// 获取请求头中的 Authorization 字段
+	authorization := string(c.Request.Header.Peek("Authorization"))
+	req := new(auth.VerifyTokenReq)
+	req.Token = authorization
+
+	// 验证 token
+	resp, err := rpc.AuthClient.VerifyTokenByRPC(ctx, req)
+	if err != nil || !resp.Res {
+		c.AbortWithMsg("Unauthorized", consts.StatusUnauthorized)
+		return
+	}
+
+	c.Request.Header.Set("userId", string(resp.UserId))
+}
+
 func main() {
-	// build a consul client
 
 	writeFile("conf/model.conf", modelFile)
 	writeFile("conf/policy.csv", policyFile)
@@ -143,10 +160,6 @@ func main() {
 	)
 	registerMiddleware(h)
 
-	h.Use(func(ctx context.Context, c *app.RequestContext) {
-		hlog.Info("孩子们这里我做了一些权限校验的东西，并且测试一下请求的顺序，1")
-	})
-
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, utils.H{"ping": "pong1"})
 	})
@@ -160,6 +173,7 @@ func main() {
 
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
+		checkAuth(ctx, c)
 
 		// 打印请求的 URI
 		hlog.Info("path: ", c.Request.URI())

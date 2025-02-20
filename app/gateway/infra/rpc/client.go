@@ -3,6 +3,7 @@ package rpc
 import (
 	"github.com/doutokk/doutok/app/gateway/conf"
 	"github.com/doutokk/doutok/common/utils"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
 	"sync"
 
@@ -18,6 +19,7 @@ var (
 	ProductClient productcatalogservice.Client
 	OrderClient   orderservice.Client
 	PaymentClient paymentservice.Client
+	AuthClient    authservice.Client
 	once          sync.Once
 	err           error
 	commonSuite   client.Option
@@ -35,7 +37,13 @@ func InitClient() {
 		initProductClient()
 		initOrderClient()
 		initPaymentClient()
+		InitAuthClient()
 	})
+}
+
+func InitAuthClient() {
+	AuthClient, err = authservice.NewClient("auth", commonSuite)
+	utils.PassOrPanic(err)
 }
 
 func initCartClient() {

@@ -3,7 +3,8 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/auth/biz/utils"
-	auth "github.com/doutokk/doutok/app/auth/kitex_gen/auth"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
+	"strconv"
 )
 
 type VerifyTokenByRPCService struct {
@@ -18,10 +19,14 @@ func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.Veri
 	// Finish your business logic.
 	token := req.Token
 
-	_, err = utils.ValidateJWT(token)
+	result, err := utils.ValidateJWT(token)
 	if err != nil {
 		return &auth.VerifyResp{Res: false}, err
 	}
 
-	return &auth.VerifyResp{Res: true}, nil
+	userId, _ := strconv.Atoi(result.ID)
+	return &auth.VerifyResp{
+		Res:    true,
+		UserId: int32(userId),
+	}, nil
 }

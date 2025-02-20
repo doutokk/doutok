@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/auth/biz/utils"
-	auth "github.com/doutokk/doutok/app/auth/kitex_gen/auth"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	"time"
 )
 

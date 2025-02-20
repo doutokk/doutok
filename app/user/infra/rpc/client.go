@@ -2,10 +2,10 @@ package rpc
 
 import (
 	"github.com/cloudwego/kitex/client"
-	"github.com/doutokk/doutok/app/auth/kitex_gen/auth/authservice"
 	"github.com/doutokk/doutok/app/checkout/conf"
 	"github.com/doutokk/doutok/common/clientsuite"
 	"github.com/doutokk/doutok/common/utils"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	"sync"
 )
 
