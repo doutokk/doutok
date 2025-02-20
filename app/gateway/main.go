@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"github.com/casbin/casbin/v2"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -18,9 +19,17 @@ import (
 	"github.com/hertz-contrib/cors"
 	hertzzap "github.com/hertz-contrib/logger/zap"
 	"github.com/hertz-contrib/registry/consul"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
+)
+
+var (
+	//go:embed conf/model.conf
+	modelFile []byte
+	//go:embed conf/policy.csv
+	policyFile []byte
 )
 
 // 自定义错误类型
@@ -66,8 +75,26 @@ func CasbinMiddleware(e *casbin.Enforcer) app.HandlerFunc {
 	}
 }
 
+func writeFile(filePath string, byteFile []byte) {
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		// 如果文件不存在，则创建并写入嵌入的内容
+		errr := ioutil.WriteFile(filePath, byteFile, 0644)
+		if errr != nil {
+			fmt.Println("无法写入文件:", errr)
+			return
+		}
+		fmt.Println("文件已写入:", filePath)
+	} else {
+		fmt.Println("文件已存在:", filePath)
+	}
+}
+
 func main() {
 	// build a consul client
+
+	writeFile("conf/model.conf", modelFile)
+	writeFile("conf/policy.csv", policyFile)
+
 	ip, err := GetOutboundIP()
 	port := conf.GetConf().Kitex.Address
 	addr := fmt.Sprintf("%s"+port, ip.String())
