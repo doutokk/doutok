@@ -6,7 +6,6 @@ require (
 	github.com/casbin/casbin/v2 v2.61.0
 	github.com/cloudwego/hertz v0.9.5
 	github.com/cloudwego/kitex v0.12.1
-	github.com/doutokk/doutok/app/user v0.0.0-20250220124703-e7bfadb232d1
 	github.com/doutokk/doutok/common v0.0.0-20250215020712-8ca923dc48e7
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250214102652-89eec21c321b
 	github.com/hashicorp/consul/api v1.31.1
@@ -47,7 +46,6 @@ require (
 	github.com/cloudwego/runtimex v0.1.0 // indirect
 	github.com/cloudwego/thriftgo v0.3.18 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/doutokk/doutok/app/checkout v0.0.0-20250220032541-44778db9162c // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
