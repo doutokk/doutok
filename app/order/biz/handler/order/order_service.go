@@ -4,12 +4,12 @@ package order
 
 import (
 	"context"
-	"github.com/doutokk/doutok/app/order/biz/service"
-	"github.com/doutokk/doutok/common/utils"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	order "github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	"github.com/doutokk/doutok/app/order/biz/dal/query"
+	"github.com/doutokk/doutok/app/order/biz/service"
+	"github.com/doutokk/doutok/common/utils"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
 // PlaceOrder .
@@ -39,6 +39,7 @@ func ListOrder(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req order.ListOrderReq
 	err = c.BindAndValidate(&req)
+	req.UserId = uint32(utils.GetUserIdRequest(c))
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
@@ -54,7 +55,7 @@ func ListOrder(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// GetOrder .
+// GetOrder 给前端展示订单详情
 // @router /order/:id [GET]
 func GetOrder(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -65,8 +66,14 @@ func GetOrder(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	userId := utils.GetUserIdRequest(c)
 
-	resp := new(order.GetOrderResp)
+	o := query.Q.Order
+	oneOrder, err := query.Q.Order.Where(o.OrderID.Eq(req.Id)).Where(o.UserID.Eq(uint32(userId))).First()
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, oneOrder)
 }

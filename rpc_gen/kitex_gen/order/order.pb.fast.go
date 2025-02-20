@@ -420,7 +420,7 @@ ReadFieldError:
 }
 
 func (x *GetOrderReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Id, offset, err = fastpb.ReadUint32(buf, _type)
+	x.Id, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -778,10 +778,10 @@ func (x *GetOrderReq) FastWrite(buf []byte) (offset int) {
 }
 
 func (x *GetOrderReq) fastWriteField1(buf []byte) (offset int) {
-	if x.Id == 0 {
+	if x.Id == "" {
 		return offset
 	}
-	offset += fastpb.WriteUint32(buf[offset:], 1, x.GetId())
+	offset += fastpb.WriteString(buf[offset:], 1, x.GetId())
 	return offset
 }
 
@@ -1111,10 +1111,10 @@ func (x *GetOrderReq) Size() (n int) {
 }
 
 func (x *GetOrderReq) sizeField1() (n int) {
-	if x.Id == 0 {
+	if x.Id == "" {
 		return n
 	}
-	n += fastpb.SizeUint32(1, x.GetId())
+	n += fastpb.SizeString(1, x.GetId())
 	return n
 }
 
