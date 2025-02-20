@@ -136,8 +136,6 @@ github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8Yc
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
 github.com/dlclark/regexp2 v1.11.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
-github.com/doutokk/doutok/app/auth v0.0.0-20250220032541-44778db9162c h1:3aVzwFpOdxNhmokiAqMcnYvIsKCaQsKFnDqDK4RKwDg=
-github.com/doutokk/doutok/app/auth v0.0.0-20250220032541-44778db9162c/go.mod h1:zqOYJrt7q1+xTMOkqztTgso5u0PYhGXVeAsXIEEwgTg=
 github.com/doutokk/doutok/app/checkout v0.0.0-20250220032541-44778db9162c h1:WOaQq5ddrhaQSC30NCcnEiG95DNoPT27ZhTYG0o2mLs=
 github.com/doutokk/doutok/app/checkout v0.0.0-20250220032541-44778db9162c/go.mod h1:6RwS+esVfzsU2jkMAKzCXDUq7KwB21CyefyqFLhTi6s=
 github.com/doutokk/doutok/common v0.0.0-20250214114708-c8ec1a9d48d2 h1:WuWREd93Rl6nw8ueoD6WnH7AuEE0RdBNHLONnoEhzFI=

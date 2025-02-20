@@ -7,7 +7,7 @@ replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 require (
 	github.com/cloudwego/hertz v0.9.5
 	github.com/cloudwego/kitex v0.12.1
-	github.com/doutokk/doutok/common v0.0.0-20250213052720-14edd7edb015
+	github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/joho/godotenv v1.5.1
@@ -116,7 +116,6 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.34.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.34.0 // indirect
-	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.20.0 // indirect
 	go.opentelemetry.io/otel/metric v1.34.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.34.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.31.0 // indirect

@@ -136,8 +136,8 @@ github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8Yc
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
 github.com/dlclark/regexp2 v1.11.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
-github.com/doutokk/doutok/common v0.0.0-20250213063132-1d342a229dad h1:EV9BE0v1EEuIkZJUm1amEVmJiDaG+WoY+5/lH7ZugT0=
-github.com/doutokk/doutok/common v0.0.0-20250213063132-1d342a229dad/go.mod h1:RtnQGZ1QM0rQLxPJEPAl36tQjzyqxmN2tExULtviJBE=
+github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20 h1:Tgug5yYeuFOeKzLuG+8s1/LecxqC0VwWmjYvJBTtXYY=
+github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20/go.mod h1:V5yqB9HGUZAxGfm5/FZnq180qz9dbP2N6CsUnoTKpFA=
 github.com/doutokk/doutok/rpc_gen v0.0.0-20250213063132-1d342a229dad h1:1m32IOt9tebj0VbHaX+LriZYHlr29fyEgq7bCOCAoDg=
 github.com/doutokk/doutok/rpc_gen v0.0.0-20250213063132-1d342a229dad/go.mod h1:ArK91JMjWm1TlMXIqLbZbHVe4zhCkcNorSlAJgsaF1g=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
