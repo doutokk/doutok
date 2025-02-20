@@ -2,8 +2,7 @@ package service
 
 import (
 	"context"
-	user "github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
-	
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 
 func TestLogin_Run(t *testing.T) {

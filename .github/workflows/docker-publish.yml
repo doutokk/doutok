@@ -34,7 +34,7 @@ jobs:
           - checkout
           - user
           - auth
-          - frontend
+          - gateway
     permissions:
       contents: read
       packages: write

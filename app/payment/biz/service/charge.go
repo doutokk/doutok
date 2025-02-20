@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/doutokk/doutok/app/payment/biz/dal/model"
 	"github.com/doutokk/doutok/app/payment/biz/dal/mysql"
-	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"time"

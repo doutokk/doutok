@@ -5,8 +5,9 @@ go 1.23.4
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
+	github.com/cloudwego/hertz v0.9.5
 	github.com/cloudwego/kitex v0.12.1
-	github.com/doutokk/doutok/common v0.0.0-20250213052720-14edd7edb015
+	github.com/doutokk/doutok/common v0.0.0-20250217115310-0ce7cd9c60a5
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
@@ -35,7 +36,6 @@ require (
 	github.com/cloudwego/fastpb v0.0.5 // indirect
 	github.com/cloudwego/frugal v0.2.3 // indirect
 	github.com/cloudwego/gopkg v0.1.3 // indirect
-	github.com/cloudwego/hertz v0.9.5 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/cloudwego/localsession v0.1.1 // indirect
 	github.com/cloudwego/netpoll v0.6.5 // indirect
@@ -85,6 +85,7 @@ require (
 	github.com/modern-go/gls v0.0.0-20220109145502-612d0167dce5 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/nyaruka/phonenumbers v1.0.55 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.20.5 // indirect
@@ -114,7 +115,6 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.34.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.34.0 // indirect
-	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.20.0 // indirect
 	go.opentelemetry.io/otel/metric v1.34.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.34.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.31.0 // indirect

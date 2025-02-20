@@ -6,7 +6,7 @@ import (
 	"github.com/doutokk/doutok/app/checkout/infra/rpc"
 	"github.com/doutokk/doutok/common/mocks"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
-	checkout "github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/checkout"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"

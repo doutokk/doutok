@@ -4,9 +4,9 @@ import (
 	"context"
 	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	
 )
 
 type RPCClient interface {

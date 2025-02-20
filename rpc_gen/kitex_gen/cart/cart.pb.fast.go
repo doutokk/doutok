@@ -5,6 +5,7 @@ package cart
 import (
 	fmt "fmt"
 	fastpb "github.com/cloudwego/fastpb"
+	api "github.com/doutokk/doutok/rpc_gen/kitex_gen/cwgo/http/api"
 )
 
 var (
@@ -541,3 +542,5 @@ var fieldIDToName_Cart = map[int32]string{
 }
 
 var fieldIDToName_EmptyCartResp = map[int32]string{}
+
+var _ = api.File_api_proto

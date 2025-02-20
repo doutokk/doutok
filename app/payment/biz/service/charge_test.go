@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/kitex/client"
-	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
 	consul "github.com/kitex-contrib/registry-consul"
 	"testing"

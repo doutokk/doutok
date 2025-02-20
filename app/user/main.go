@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user/userservice"
 	"github.com/joho/godotenv"
 	"net"
 	"os"
@@ -12,7 +13,6 @@ import (
 	"github.com/doutokk/doutok/app/user/conf"
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/common/serversuite"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user/userservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
@@ -38,6 +38,8 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
+	opts = append(opts, server.WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
+
 	// klog
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)

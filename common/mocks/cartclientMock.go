@@ -8,8 +8,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	callopt "github.com/cloudwego/kitex/client/callopt"
+	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	gomock "github.com/golang/mock/gomock"
 )
 

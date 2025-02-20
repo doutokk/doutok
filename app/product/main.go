@@ -4,18 +4,17 @@ package main
 import (
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/common/serversuite"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 	"net"
 	"os"
-
-	"github.com/doutokk/doutok/app/product/biz/dal"
-	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
-	"github.com/doutokk/doutok/app/product/biz/dal/query"
-	"github.com/doutokk/doutok/app/product/conf"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/doutokk/doutok/app/product/biz/dal"
+	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/product/biz/dal/query"
+	"github.com/doutokk/doutok/app/product/conf"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 )
 
@@ -38,6 +37,8 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
+	opts = append(opts, server.WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
+
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
 	if err != nil {

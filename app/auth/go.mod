@@ -2,15 +2,10 @@ module github.com/doutokk/doutok/app/auth
 
 go 1.23.4
 
-replace (
-	github.com/cloudwego/biz-demo/gomall/common => ../../common
-	github.com/cloudwego/biz-demo/gomall/rpc_gen => ../../rpc_gen
-)
-
 require (
+	github.com/cloudwego/fastpb v0.0.5
 	github.com/cloudwego/kitex v0.12.1
 	github.com/doutokk/doutok/common v0.0.0-20250214060332-d1df8124e83b
-	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
@@ -18,6 +13,7 @@ require (
 	github.com/kr/pretty v0.3.1
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/spf13/viper v1.19.0
+	google.golang.org/protobuf v1.36.5
 	gopkg.in/validator.v2 v2.0.1
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gen v0.3.26
@@ -36,7 +32,6 @@ require (
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/configmanager v0.2.2 // indirect
 	github.com/cloudwego/dynamicgo v0.4.7-0.20241220085612-55704ea4ca8f // indirect
-	github.com/cloudwego/fastpb v0.0.5 // indirect
 	github.com/cloudwego/frugal v0.2.3 // indirect
 	github.com/cloudwego/gopkg v0.1.3 // indirect
 	github.com/cloudwego/hertz v0.9.5 // indirect
@@ -138,7 +133,6 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20250115164207-1a7da9e5054f // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
 	google.golang.org/grpc v1.69.4 // indirect
-	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/datatypes v1.2.5 // indirect

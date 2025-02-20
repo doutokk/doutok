@@ -6,9 +6,15 @@ import "cart.proto";
 
 option go_package = "order";
 
+import "api.proto";
+
 service OrderService {
-  rpc PlaceOrder(PlaceOrderReq) returns (PlaceOrderResp) {}
-  rpc ListOrder(ListOrderReq) returns (ListOrderResp) {}
+  rpc PlaceOrder(PlaceOrderReq) returns (PlaceOrderResp) {
+    option(api.post) = "/order";
+  }
+  rpc ListOrder(ListOrderReq) returns (ListOrderResp) {
+    option(api.get) = "/order";
+  }
   rpc MarkOrderPaid(MarkOrderPaidReq) returns (MarkOrderPaidResp) {}
 }
 
