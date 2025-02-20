@@ -22,5 +22,6 @@ message DeliveryResp {
 }
 
 message VerifyResp {
-  bool res = 1;
+  int32 user_id = 1;
+  bool res = 2;
 }

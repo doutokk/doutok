@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/doutokk/doutok/app/auth/conf"
-	"github.com/doutokk/doutok/app/auth/kitex_gen/auth/authservice"
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/common/serversuite"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	"github.com/joho/godotenv"
 	"net"
 	"os"
@@ -31,6 +31,9 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
+	opts = append(opts, server.
+		WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
+
 	// klog
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)

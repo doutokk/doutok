@@ -4,8 +4,8 @@ import (
 	"context"
 	client2 "github.com/cloudwego/kitex/client"
 	"github.com/doutokk/doutok/app/auth/conf"
-	"github.com/doutokk/doutok/app/auth/kitex_gen/auth"
-	"github.com/doutokk/doutok/app/auth/kitex_gen/auth/authservice"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
 	consul "github.com/kitex-contrib/registry-consul"
 	"log"
 )
