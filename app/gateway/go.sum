@@ -95,10 +95,14 @@ github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
 github.com/dlclark/regexp2 v1.11.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
+github.com/doutokk/doutok/app/checkout v0.0.0-20250220032541-44778db9162c h1:WOaQq5ddrhaQSC30NCcnEiG95DNoPT27ZhTYG0o2mLs=
+github.com/doutokk/doutok/app/checkout v0.0.0-20250220032541-44778db9162c/go.mod h1:6RwS+esVfzsU2jkMAKzCXDUq7KwB21CyefyqFLhTi6s=
+github.com/doutokk/doutok/app/user v0.0.0-20250220124703-e7bfadb232d1 h1:tV+ixw5OgylrQOhr8HK2zOh8tMAiy0gWO1sYyRJu1Xw=
+github.com/doutokk/doutok/app/user v0.0.0-20250220124703-e7bfadb232d1/go.mod h1:Il4KiYmusGcJvXYL4Vmd8SVOHgL+CvuYy6mriYeybaY=
 github.com/doutokk/doutok/common v0.0.0-20250215020712-8ca923dc48e7 h1:Noid8j5IOtJMLCx6XoL6yao/vnzvnYotGSUUIj4fIlE=
 github.com/doutokk/doutok/common v0.0.0-20250215020712-8ca923dc48e7/go.mod h1:MZ/gDRBwe3FfQOFXwtglqwzMRoDNBlFoJeayJZN49js=
-github.com/doutokk/doutok/rpc_gen v0.0.0-20250213063132-1d342a229dad h1:1m32IOt9tebj0VbHaX+LriZYHlr29fyEgq7bCOCAoDg=
-github.com/doutokk/doutok/rpc_gen v0.0.0-20250213063132-1d342a229dad/go.mod h1:ArK91JMjWm1TlMXIqLbZbHVe4zhCkcNorSlAJgsaF1g=
+github.com/doutokk/doutok/rpc_gen v0.0.0-20250214102652-89eec21c321b h1:GKY9GrkXAi3cpwDnUTAj7EoeQUUAnC1tW4wvDVpYLmM=
+github.com/doutokk/doutok/rpc_gen v0.0.0-20250214102652-89eec21c321b/go.mod h1:ArK91JMjWm1TlMXIqLbZbHVe4zhCkcNorSlAJgsaF1g=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
