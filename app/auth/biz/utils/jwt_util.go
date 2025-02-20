@@ -44,6 +44,12 @@ func GenerateJWT(userID int, expirationTime time.Duration) (string, error) {
 
 // 校验jwt
 func ValidateJWT(tokenString string) (*CustomClaims, error) {
+
+	// 加上处理Bearer的逻辑，删除Bearer
+	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
+		tokenString = tokenString[7:]
+	}
+
 	// 解析并校验token
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// 校验签名方法

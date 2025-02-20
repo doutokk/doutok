@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/doutokk/doutok/app/user/infra/rpc"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user/userservice"
 	"github.com/joho/godotenv"
 	"net"
@@ -27,6 +28,7 @@ func main() {
 	query.SetDefault(mysql.DB)
 	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
+	rpc.InitClient()
 	opts := kitexInit()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)
