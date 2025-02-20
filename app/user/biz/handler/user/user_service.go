@@ -42,12 +42,8 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	//s := service.NewLoginService(ctx)
-	//resp, err := s.Run(&req)
-
-	// 测试看看
-	resp := new(user.LoginResp)
-	resp.Token = "1234"
+	s := service.NewLoginService(ctx)
+	resp, err := s.Run(&req)
 
 	if err != nil {
 		c.JSON(consts.StatusInternalServerError, err.Error())
