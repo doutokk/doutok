@@ -15,7 +15,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/doutokk/doutok/app/gateway/conf"
 	"github.com/doutokk/doutok/app/gateway/infra/proxyPool"
-	"github.com/doutokk/doutok/app/user/infra/rpc"
+	"github.com/doutokk/doutok/app/gateway/infra/rpc"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	consulapi "github.com/hashicorp/consul/api"
 	"github.com/hertz-contrib/cors"
@@ -126,6 +126,7 @@ func main() {
 
 	writeFile("conf/model.conf", modelFile)
 	writeFile("conf/policy.csv", policyFile)
+	rpc.InitClient()
 
 	ip, err := GetOutboundIP()
 	port := conf.GetConf().Kitex.Address
