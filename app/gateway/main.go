@@ -62,7 +62,6 @@ func CasbinMiddleware(e *casbin.Enforcer) app.HandlerFunc {
 			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
 			return
 		}
-
 		c.Next(ctx)
 	}
 }
@@ -72,9 +71,6 @@ func main() {
 	ip, err := GetOutboundIP()
 	port := conf.GetConf().Kitex.Address
 	addr := fmt.Sprintf("%s"+port, ip.String())
-
-	// 创建反向代理池子
-	proxyPool.Init()
 
 	if err != nil {
 		log.Fatal(err)
@@ -89,6 +85,9 @@ func main() {
 	}
 	// build a consul register with the consul client
 	r := consul.NewConsulRegister(consulClient)
+
+	// 创建反向代理池子
+	proxyPool.Init()
 
 	// run Hertz with the consul register
 	h := server.New(
@@ -109,10 +108,6 @@ func main() {
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, utils.H{"ping": "pong1"})
 	})
-
-	if err != nil {
-		// 处理错误
-	}
 
 	// 鉴权中间件
 	enforcer, err := casbin.NewEnforcer("conf/model.conf", "conf/policy.csv")

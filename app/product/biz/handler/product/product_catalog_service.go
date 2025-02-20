@@ -4,12 +4,11 @@ package product
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/service"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
-
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 type bffProduct struct {
@@ -71,6 +70,11 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.GetProductReq
 	err = c.BindAndValidate(&req)
+
+	//id, _ := c.Params.Get("id")
+	//idInt, err := strconv.Atoi(id)
+	//req.Id = uint32(idInt)
+
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
@@ -92,6 +96,7 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 func SearchProducts(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.SearchProductsReq
+	c.BindQuery(&req)
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())

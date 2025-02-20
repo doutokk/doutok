@@ -1,6 +1,6 @@
 kitex:
   service: "product"
-  address: ":8887"
+  address: ":8888"
   log_level: info
   otlp_address: "localhost:4317"
 

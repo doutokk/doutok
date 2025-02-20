@@ -1,6 +1,6 @@
 kitex:
   service: "payment"
-  address: ":8886"
+  address: ":8888"
   log_level: info
   otlp_address: "localhost:4317"
 
