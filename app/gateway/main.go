@@ -27,6 +27,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"time"
 )
 
 var (
@@ -192,10 +193,35 @@ func main() {
 		}),
 	)
 
-	registerMiddleware(h)
+	// todo:为什么我h.Use的没被执行
+	h.Use(
+		cors.New(cors.Config{
+			AllowAllOrigins: true,
+			AllowMethods: []string{
+				"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS",
+			},
+			AllowHeaders: []string{
+				"Content-Type",
+				"Authorization",
+				"X-Token",
+				"Refer",
+				"Origin",
+				"Zy-Cookie",
+			},
+			ExposeHeaders: []string{
+				"Content-Length",
+				"Access-Control-Allow-Origin",
+				"Access-Control-Allow-Headers",
+				"Access-Control-Request-Headers",
+				"Access-Control-Expose-Headers",
+				"Content-Type",
+				"Zy-Cookie",
+			},
+			AllowCredentials: true,
+			MaxAge:           12 * time.Hour,
+		}))
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
-		allowCors(c)
 		c.JSON(consts.StatusOK, utils.H{"ping": "pong1"})
 	})
 
@@ -205,12 +231,17 @@ func main() {
 		log.Fatal(err)
 	}
 	h.Use(CasbinMiddleware(enforcer))
+	registerMiddleware()
 
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
 		allowCors(c)
+		if string(c.Method()) == "OPTIONS" {
+			c.SetStatusCode(204)
+			return
+		}
 		if !checkAuth(ctx, c) {
-			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
+			c.JSON(401, utils.H{"error": "Unauthorized"})
 			return
 		}
 
@@ -255,13 +286,10 @@ func main() {
 }
 
 // todo:往里面加多点好东西
-func registerMiddleware(h *server.Hertz) {
+func registerMiddleware() {
 	// access log
 	logger := hertzzap.NewLogger()
 	hlog.SetLogger(logger)
 	hlog.SetLevel(hlog.LevelInfo)
 	hlog.SetOutput(os.Stdout)
-
-	// cores
-	h.Use(cors.Default())
 }
