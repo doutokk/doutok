@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package file;
+
+option go_package = 'file';
+
+message UploadFileResp {
+  string key = 1;
+  string host = 2;
+  string policy = 3;
+  string security_token = 4;
+  string signature = 5;
+  string x_oss_credential = 6;
+  string x_oss_date = 7;
+  string x_oss_signature_version = 8;
+}
+
+message UploadFileReq {
+    string user_id = 1;
+    string file_name = 2;
+}
+
+
+service FileService {
+  rpc UploadFile(UploadFileReq) returns (UploadFileResp) {}
+}
