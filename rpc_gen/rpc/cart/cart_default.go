@@ -33,3 +33,12 @@ func EmptyCart(ctx context.Context, req *cart.EmptyCartReq, callOptions ...callo
 	}
 	return resp, nil
 }
+
+func EditCart(ctx context.Context, req *cart.EditCartReq, callOptions ...callopt.Option) (resp *cart.EditCartResp, err error) {
+	resp, err = defaultClient.EditCart(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "EditCart call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

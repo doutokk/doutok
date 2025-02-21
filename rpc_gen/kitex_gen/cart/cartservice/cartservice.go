@@ -36,6 +36,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"editCart": kitex.NewMethodInfo(
+		editCartHandler,
+		newEditCartArgs,
+		newEditCartResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -561,6 +568,159 @@ func (p *EmptyCartResult) GetResult() interface{} {
 	return p.Success
 }
 
+func editCartHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(cart.EditCartReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(cart.CartService).EditCart(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *EditCartArgs:
+		success, err := handler.(cart.CartService).EditCart(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*EditCartResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newEditCartArgs() interface{} {
+	return &EditCartArgs{}
+}
+
+func newEditCartResult() interface{} {
+	return &EditCartResult{}
+}
+
+type EditCartArgs struct {
+	Req *cart.EditCartReq
+}
+
+func (p *EditCartArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(cart.EditCartReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *EditCartArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *EditCartArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *EditCartArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *EditCartArgs) Unmarshal(in []byte) error {
+	msg := new(cart.EditCartReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var EditCartArgs_Req_DEFAULT *cart.EditCartReq
+
+func (p *EditCartArgs) GetReq() *cart.EditCartReq {
+	if !p.IsSetReq() {
+		return EditCartArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *EditCartArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *EditCartArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type EditCartResult struct {
+	Success *cart.EditCartResp
+}
+
+var EditCartResult_Success_DEFAULT *cart.EditCartResp
+
+func (p *EditCartResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(cart.EditCartResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *EditCartResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *EditCartResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *EditCartResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *EditCartResult) Unmarshal(in []byte) error {
+	msg := new(cart.EditCartResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *EditCartResult) GetSuccess() *cart.EditCartResp {
+	if !p.IsSetSuccess() {
+		return EditCartResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *EditCartResult) SetSuccess(x interface{}) {
+	p.Success = x.(*cart.EditCartResp)
+}
+
+func (p *EditCartResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *EditCartResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -596,6 +756,16 @@ func (p *kClient) EmptyCart(ctx context.Context, Req *cart.EmptyCartReq) (r *car
 	_args.Req = Req
 	var _result EmptyCartResult
 	if err = p.c.Call(ctx, "EmptyCart", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) EditCart(ctx context.Context, Req *cart.EditCartReq) (r *cart.EditCartResp, err error) {
+	var _args EditCartArgs
+	_args.Req = Req
+	var _result EditCartResult
+	if err = p.c.Call(ctx, "editCart", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

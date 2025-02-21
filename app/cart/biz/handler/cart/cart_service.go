@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/doutokk/doutok/app/cart/biz/service"
 	"github.com/doutokk/doutok/app/cart/infra/rpc"
+	"github.com/doutokk/doutok/common/utils"
 	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 
@@ -27,33 +28,12 @@ type BffProduct struct {
 	Quantity    int32   `json:"quantity"`
 }
 
-// AddItem .
-// @router /product/edit [POST]
-func AddItem(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req cart.AddItemReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-
-	server := service.NewAddItemService(ctx)
-
-	resp, err := server.Run(&req)
-
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
-		return
-	}
-	c.JSON(consts.StatusOK, resp)
-}
-
 // GetCart .
 // @router /cart [GET]
 func GetCart(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req cart.GetCartReq
+	req.UserId = uint32(utils.GetUserIdRequest(c))
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
@@ -99,4 +79,21 @@ func GetCart(ctx context.Context, c *app.RequestContext) {
 	//
 
 	c.JSON(consts.StatusOK, bffCart)
+}
+
+// EditCart .
+// @router /cart/edit [POST]
+func EditCart(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req cart.EditCartReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	server := service.NewEditCartService(ctx)
+	req.UserId = uint32(utils.GetUserIdRequest(c))
+	resp, err := server.Run(&req)
+
+	c.JSON(consts.StatusOK, resp)
 }

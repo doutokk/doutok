@@ -8,12 +8,23 @@ import "api.proto";
 
 service CartService {
   rpc AddItem(AddItemReq) returns (AddItemResp) {
-    option(api.post) = "/cart/edit";
   }
   rpc GetCart(GetCartReq) returns (GetCartResp) {
     option(api.get) = "/cart";
   }
   rpc EmptyCart(EmptyCartReq) returns (EmptyCartResp) {}
+
+  rpc editCart(editCartReq) returns (editCartResp) {
+    option(api.post) = "/cart/edit";
+  }
+}
+
+message editCartReq{
+  uint32 user_id= 1;
+  repeated CartItem items = 2;
+}
+
+message editCartResp{
 }
 
 message CartItem {

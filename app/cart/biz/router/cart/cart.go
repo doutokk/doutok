@@ -18,8 +18,6 @@ func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
 	root.GET("/cart", append(_getcartMw(), cart.GetCart)...)
-	{
-		_cart := root.Group("/cart", _cartMw()...)
-		_cart.POST("/edit", append(_additemMw(), cart.AddItem)...)
-	}
+	_cart := root.Group("/cart", _cartMw()...)
+	_cart.POST("/edit", append(_editcartMw(), cart.EditCart)...)
 }
