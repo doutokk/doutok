@@ -153,6 +153,7 @@ func allowCors(c *app.RequestContext) {
 
 	// 允许浏览器读取的所有响应头
 	c.Header("Access-Control-Expose-Headers", "*")
+
 }
 
 func main() {
@@ -209,6 +210,11 @@ func main() {
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
 		allowCors(c)
+		if string(c.Request.Method()) == "OPTIONS" {
+			c.AbortWithStatus(200) // 返回 204 No Content
+			return
+		}
+
 		if !checkAuth(ctx, c) {
 			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
 			return
