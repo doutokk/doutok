@@ -129,13 +129,20 @@ func checkAuth(ctx context.Context, c *app.RequestContext) bool {
 	return true
 }
 
-func allowCors(h *server.Hertz) {
-	// 允许跨域请求
-	h.Use(cors.New(cors.Config{
-		AllowAllOrigins: true,
-		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD", "CONNECT", "TRACE"},
-		AllowHeaders:    []string{"Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method", "Authorization", "Content-Type", "Access-Control-Allow-Headers"},
-	}))
+func allowCors(c *app.RequestContext) {
+	c.Header("Access-Control-Allow-Credentials", "true")
+
+	origin := c.Request.Header.Get("Origin")
+
+	if origin != "" {
+		c.Header("Access-Control-Allow-Origin", origin)
+	}
+
+	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+	c.Header("Access-Control-Allow-Headers", "Authorization, transfer, session, Content-Type, Accept, Origin, X-Requested-With, token, id, X-Custom-Header, X-Cookie, Connection, User-Agent, Cookie")
+	c.Header("Access-Control-Max-Age", "3600")
+	c.Header("Access-Control-Expose-Headers", "*")
 }
 
 func main() {
@@ -175,8 +182,6 @@ func main() {
 		}),
 	)
 
-	allowCors(h)
-
 	registerMiddleware(h)
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
@@ -192,6 +197,7 @@ func main() {
 
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
+		allowCors(c)
 		if !checkAuth(ctx, c) {
 			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
 			return
