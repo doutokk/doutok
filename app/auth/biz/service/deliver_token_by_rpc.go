@@ -19,7 +19,8 @@ func (s *DeliverTokenByRPCService) Run(req *auth.DeliverTokenReq) (resp *auth.De
 	// Finish your business logic.
 	userId := req.UserId
 
-	jwt, err := utils.GenerateJWT(int(userId), 24*time.Hour)
+	// todo:过期时间
+	jwt, err := utils.GenerateJWT(int(userId), 24*30*30*time.Hour)
 	if err != nil {
 		return &auth.DeliveryResp{
 			Token: "",
