@@ -26,6 +26,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"strconv"
 )
 
 var (
@@ -106,7 +107,13 @@ func writeFile(filePath string, byteFile []byte) {
 	}
 }
 
-func checkAuth(ctx context.Context, c *app.RequestContext) {
+func checkAuth(ctx context.Context, c *app.RequestContext) bool {
+
+	// todo:测试，实际要在auth那里用casbin
+	if proxyPool.GetTargetServiceName(c.Request.URI().String()) == "user" {
+		return true
+	}
+
 	// 获取请求头中的 Authorization 字段
 	authorization := string(c.Request.Header.Peek("Authorization"))
 	req := new(auth.VerifyTokenReq)
@@ -115,11 +122,13 @@ func checkAuth(ctx context.Context, c *app.RequestContext) {
 	// 验证 token
 	resp, err := rpc.AuthClient.VerifyTokenByRPC(ctx, req)
 	if err != nil || !resp.Res {
-		c.AbortWithMsg("Unauthorized", consts.StatusUnauthorized)
-		return
+		return false
 	}
 
-	c.Request.Header.Set("userId", string(resp.UserId))
+	c.Request.Header.Set("userId", strconv.Itoa(int(resp.UserId)))
+	ctx = context.WithValue(ctx, "userId", strconv.Itoa(int(resp.UserId)))
+
+	return true
 }
 
 func main() {
@@ -174,7 +183,10 @@ func main() {
 
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
-		checkAuth(ctx, c)
+		if !checkAuth(ctx, c) {
+			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
+			return
+		}
 
 		// 打印请求的 URI
 		hlog.Info("path: ", c.Request.URI())
