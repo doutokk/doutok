@@ -24,6 +24,9 @@ func PlaceOrder(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
+	// todo:这里应该做统一化的处理，userId不应该用传进来的
+	req.UserId = uint32(utils.GetUserIdRequest(c))
+
 	service := service.NewPlaceOrderService(ctx)
 	resp, err := service.Run(&req)
 

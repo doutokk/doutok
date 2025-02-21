@@ -30,3 +30,8 @@ func _cartMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _editcartMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

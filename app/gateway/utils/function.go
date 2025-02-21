@@ -1,10 +1,12 @@
 package utils
 
-import "context"
+import (
+	"context"
+	"strconv"
+)
 
 func GetUserIdFromCtx(ctx context.Context) uint32 {
-	if ctx.Value(UserIdKey) == nil {
-		return 0
-	}
-	return uint32(ctx.Value(UserIdKey).(float64))
+	userIDStr := ctx.Value("user_id").(string)
+	userIDUint64, _ := strconv.ParseUint(userIDStr, 10, 32)
+	return uint32(userIDUint64)
 }

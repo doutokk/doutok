@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/doutokk/doutok/app/auth/biz/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
-	"strconv"
 )
 
 type VerifyTokenByRPCService struct {
@@ -24,7 +23,7 @@ func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.Veri
 		return &auth.VerifyResp{Res: false}, err
 	}
 
-	userId, _ := strconv.Atoi(result.ID)
+	userId := result.UserID
 	return &auth.VerifyResp{
 		Res:    true,
 		UserId: int32(userId),

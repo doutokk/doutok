@@ -125,9 +125,7 @@ func checkAuth(ctx context.Context, c *app.RequestContext) bool {
 		return false
 	}
 
-	c.Request.Header.Set("userId", strconv.Itoa(int(resp.UserId)))
-	ctx = context.WithValue(ctx, "userId", strconv.Itoa(int(resp.UserId)))
-
+	c.Request.Header.Set("user_id", strconv.Itoa(int(resp.UserId)))
 	return true
 }
 
