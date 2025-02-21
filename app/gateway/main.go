@@ -140,7 +140,6 @@ func allowCors(h *server.Hertz) {
 }
 
 func main() {
-
 	writeFile("conf/model.conf", modelFile)
 	writeFile("conf/policy.csv", policyFile)
 	rpc.InitClient()
@@ -176,6 +175,9 @@ func main() {
 			Tags:        nil,
 		}),
 	)
+
+	allowCors(h)
+
 	registerMiddleware(h)
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
