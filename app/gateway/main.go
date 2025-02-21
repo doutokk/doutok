@@ -129,6 +129,16 @@ func checkAuth(ctx context.Context, c *app.RequestContext) bool {
 	return true
 }
 
+func allowCors(h *server.Hertz) {
+	// 允许跨域请求
+	h.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD", "CONNECT", "TRACE"},
+		AllowHeaders:     []string{"Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method", "Authorization", "Content-Type"},
+		AllowCredentials: true,
+	}))
+}
+
 func main() {
 
 	writeFile("conf/model.conf", modelFile)
