@@ -235,7 +235,7 @@ func main() {
 
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
-		allowCors(c)
+		defer allowCors(c)
 		if string(c.Method()) == "OPTIONS" {
 			c.SetStatusCode(204)
 			return
