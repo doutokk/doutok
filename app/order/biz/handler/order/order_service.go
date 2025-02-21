@@ -74,11 +74,16 @@ func GetOrder(ctx context.Context, c *app.RequestContext) {
 
 	o := query.Q.Order
 	oi := query.Q.OrderItem
-	oneOrder, err := query.Q.Order.Where(o.OrderID.Eq(req.Id)).Where(o.UserID.Eq(uint32(userId))).First()
+	oneOrder, err := o.Where(o.OrderID.Eq(req.Id)).Where(o.UserID.Eq(uint32(userId))).First()
 
 	orderItems, err := oi.Where(oi.OrderID.Eq(oneOrder.OrderID)).Find()
 	orderItemsResp := make([]*order.OrderItem, 1)
 	for _, orderItem := range orderItems {
+
+		if orderItem == nil {
+			continue
+		}
+
 		orderItemsResp = append(orderItemsResp, &order.OrderItem{
 			Item: &cart.CartItem{
 				ProductId: orderItem.ProductID,
