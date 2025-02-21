@@ -21,3 +21,10 @@ redis:
   username: ""
   password: ""
   db: 0
+
+oss:
+  access_key_id: ""
+  access_key_secret: ""
+  role_arn_for_oss_upload: ""
+  bucket: ""
+  region_id: ""

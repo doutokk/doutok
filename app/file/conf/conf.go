@@ -47,6 +47,14 @@ type Config struct {
 		Password string `mapstructure:"password"`
 		DB       int    `mapstructure:"db"`
 	} `mapstructure:"redis"`
+
+	OSS struct {
+		AccessKeyID         string `mapstructure:"access_key_id"`
+		AccessKeySecret     string `mapstructure:"access_key_secret"`
+		RoleArnForOssUpload string `mapstructure:"role_arn_for_oss_upload"`
+		Bucket              string `mapstructure:"bucket"`
+		RegionID            string `mapstructure:"region_id"`
+	} `mapstructure:"oss"`
 }
 
 // GetConf gets configuration instance
