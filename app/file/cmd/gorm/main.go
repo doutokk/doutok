@@ -38,7 +38,7 @@ func main() {
 	// migrate the database
 	mysql.Init()
 
-	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.User{})
+	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.File{})
 	if err != nil {
 		panic(err)
 	}
