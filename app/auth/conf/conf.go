@@ -47,6 +47,7 @@ type Config struct {
 		Password string `mapstructure:"password"`
 		DB       int    `mapstructure:"db"`
 	} `mapstructure:"redis"`
+	JwtSecret string `mapstructure:"jwt_secret"`
 }
 
 // GetConf gets configuration instance

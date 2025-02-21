@@ -21,3 +21,5 @@ redis:
   username: ""
   password: ""
   db: 0
+
+jwt_secret: https://github.com/doutokk/doutok
