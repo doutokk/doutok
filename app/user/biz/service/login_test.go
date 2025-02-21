@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"testing"
+
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 )
 
