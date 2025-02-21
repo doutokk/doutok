@@ -129,13 +129,30 @@ func checkAuth(ctx context.Context, c *app.RequestContext) bool {
 	return true
 }
 
-func allowCors(h *server.Hertz) {
+func allowCors(c *app.RequestContext) {
 	// 允许跨域请求
-	h.Use(cors.New(cors.Config{
-		AllowAllOrigins: true,
-		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD", "CONNECT", "TRACE"},
-		AllowHeaders:    []string{"Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method", "Authorization", "Content-Type", "Access-Control-Allow-Headers"},
-	}))
+	// 设置允许携带凭证（cookies）
+	c.Header("Access-Control-Allow-Credentials", "true")
+
+	// 获取请求的来源地址
+	origin := c.Request.Header.Get("Origin")
+
+	// 根据需求放宽或限制允许的源，这里假设只允许特定源
+	if origin != "" {
+		c.Header("Access-Control-Allow-Origin", origin)
+	}
+
+	// 设置允许的方法
+	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+	// 设置允许的请求头
+	c.Header("Access-Control-Allow-Headers", "Authorization, transfer, session, Content-Type, Accept, Origin, X-Requested-With, token, id, X-Custom-Header, X-Cookie, Connection, User-Agent, Cookie")
+
+	// 设置预检请求的有效期
+	c.Header("Access-Control-Max-Age", "3600")
+
+	// 允许浏览器读取的所有响应头
+	c.Header("Access-Control-Expose-Headers", "*")
 }
 
 func main() {
@@ -175,11 +192,10 @@ func main() {
 		}),
 	)
 
-	allowCors(h)
-
 	registerMiddleware(h)
 
 	h.GET("/ping", func(ctx context.Context, c *app.RequestContext) {
+		allowCors(c)
 		c.JSON(consts.StatusOK, utils.H{"ping": "pong1"})
 	})
 
@@ -192,6 +208,7 @@ func main() {
 
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
+		allowCors(c)
 		if !checkAuth(ctx, c) {
 			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
 			return
