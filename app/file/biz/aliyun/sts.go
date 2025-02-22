@@ -2,20 +2,28 @@ package aliyun
 
 import (
 	"fmt"
-	"os"
-
 	openapi "github.com/alibabacloud-go/darabonba-openapi/v2/client"
 	sts20150401 "github.com/alibabacloud-go/sts-20150401/v2/client"
 	util "github.com/alibabacloud-go/tea-utils/v2/service"
 	"github.com/alibabacloud-go/tea/tea"
+	"github.com/doutokk/doutok/app/file/conf"
 )
 
-func main() {
+var c = conf.GetConf().OSS
+
+type STSToken struct {
+	AccessKeyId     string
+	AccessKeySecret string
+	SecurityToken   string
+	Expiration      string
+}
+
+func GetSTSToken() (token STSToken) {
 	// 从环境变量中获取步骤 1.1 生成的 RAM 用户的访问密钥（AccessKey ID 和 AccessKey Secret）。
-	accessKeyId := os.Getenv("ACCESS_KEY_ID")
-	accessKeySecret := os.Getenv("ACCESS_KEY_SECRET")
+	accessKeyId := c.AccessKeyID
+	accessKeySecret := c.AccessKeySecret
 	// 从环境变量中获取步骤 1.3 生成的 RAM 角色的 RamRoleArn。
-	roleArn := os.Getenv("RAM_ROLE_ARN")
+	roleArn := c.RoleArnForOssUpload
 
 	// 创建权限策略客户端。
 	config := &openapi.Config{
@@ -25,7 +33,7 @@ func main() {
 		AccessKeySecret: tea.String(accessKeySecret),
 	}
 	// Endpoint 请参考 https://api.aliyun.com/product/Sts
-	config.Endpoint = tea.String("sts.cn-hangzhou.aliyuncs.com")
+	config.Endpoint = tea.String("sts.cn-shenzhen.aliyuncs.com")
 	client, err := sts20150401.NewClient(config)
 	if err != nil {
 		fmt.Printf("Failed to create client: %v\n", err)
@@ -53,4 +61,11 @@ func main() {
 	fmt.Println("AccessKeySecret: " + tea.StringValue(credentials.AccessKeySecret))
 	fmt.Println("SecurityToken: " + tea.StringValue(credentials.SecurityToken))
 	fmt.Println("Expiration: " + tea.StringValue(credentials.Expiration))
+	token = STSToken{
+		AccessKeyId:     tea.StringValue(credentials.AccessKeyId),
+		AccessKeySecret: tea.StringValue(credentials.AccessKeySecret),
+		SecurityToken:   tea.StringValue(credentials.SecurityToken),
+		Expiration:      tea.StringValue(credentials.Expiration),
+	}
+	return
 }
