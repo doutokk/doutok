@@ -4,6 +4,7 @@ use (
 	./app/auth
 	./app/cart
 	./app/checkout
+	./app/file
 	./app/gateway
 	./app/order
 	./app/payment

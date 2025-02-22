@@ -3,16 +3,15 @@ package service
 import (
 	"context"
 	"testing"
-
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
+	file "github.com/doutokk/doutok/rpc_gen/kitex_gen/file"
 )
 
-func TestLogin_Run(t *testing.T) {
+func TestUploadFile_Run(t *testing.T) {
 	ctx := context.Background()
-	s := NewLoginService(ctx)
+	s := NewUploadFileService(ctx)
 	// init req and assert value
 
-	req := &user.LoginReq{}
+	req := &file.UploadFileReq{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)
