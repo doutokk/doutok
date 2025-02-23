@@ -36,3 +36,10 @@ func (s *CartServiceImpl) EditCart(ctx context.Context, req *cart.EditCartReq) (
 
 	return resp, err
 }
+
+// FrontendGetCart implements the CartServiceImpl interface.
+func (s *CartServiceImpl) FrontendGetCart(ctx context.Context, req *cart.FrontendGetCartReq) (resp *cart.FrontendGetCartResp, err error) {
+	resp, err = service.NewFrontendGetCartService(ctx).Run(req)
+
+	return resp, err
+}

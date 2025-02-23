@@ -43,6 +43,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"FrontendGetCart": kitex.NewMethodInfo(
+		frontendGetCartHandler,
+		newFrontendGetCartArgs,
+		newFrontendGetCartResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -721,6 +728,159 @@ func (p *EditCartResult) GetResult() interface{} {
 	return p.Success
 }
 
+func frontendGetCartHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(cart.FrontendGetCartReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(cart.CartService).FrontendGetCart(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *FrontendGetCartArgs:
+		success, err := handler.(cart.CartService).FrontendGetCart(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*FrontendGetCartResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newFrontendGetCartArgs() interface{} {
+	return &FrontendGetCartArgs{}
+}
+
+func newFrontendGetCartResult() interface{} {
+	return &FrontendGetCartResult{}
+}
+
+type FrontendGetCartArgs struct {
+	Req *cart.FrontendGetCartReq
+}
+
+func (p *FrontendGetCartArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(cart.FrontendGetCartReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *FrontendGetCartArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *FrontendGetCartArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *FrontendGetCartArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *FrontendGetCartArgs) Unmarshal(in []byte) error {
+	msg := new(cart.FrontendGetCartReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var FrontendGetCartArgs_Req_DEFAULT *cart.FrontendGetCartReq
+
+func (p *FrontendGetCartArgs) GetReq() *cart.FrontendGetCartReq {
+	if !p.IsSetReq() {
+		return FrontendGetCartArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *FrontendGetCartArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *FrontendGetCartArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type FrontendGetCartResult struct {
+	Success *cart.FrontendGetCartResp
+}
+
+var FrontendGetCartResult_Success_DEFAULT *cart.FrontendGetCartResp
+
+func (p *FrontendGetCartResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(cart.FrontendGetCartResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *FrontendGetCartResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *FrontendGetCartResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *FrontendGetCartResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *FrontendGetCartResult) Unmarshal(in []byte) error {
+	msg := new(cart.FrontendGetCartResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *FrontendGetCartResult) GetSuccess() *cart.FrontendGetCartResp {
+	if !p.IsSetSuccess() {
+		return FrontendGetCartResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *FrontendGetCartResult) SetSuccess(x interface{}) {
+	p.Success = x.(*cart.FrontendGetCartResp)
+}
+
+func (p *FrontendGetCartResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *FrontendGetCartResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -766,6 +926,16 @@ func (p *kClient) EditCart(ctx context.Context, Req *cart.EditCartReq) (r *cart.
 	_args.Req = Req
 	var _result EditCartResult
 	if err = p.c.Call(ctx, "editCart", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) FrontendGetCart(ctx context.Context, Req *cart.FrontendGetCartReq) (r *cart.FrontendGetCartResp, err error) {
+	var _args FrontendGetCartArgs
+	_args.Req = Req
+	var _result FrontendGetCartResult
+	if err = p.c.Call(ctx, "FrontendGetCart", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

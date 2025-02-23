@@ -5,7 +5,7 @@ package user
 import (
 	fmt "fmt"
 	fastpb "github.com/cloudwego/fastpb"
-	api "github.com/doutokk/doutok/rpc_gen/kitex_gen/cwgo/http/api"
+	annotations "google.golang.org/genproto/googleapis/api/annotations"
 )
 
 var (
@@ -315,4 +315,4 @@ var fieldIDToName_LoginResp = map[int32]string{
 	1: "Token",
 }
 
-var _ = api.File_api_proto
+var _ = annotations.File_google_api_annotations_proto
