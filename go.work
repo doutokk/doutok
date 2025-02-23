@@ -1,4 +1,4 @@
-go 1.23.4
+go 1.23.6
 
 use (
 	./app/auth
@@ -6,6 +6,7 @@ use (
 	./app/checkout
 	./app/file
 	./app/gateway
+	./app/grpc-gateway
 	./app/order
 	./app/payment
 	./app/product

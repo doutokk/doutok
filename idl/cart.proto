@@ -6,6 +6,9 @@ option go_package = '/cart';
 
 import "api.proto";
 
+import "google/api/annotations.proto";
+
+
 service CartService {
   rpc AddItem(AddItemReq) returns (AddItemResp) {
   }
@@ -17,6 +20,27 @@ service CartService {
   rpc editCart(editCartReq) returns (editCartResp) {
     option(api.post) = "/cart/edit";
   }
+
+  rpc FrontendGetCart (FrontendGetCartReq) returns (FrontendGetCartResp) {
+    option (google.api.http) = {
+      get: "/cart"
+    };
+  }
+}
+
+message FrontendGetCartReq {}
+
+message FrontendItem {
+  uint32 product_id = 1;
+  string product_name = 2;
+  float price = 3;
+  string description = 4;
+  string img = 5;
+  int32 quantity = 6;
+}
+
+message FrontendGetCartResp {
+  repeated FrontendItem items = 1;
 }
 
 message editCartReq{
