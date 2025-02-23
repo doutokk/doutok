@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/doutokk/doutok/app/user/biz/dal/query"
 	"github.com/doutokk/doutok/app/user/infra/rpc"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
@@ -22,6 +23,8 @@ func NewLoginService(ctx context.Context) *LoginService {
 // Run create note info
 func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error) {
 	// Finish your business logic.
+
+	fmt.Println("user")
 
 	u := query.User
 	us, err := query.Q.User.Where(u.Email.Eq(req.Email)).First()

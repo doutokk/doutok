@@ -39,8 +39,7 @@ mock:
 
 .PHONY: gen-gg
 gen-gg:
-	@mkdir app/grpc-gateway/pb/${svc} && \
-	protoc -I idl \
+	@protoc -I idl \
 		 --go_out app/grpc-gateway/pb \
 		 --go-grpc_out app/grpc-gateway/pb \
 		 --grpc-gateway_out app/grpc-gateway/pb \
