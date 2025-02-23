@@ -15,6 +15,7 @@ type Client interface {
 	GetCart(ctx context.Context, Req *cart.GetCartReq, callOptions ...callopt.Option) (r *cart.GetCartResp, err error)
 	EmptyCart(ctx context.Context, Req *cart.EmptyCartReq, callOptions ...callopt.Option) (r *cart.EmptyCartResp, err error)
 	EditCart(ctx context.Context, Req *cart.EditCartReq, callOptions ...callopt.Option) (r *cart.EditCartResp, err error)
+	FrontendGetCart(ctx context.Context, Req *cart.FrontendGetCartReq, callOptions ...callopt.Option) (r *cart.FrontendGetCartResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -64,4 +65,9 @@ func (p *kCartServiceClient) EmptyCart(ctx context.Context, Req *cart.EmptyCartR
 func (p *kCartServiceClient) EditCart(ctx context.Context, Req *cart.EditCartReq, callOptions ...callopt.Option) (r *cart.EditCartResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.EditCart(ctx, Req)
+}
+
+func (p *kCartServiceClient) FrontendGetCart(ctx context.Context, Req *cart.FrontendGetCartReq, callOptions ...callopt.Option) (r *cart.FrontendGetCartResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.FrontendGetCart(ctx, Req)
 }

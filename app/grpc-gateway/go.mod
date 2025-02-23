@@ -1,4 +1,4 @@
-module github.com/doutokk/doutok/app/order/grpc-gateway
+module github.com/doutokk/doutok/app/grpc-gateway
 
 go 1.23.4
 
