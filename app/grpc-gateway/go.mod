@@ -1,6 +1,6 @@
 module github.com/doutokk/doutok/app/order/grpc-gateway
 
-go 1.23.6
+go 1.23.4
 
 require (
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250223052722-107b6d04a8e2
