@@ -11,7 +11,6 @@ import (
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
@@ -26,14 +25,6 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
-	opts = append(opts, server.
-		WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
-
-	opts = append(opts, server.
-		WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
-
-	opts = append(opts, server.
-		WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
 
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)

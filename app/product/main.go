@@ -37,8 +37,6 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
-	opts = append(opts, server.WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
-
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
 	if err != nil {
