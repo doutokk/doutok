@@ -13,9 +13,9 @@ service CartService {
   rpc AddItem(AddItemReq) returns (AddItemResp) {
   }
   rpc GetCart(GetCartReq) returns (GetCartResp) {
-    option(api.get) = "/cart";
   }
-  rpc EmptyCart(EmptyCartReq) returns (EmptyCartResp) {}
+  rpc EmptyCart(EmptyCartReq) returns (EmptyCartResp) {
+  }
 
   rpc editCart(editCartReq) returns (editCartResp) {
     option(api.post) = "/cart/edit";
@@ -26,6 +26,7 @@ service CartService {
       get: "/cart"
     };
   }
+
 }
 
 message FrontendGetCartReq {}

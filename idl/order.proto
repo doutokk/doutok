@@ -4,20 +4,29 @@ package order;
 
 import "cart.proto";
 
-option go_package = "order";
+option go_package = "/order";
 
-import "api.proto";
+import "google/api/annotations.proto";
 
 service OrderService {
   rpc PlaceOrder(PlaceOrderReq) returns (PlaceOrderResp) {
-    option(api.post) = "/order";
+    option (google.api.http) = {
+      post : "/cart/edit"
+      body : "*"
+    };
   }
   rpc ListOrder(ListOrderReq) returns (ListOrderResp) {
-    option(api.get) = "/order";
+    option (google.api.http) = {
+      get: "/order"
+    };
   }
+
   rpc getOrder(getOrderReq) returns (getOrderResp){
-    option(api.get) = "/order/:id";
+    option (google.api.http) = {
+      get: "/order/{id}"
+    };
   }
+
   rpc MarkOrderPaid(MarkOrderPaidReq) returns (MarkOrderPaidResp) {}
 }
 
@@ -70,7 +79,7 @@ message getOrderResp{
 }
 
 message getOrderReq{
-  string id = 1[(api.path)="id"];
+  string id = 1;
 }
 
 message ListOrderResp {
