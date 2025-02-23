@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package file;
 
-option go_package = 'file';
+option go_package = '/file';
+
+import "google/api/annotations.proto";
 
 message UploadFileResp {
   string key = 1;
@@ -22,5 +24,10 @@ message UploadFileReq {
 
 
 service FileService {
-  rpc UploadFile(UploadFileReq) returns (UploadFileResp) {}
+  rpc UploadFile(UploadFileReq) returns (UploadFileResp) {
+    option (google.api.http) = {
+      post: "/v1/example/file"
+      body: "*"
+    };
+  }
 }

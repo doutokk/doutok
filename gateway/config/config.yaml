@@ -1,0 +1,7 @@
+server:
+  http_port: 8081
+  grpc_endpoint: "localhost:50051"
+
+services:
+  file_service:
+    endpoint: ":50051"
