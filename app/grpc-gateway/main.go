@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/doutokk/doutok/app/order/grpc-gateway/pb/cart"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -34,11 +37,11 @@ func run() (err error) {
 	defer cancel()
 
 	mux := runtime.NewServeMux()
-	//opts := []grpc.DialOption{grpc.WithTransportCredentials(
-	//	insecure.NewCredentials())}
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(
+		insecure.NewCredentials())}
 
 	//err = cartpb.RegisterCartServiceHandlerFromEndpoint(ctx, mux, "10.21.32.14:8886", opts)
-	//err = cartpb.RegisterCartServiceHandlerFromEndpoint(ctx, mux, "localhost:8886", opts)
+	err = cart.RegisterCartServiceHandlerFromEndpoint(ctx, mux, "cart-service:8888", opts)
 	//err = userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "10.21.32.14:8888", opts)
 	if err != nil {
 		return err
