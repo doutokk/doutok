@@ -39,7 +39,6 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
-	opts = append(opts, server.WithTransHandlerFactory(&mixTransHandlerFactory{nil}))
 
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
@@ -56,8 +55,8 @@ func kitexInit() (opts []server.Option) {
 	// registry
 	opts = append(opts,
 		server.WithSuite(serversuite.CommonServerSuite{
-			CurrentServiceName:	conf.GetConf().Kitex.Service,
-			RegistryAddr:		conf.GetConf().Registry.RegistryAddress[0],
+			CurrentServiceName: conf.GetConf().Kitex.Service,
+			RegistryAddr:       conf.GetConf().Registry.RegistryAddress[0],
 		}))
 
 	// klog
