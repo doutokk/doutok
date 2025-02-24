@@ -9,17 +9,18 @@ import "google/api/annotations.proto";
 service ProductCatalogService {
   rpc ListProducts(ListProductsReq) returns (ListProductsResp) {
     option (google.api.http) = {
-      get: "/product"
+      post : "/product"
+      body : "*"
     };
   }
   rpc GetProduct(GetProductReq) returns (GetProductResp) {
     option (google.api.http) = {
-      get: "/product/{id}"
+      get: "/product/{id=*}"
     };
   }
   rpc SearchProducts(SearchProductsReq) returns (SearchProductsResp) {
     option (google.api.http) = {
-      get: "/product/{query}"
+      get: "/product"''
     };
   }
 }
@@ -55,7 +56,7 @@ message GetProductReq {
 
 
 message SearchProductsReq {
-    string query = 1;
+  string query = 1;
 }
 
 message SearchProductsResp {
