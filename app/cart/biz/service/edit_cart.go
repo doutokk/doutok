@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/doutokk/doutok/app/cart/biz/dal/model"
 	"github.com/doutokk/doutok/app/cart/biz/dal/query"
+	"github.com/doutokk/doutok/common/utils"
 	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 )
 
@@ -20,7 +21,7 @@ func (s *EditCartService) Run(req *cart.EditCartReq) (resp *cart.EditCartResp, e
 	// Finish your business logic.
 	// TODO: add transaction
 	ci := query.Q.CartItem
-	userId := req.UserId
+	userId := uint32(utils.GetUserId(s.ctx))
 	for _, ids := range req.Items {
 		item, innerErr := query.Q.CartItem.GetByUserIdAndProductId(userId, ids.ProductId)
 
