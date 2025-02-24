@@ -9,7 +9,7 @@ import "google/api/annotations.proto";
 service OrderService {
   rpc PlaceOrder(PlaceOrderReq) returns (PlaceOrderResp) {
     option (google.api.http) = {
-      post : "/cart/edit"
+      post : "/order"
       body : "*"
     };
   }
