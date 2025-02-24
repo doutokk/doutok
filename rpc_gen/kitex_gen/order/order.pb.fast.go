@@ -6,7 +6,7 @@ import (
 	fmt "fmt"
 	fastpb "github.com/cloudwego/fastpb"
 	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
-	api "github.com/doutokk/doutok/rpc_gen/kitex_gen/cwgo/http/api"
+	annotations "google.golang.org/genproto/googleapis/api/annotations"
 )
 
 var (
@@ -1231,4 +1231,4 @@ var fieldIDToName_MarkOrderPaidReq = map[int32]string{
 var fieldIDToName_MarkOrderPaidResp = map[int32]string{}
 
 var _ = cart.File_cart_proto
-var _ = api.File_api_proto
+var _ = annotations.File_google_api_annotations_proto

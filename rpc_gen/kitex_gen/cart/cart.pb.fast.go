@@ -6,12 +6,131 @@ import (
 	fmt "fmt"
 	fastpb "github.com/cloudwego/fastpb"
 	api "github.com/doutokk/doutok/rpc_gen/kitex_gen/cwgo/http/api"
+	annotations "google.golang.org/genproto/googleapis/api/annotations"
 )
 
 var (
 	_ = fmt.Errorf
 	_ = fastpb.Skip
 )
+
+func (x *FrontendGetCartReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+}
+
+func (x *FrontendItem) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_FrontendItem[number], err)
+}
+
+func (x *FrontendItem) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.ProductId, offset, err = fastpb.ReadUint32(buf, _type)
+	return offset, err
+}
+
+func (x *FrontendItem) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.ProductName, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *FrontendItem) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Price, offset, err = fastpb.ReadFloat(buf, _type)
+	return offset, err
+}
+
+func (x *FrontendItem) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Description, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *FrontendItem) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Img, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *FrontendItem) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.Quantity, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
+}
+
+func (x *FrontendGetCartResp) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_FrontendGetCartResp[number], err)
+}
+
+func (x *FrontendGetCartResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	var v FrontendItem
+	offset, err = fastpb.ReadMessage(buf, _type, &v)
+	if err != nil {
+		return offset, err
+	}
+	x.Items = append(x.Items, &v)
+	return offset, nil
+}
 
 func (x *EditCartReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
@@ -287,6 +406,92 @@ SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 }
 
+func (x *FrontendGetCartReq) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	return offset
+}
+
+func (x *FrontendItem) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
+	return offset
+}
+
+func (x *FrontendItem) fastWriteField1(buf []byte) (offset int) {
+	if x.ProductId == 0 {
+		return offset
+	}
+	offset += fastpb.WriteUint32(buf[offset:], 1, x.GetProductId())
+	return offset
+}
+
+func (x *FrontendItem) fastWriteField2(buf []byte) (offset int) {
+	if x.ProductName == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetProductName())
+	return offset
+}
+
+func (x *FrontendItem) fastWriteField3(buf []byte) (offset int) {
+	if x.Price == 0 {
+		return offset
+	}
+	offset += fastpb.WriteFloat(buf[offset:], 3, x.GetPrice())
+	return offset
+}
+
+func (x *FrontendItem) fastWriteField4(buf []byte) (offset int) {
+	if x.Description == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetDescription())
+	return offset
+}
+
+func (x *FrontendItem) fastWriteField5(buf []byte) (offset int) {
+	if x.Img == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetImg())
+	return offset
+}
+
+func (x *FrontendItem) fastWriteField6(buf []byte) (offset int) {
+	if x.Quantity == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 6, x.GetQuantity())
+	return offset
+}
+
+func (x *FrontendGetCartResp) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	return offset
+}
+
+func (x *FrontendGetCartResp) fastWriteField1(buf []byte) (offset int) {
+	if x.Items == nil {
+		return offset
+	}
+	for i := range x.GetItems() {
+		offset += fastpb.WriteMessage(buf[offset:], 1, x.GetItems()[i])
+	}
+	return offset
+}
+
 func (x *EditCartReq) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -458,6 +663,92 @@ func (x *EmptyCartResp) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	return offset
+}
+
+func (x *FrontendGetCartReq) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	return n
+}
+
+func (x *FrontendItem) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	n += x.sizeField3()
+	n += x.sizeField4()
+	n += x.sizeField5()
+	n += x.sizeField6()
+	return n
+}
+
+func (x *FrontendItem) sizeField1() (n int) {
+	if x.ProductId == 0 {
+		return n
+	}
+	n += fastpb.SizeUint32(1, x.GetProductId())
+	return n
+}
+
+func (x *FrontendItem) sizeField2() (n int) {
+	if x.ProductName == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetProductName())
+	return n
+}
+
+func (x *FrontendItem) sizeField3() (n int) {
+	if x.Price == 0 {
+		return n
+	}
+	n += fastpb.SizeFloat(3, x.GetPrice())
+	return n
+}
+
+func (x *FrontendItem) sizeField4() (n int) {
+	if x.Description == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetDescription())
+	return n
+}
+
+func (x *FrontendItem) sizeField5() (n int) {
+	if x.Img == "" {
+		return n
+	}
+	n += fastpb.SizeString(5, x.GetImg())
+	return n
+}
+
+func (x *FrontendItem) sizeField6() (n int) {
+	if x.Quantity == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(6, x.GetQuantity())
+	return n
+}
+
+func (x *FrontendGetCartResp) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	return n
+}
+
+func (x *FrontendGetCartResp) sizeField1() (n int) {
+	if x.Items == nil {
+		return n
+	}
+	for i := range x.GetItems() {
+		n += fastpb.SizeMessage(1, x.GetItems()[i])
+	}
+	return n
 }
 
 func (x *EditCartReq) Size() (n int) {
@@ -633,6 +924,21 @@ func (x *EmptyCartResp) Size() (n int) {
 	return n
 }
 
+var fieldIDToName_FrontendGetCartReq = map[int32]string{}
+
+var fieldIDToName_FrontendItem = map[int32]string{
+	1: "ProductId",
+	2: "ProductName",
+	3: "Price",
+	4: "Description",
+	5: "Img",
+	6: "Quantity",
+}
+
+var fieldIDToName_FrontendGetCartResp = map[int32]string{
+	1: "Items",
+}
+
 var fieldIDToName_EditCartReq = map[int32]string{
 	1: "UserId",
 	2: "Items",
@@ -672,3 +978,4 @@ var fieldIDToName_Cart = map[int32]string{
 var fieldIDToName_EmptyCartResp = map[int32]string{}
 
 var _ = api.File_api_proto
+var _ = annotations.File_google_api_annotations_proto

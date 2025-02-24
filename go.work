@@ -6,6 +6,7 @@ use (
 	./app/checkout
 	./app/file
 	./app/gateway
+	./app/grpc-gateway
 	./app/order
 	./app/payment
 	./app/product

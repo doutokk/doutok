@@ -1,6 +1,9 @@
 package main
 
 import (
+	"net"
+	"os"
+
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -13,8 +16,6 @@ import (
 	"github.com/doutokk/doutok/common/serversuite"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"net"
-	"os"
 )
 
 var serviceName = conf.GetConf().Kitex.Service
@@ -27,6 +28,7 @@ func main() {
 	rpc.InitClient()
 	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
+	rpc.InitClient()
 	opts := kitexInit()
 
 	svr := cartservice.NewServer(new(CartServiceImpl), opts...)

@@ -36,3 +36,11 @@ run:
 source ?= ${svc}"service"
 mock:
 	@cd app/${svc} && mockgen -source=../../rpc_gen/kitex_gen/${svc}/${source}/client.go -destination=../../common/mocks/${svc}"clientMock".go -package=mocks -mock_names "Client"="Mock"${svc}"Client"
+
+.PHONY: gen-gg
+gen-gg:
+	@protoc -I idl \
+		 --go_out app/grpc-gateway/pb \
+		 --go-grpc_out app/grpc-gateway/pb \
+		 --grpc-gateway_out app/grpc-gateway/pb \
+		 idl/${svc}.proto
