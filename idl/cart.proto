@@ -16,6 +16,10 @@ service CartService {
   }
 
   rpc editCart(editCartReq) returns (editCartResp) {
+    option (google.api.http) = {
+      post : "/cart/edit"
+      body : "*"
+    };
   }
 
   rpc FrontendGetCart (FrontendGetCartReq) returns (FrontendGetCartResp) {
