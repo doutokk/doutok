@@ -9,7 +9,6 @@ import (
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
 	"github.com/doutokk/doutok/app/order/biz/service"
 	"github.com/doutokk/doutok/common/utils"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
@@ -85,7 +84,7 @@ func GetOrder(ctx context.Context, c *app.RequestContext) {
 		}
 
 		orderItemsResp = append(orderItemsResp, &order.OrderItem{
-			Item: &cart.CartItem{
+			Item: &order.CartItem{
 				ProductId: orderItem.ProductID,
 				Quantity:  orderItem.Quantity,
 			},

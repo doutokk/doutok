@@ -128,9 +128,9 @@ func checkAuth(ctx context.Context, c *app.RequestContext) (bool, context.Contex
 		return false, ctx
 	}
 
-	c.Request.Header.Set("user_id", strconv.Itoa(int(resp.UserId)))
-	ctx = context.WithValue(ctx, "user_id", strconv.Itoa(int(resp.UserId)))
-	hlog.Info(ctx.Value("user_id"))
+	c.Request.Header.Set("user-id", strconv.Itoa(int(resp.UserId)))
+	ctx = context.WithValue(ctx, "user-id", strconv.Itoa(int(resp.UserId)))
+	hlog.Info(ctx.Value("user-id"))
 
 	return true, ctx
 }
@@ -255,6 +255,7 @@ func main() {
 		proxy.SetDirector(func(req *protocol.Request) {
 			req.SetHost(targetHost + path)
 			req.SetRequestURI("http://" + targetHost + path)
+			req.Header.Set("userId", "7")
 		})
 
 		// 调用反向代理处理请求

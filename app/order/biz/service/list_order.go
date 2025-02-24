@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
+	"github.com/doutokk/doutok/common/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
@@ -17,10 +18,11 @@ func NewListOrderService(ctx context.Context) *ListOrderService {
 
 // Run create note info
 func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderResp, err error) {
+	userId := utils.GetUserId(s.ctx)
 	// Finish your business logic.
 	o := query.Q.Order
 	oi := query.Q.OrderItem
-	orders, err := query.Q.Order.Where(o.UserID.Eq(req.UserId)).Find()
+	orders, err := query.Q.Order.Where(o.UserID.Eq(uint32(userId))).Find()
 	if err != nil {
 		return nil, err
 	}
