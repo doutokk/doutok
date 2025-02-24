@@ -10,11 +10,13 @@ service UserService {
   rpc Register(RegisterReq) returns (RegisterResp) {
     option (google.api.http) = {
       post: "/user/register"
+      body: "*"
     };
   }
   rpc Login(LoginReq) returns (LoginResp) {
     option (google.api.http) = {
       post: "/user/login"
+      body: "*"
     };
   }
 }

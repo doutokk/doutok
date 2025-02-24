@@ -16,6 +16,7 @@ type RPCClient interface {
 	GetCart(ctx context.Context, Req *cart.GetCartReq, callOptions ...callopt.Option) (r *cart.GetCartResp, err error)
 	EmptyCart(ctx context.Context, Req *cart.EmptyCartReq, callOptions ...callopt.Option) (r *cart.EmptyCartResp, err error)
 	EditCart(ctx context.Context, Req *cart.EditCartReq, callOptions ...callopt.Option) (r *cart.EditCartResp, err error)
+	FrontendGetCart(ctx context.Context, Req *cart.FrontendGetCartReq, callOptions ...callopt.Option) (r *cart.FrontendGetCartResp, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -58,4 +59,8 @@ func (c *clientImpl) EmptyCart(ctx context.Context, Req *cart.EmptyCartReq, call
 
 func (c *clientImpl) EditCart(ctx context.Context, Req *cart.EditCartReq, callOptions ...callopt.Option) (r *cart.EditCartResp, err error) {
 	return c.kitexClient.EditCart(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) FrontendGetCart(ctx context.Context, Req *cart.FrontendGetCartReq, callOptions ...callopt.Option) (r *cart.FrontendGetCartResp, err error) {
+	return c.kitexClient.FrontendGetCart(ctx, Req, callOptions...)
 }

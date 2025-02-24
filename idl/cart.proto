@@ -4,8 +4,6 @@ package cart;
 
 option go_package = '/cart';
 
-import "api.proto";
-
 import "google/api/annotations.proto";
 
 
@@ -18,7 +16,10 @@ service CartService {
   }
 
   rpc editCart(editCartReq) returns (editCartResp) {
-    option(api.post) = "/cart/edit";
+    option (google.api.http) = {
+      post : "/cart/edit"
+      body : "*"
+    };
   }
 
   rpc FrontendGetCart (FrontendGetCartReq) returns (FrontendGetCartResp) {

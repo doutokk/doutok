@@ -21,12 +21,14 @@ import (
 	"github.com/hertz-contrib/cors"
 	hertzzap "github.com/hertz-contrib/logger/zap"
 	"github.com/hertz-contrib/registry/consul"
+	"github.com/hertz-contrib/reverseproxy"
 	"io/ioutil"
 	"log"
 	"net"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -108,11 +110,11 @@ func writeFile(filePath string, byteFile []byte) {
 	}
 }
 
-func checkAuth(ctx context.Context, c *app.RequestContext) bool {
+func checkAuth(ctx context.Context, c *app.RequestContext) (bool, context.Context) {
 
 	// todo:测试，实际要在auth那里用casbin
 	if proxyPool.GetTargetServiceName(c.Request.URI().String()) == "user" {
-		return true
+		return true, ctx
 	}
 
 	// 获取请求头中的 Authorization 字段
@@ -123,11 +125,14 @@ func checkAuth(ctx context.Context, c *app.RequestContext) bool {
 	// 验证 token
 	resp, err := rpc.AuthClient.VerifyTokenByRPC(ctx, req)
 	if err != nil || !resp.Res {
-		return false
+		return false, ctx
 	}
 
-	c.Request.Header.Set("user_id", strconv.Itoa(int(resp.UserId)))
-	return true
+	c.Request.Header.Set("user-id", strconv.Itoa(int(resp.UserId)))
+	ctx = context.WithValue(ctx, "user-id", strconv.Itoa(int(resp.UserId)))
+	hlog.Info(ctx.Value("user-id"))
+
+	return true, ctx
 }
 
 func allowCors(c *app.RequestContext) {
@@ -179,9 +184,6 @@ func main() {
 	// build a consul register with the consul client
 	r := consul.NewConsulRegister(consulClient)
 
-	// 创建反向代理池子
-	proxyPool.Init()
-
 	// run Hertz with the consul register
 	h := server.New(
 		server.WithHostPorts(port),
@@ -232,7 +234,9 @@ func main() {
 	}
 	h.Use(CasbinMiddleware(enforcer))
 	registerMiddleware()
-
+	//todo: 不要写死
+	targetHost := "10.21.32.14:8087"
+	proxy, _ := reverseproxy.NewSingleHostReverseProxy(targetHost)
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
 		defer allowCors(c)
@@ -240,17 +244,18 @@ func main() {
 			c.SetStatusCode(204)
 			return
 		}
-		if !checkAuth(ctx, c) {
+
+		allow, ctx := checkAuth(ctx, c)
+		if !allow {
 			c.JSON(401, utils.H{"error": "Unauthorized"})
 			return
 		}
 
-		// 打印请求的 URI
-		hlog.Info("path: ", c.Request.URI())
-		serviceName := proxyPool.GetTargetServiceName(c.Request.URI().String())
-		proxy := proxyPool.GetProxy(serviceName)
+		path := getPath(c.Request.URI().String())
 		proxy.SetDirector(func(req *protocol.Request) {
-			req.SetHost(proxyPool.GetHost(serviceName))
+			req.SetHost(targetHost + path)
+			req.SetRequestURI("http://" + targetHost + path)
+			req.Header.Set("userId", "7")
 		})
 
 		// 调用反向代理处理请求
@@ -259,7 +264,6 @@ func main() {
 		// todo:后端服务需要把错误返回
 
 		// todo:鉴权
-
 		if c.Response.StatusCode() != 200 {
 			// 读取响应 Body
 			bodyBytes := c.Response.Body()
@@ -283,6 +287,18 @@ func main() {
 	})
 
 	h.Spin()
+}
+
+func getPath(rawURL string) string {
+	// 按 "://" 分割，去掉协议头
+	parts := strings.SplitN(rawURL, "://", 2)
+	if len(parts) > 1 {
+		rawURL = parts[1]
+	}
+
+	// 按 "/" 分割，提取第一个 "/" 及后面的部分
+	index := strings.Index(rawURL, "/")
+	return rawURL[index:]
 }
 
 // todo:往里面加多点好东西

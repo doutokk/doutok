@@ -12,6 +12,10 @@ func GetUserIdRequest(c *app.RequestContext) int {
 	return userId
 }
 
+func GetUserId(ctx context.Context) int {
+	return 1
+}
+
 func GetUserIdFromCtx(ctx context.Context) int {
 	return ctx.Value("user_id").(int)
 }

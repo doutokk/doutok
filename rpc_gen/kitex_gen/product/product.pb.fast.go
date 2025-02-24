@@ -5,7 +5,7 @@ package product
 import (
 	fmt "fmt"
 	fastpb "github.com/cloudwego/fastpb"
-	annotations "google.golang.org/genproto/googleapis/api/annotations"
+	annotations "github.com/doutokk/doutok/rpc_gen/kitex_gen/genproto/googleapis/api/annotations"
 )
 
 var (
