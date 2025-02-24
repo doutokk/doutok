@@ -34,10 +34,10 @@ func run() (err error) {
 	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	err = cartpb.RegisterCartServiceHandlerFromEndpoint(ctx, mux, "10.21.32.14:8882", opts)
-	err = orderpb.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, "10.21.32.14:8885", opts)
-	err = userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "10.21.32.14:8888", opts)
-	err = productpb.RegisterProductCatalogServiceHandlerFromEndpoint(ctx, mux, "10.21.32.14:8887", opts)
+	err = cartpb.RegisterCartServiceHandlerFromEndpoint(ctx, mux, "cart-service:8888", opts)
+	err = orderpb.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, "order-service:8888", opts)
+	err = userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "user-service:8888", opts)
+	err = productpb.RegisterProductCatalogServiceHandlerFromEndpoint(ctx, mux, "product-service:8888", opts)
 
 	if err != nil {
 		return err
