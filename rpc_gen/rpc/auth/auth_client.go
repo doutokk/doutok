@@ -2,11 +2,11 @@ package auth
 
 import (
 	"context"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
+	auth "github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth/authservice"
+
 )
 
 type RPCClient interface {

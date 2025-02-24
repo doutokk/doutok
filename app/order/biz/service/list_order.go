@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 )
 
@@ -34,7 +33,7 @@ func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRe
 		orderItemsResp := make([]*order.OrderItem, 0)
 		for _, orderItem := range orderItems {
 			orderItemsResp = append(orderItemsResp, &order.OrderItem{
-				Item: &cart.CartItem{
+				Item: &order.CartItem{
 					ProductId: orderItem.ProductID,
 					Quantity:  orderItem.Quantity,
 				},

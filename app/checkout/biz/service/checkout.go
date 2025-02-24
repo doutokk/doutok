@@ -62,7 +62,7 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 		cost := productResp.GetProduct().Price * float32(cartItem.Quantity)
 		price += cost
 		oi = append(oi, &order.OrderItem{
-			Item: &cart.CartItem{ProductId: cartItem.ProductId, Quantity: cartItem.Quantity},
+			Item: &order.CartItem{ProductId: cartItem.ProductId, Quantity: cartItem.Quantity},
 			Cost: cost,
 		})
 	}

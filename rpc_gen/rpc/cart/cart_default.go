@@ -42,3 +42,12 @@ func EditCart(ctx context.Context, req *cart.EditCartReq, callOptions ...callopt
 	}
 	return resp, nil
 }
+
+func FrontendGetCart(ctx context.Context, req *cart.FrontendGetCartReq, callOptions ...callopt.Option) (resp *cart.FrontendGetCartResp, err error) {
+	resp, err = defaultClient.FrontendGetCart(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "FrontendGetCart call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
