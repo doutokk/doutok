@@ -24,7 +24,7 @@ func run() (err error) {
 		return err
 	}
 
-	return http.ListenAndServe(":8081", mux)
+	return http.ListenAndServe("0.0.0.0:8081", mux)
 }
 
 func main() {
