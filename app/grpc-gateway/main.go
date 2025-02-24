@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	cartpb "github.com/doutokk/doutok/app/order/grpc-gateway/pb/cart"
+	cartpb "github.com/doutokk/doutok/app/grpc-gateway/pb/cart"
 )
 
 func run() (err error) {
