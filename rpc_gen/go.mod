@@ -7,7 +7,7 @@ replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 require (
 	github.com/cloudwego/fastpb v0.0.5
 	github.com/cloudwego/kitex v0.12.1
-	google.golang.org/genproto/googleapis/api v0.0.0-20241202173237-19429a94021a
+	google.golang.org/genproto/googleapis/api v0.0.0-20250219182151-9fdb1cabc7b2
 	google.golang.org/protobuf v1.36.5
 )
 
