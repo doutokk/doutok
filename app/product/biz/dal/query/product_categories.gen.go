@@ -33,6 +33,24 @@ func newProductCategory(db *gorm.DB, opts ...gen.DOOption) productCategory {
 	_productCategory.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_productCategory.DeletedAt = field.NewField(tableName, "deleted_at")
 	_productCategory.Name = field.NewString(tableName, "name")
+	_productCategory.Products = productCategoryManyToManyProducts{
+		db: db.Session(&gorm.Session{}),
+
+		RelationField: field.NewRelation("Products", "model.Product"),
+		Categories: struct {
+			field.RelationField
+			Products struct {
+				field.RelationField
+			}
+		}{
+			RelationField: field.NewRelation("Products.Categories", "model.ProductCategory"),
+			Products: struct {
+				field.RelationField
+			}{
+				RelationField: field.NewRelation("Products.Categories.Products", "model.Product"),
+			},
+		},
+	}
 
 	_productCategory.fillFieldMap()
 
@@ -48,6 +66,7 @@ type productCategory struct {
 	UpdatedAt field.Time
 	DeletedAt field.Field
 	Name      field.String
+	Products  productCategoryManyToManyProducts
 
 	fieldMap map[string]field.Expr
 }
@@ -85,12 +104,13 @@ func (p *productCategory) GetFieldByName(fieldName string) (field.OrderExpr, boo
 }
 
 func (p *productCategory) fillFieldMap() {
-	p.fieldMap = make(map[string]field.Expr, 5)
+	p.fieldMap = make(map[string]field.Expr, 6)
 	p.fieldMap["id"] = p.ID
 	p.fieldMap["created_at"] = p.CreatedAt
 	p.fieldMap["updated_at"] = p.UpdatedAt
 	p.fieldMap["deleted_at"] = p.DeletedAt
 	p.fieldMap["name"] = p.Name
+
 }
 
 func (p productCategory) clone(db *gorm.DB) productCategory {
@@ -101,6 +121,84 @@ func (p productCategory) clone(db *gorm.DB) productCategory {
 func (p productCategory) replaceDB(db *gorm.DB) productCategory {
 	p.productCategoryDo.ReplaceDB(db)
 	return p
+}
+
+type productCategoryManyToManyProducts struct {
+	db *gorm.DB
+
+	field.RelationField
+
+	Categories struct {
+		field.RelationField
+		Products struct {
+			field.RelationField
+		}
+	}
+}
+
+func (a productCategoryManyToManyProducts) Where(conds ...field.Expr) *productCategoryManyToManyProducts {
+	if len(conds) == 0 {
+		return &a
+	}
+
+	exprs := make([]clause.Expression, 0, len(conds))
+	for _, cond := range conds {
+		exprs = append(exprs, cond.BeCond().(clause.Expression))
+	}
+	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
+	return &a
+}
+
+func (a productCategoryManyToManyProducts) WithContext(ctx context.Context) *productCategoryManyToManyProducts {
+	a.db = a.db.WithContext(ctx)
+	return &a
+}
+
+func (a productCategoryManyToManyProducts) Session(session *gorm.Session) *productCategoryManyToManyProducts {
+	a.db = a.db.Session(session)
+	return &a
+}
+
+func (a productCategoryManyToManyProducts) Model(m *model.ProductCategory) *productCategoryManyToManyProductsTx {
+	return &productCategoryManyToManyProductsTx{a.db.Model(m).Association(a.Name())}
+}
+
+type productCategoryManyToManyProductsTx struct{ tx *gorm.Association }
+
+func (a productCategoryManyToManyProductsTx) Find() (result []*model.Product, err error) {
+	return result, a.tx.Find(&result)
+}
+
+func (a productCategoryManyToManyProductsTx) Append(values ...*model.Product) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Append(targetValues...)
+}
+
+func (a productCategoryManyToManyProductsTx) Replace(values ...*model.Product) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Replace(targetValues...)
+}
+
+func (a productCategoryManyToManyProductsTx) Delete(values ...*model.Product) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Delete(targetValues...)
+}
+
+func (a productCategoryManyToManyProductsTx) Clear() error {
+	return a.tx.Clear()
+}
+
+func (a productCategoryManyToManyProductsTx) Count() int64 {
+	return a.tx.Count()
 }
 
 type productCategoryDo struct{ gen.DO }

@@ -40,6 +40,19 @@ func newProduct(db *gorm.DB, opts ...gen.DOOption) product {
 		db: db.Session(&gorm.Session{}),
 
 		RelationField: field.NewRelation("Categories", "model.ProductCategory"),
+		Products: struct {
+			field.RelationField
+			Categories struct {
+				field.RelationField
+			}
+		}{
+			RelationField: field.NewRelation("Categories.Products", "model.Product"),
+			Categories: struct {
+				field.RelationField
+			}{
+				RelationField: field.NewRelation("Categories.Products.Categories", "model.ProductCategory"),
+			},
+		},
 	}
 
 	_product.fillFieldMap()
@@ -126,6 +139,13 @@ type productManyToManyCategories struct {
 	db *gorm.DB
 
 	field.RelationField
+
+	Products struct {
+		field.RelationField
+		Categories struct {
+			field.RelationField
+		}
+	}
 }
 
 func (a productManyToManyCategories) Where(conds ...field.Expr) *productManyToManyCategories {

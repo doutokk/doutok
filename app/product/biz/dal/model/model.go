@@ -15,7 +15,8 @@ type Product struct {
 
 type ProductCategory struct {
 	gorm.Model
-	Name string `gorm:"unique;not null"`
+	Name     string    `gorm:"unique;not null"`
+	Products []Product `gorm:"many2many:r_product_categories;"`
 }
 
 type Querier interface {

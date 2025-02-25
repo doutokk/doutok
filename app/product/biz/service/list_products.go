@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
@@ -19,14 +20,23 @@ func NewListProductsService(ctx context.Context) *ListProductsService {
 func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.ListProductsResp, err error) {
 	// Finish your business logic.
 	p := query.Product
-	var q query.IProductDo
+	c := query.ProductCategory
+	var products []*model.Product
+	// 还是不太会用 gorm，这里的逻辑是如果请求中有分类名，就根据分类名查找商品，否则查找所有商品
+	// 没搞定直接多对多查询的，所以先查出分类，再查出关联的商品
 	if req.CategoryName != "" {
-		q = query.Q.Product.Where(query.ProductCategory.Name.In(req.CategoryName)).Preload(p.Categories)
+		cat, err := c.Where(c.Name.Eq(req.CategoryName)).Preload(c.Products).First()
+		if err != nil {
+			return nil, err
+		}
+		products = make([]*model.Product, len(cat.Products))
+		for i, prod := range cat.Products {
+			products[i] = &prod
+		}
 	} else {
-		q = query.Q.Product.Preload(p.Categories)
+		products, err = p.Preload(p.Categories).
+			Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1))).Find()
 	}
-	q.Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1)))
-	products, err := q.Find()
 	if err != nil {
 		return
 	}
