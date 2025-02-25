@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/doutokk/doutok/app/order/biz/dal/model"
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
+	"github.com/doutokk/doutok/common/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"github.com/hashicorp/go-uuid"
 )
@@ -22,11 +23,12 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 	// Finish your business logic.
 	// TODO: 事务支持
 	// 插入订单
+	userId := utils.GetUserId(s.ctx)
 	generateUUID, err := uuid.GenerateUUID()
 
 	ord := &model.Order{
 		OrderID:       generateUUID,
-		UserID:        req.UserId,
+		UserID:        uint32(userId),
 		UserCurrency:  req.UserCurrency,
 		Email:         req.Email,
 		StreetAddress: req.Address.StreetAddress,
