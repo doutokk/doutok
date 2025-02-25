@@ -13,13 +13,12 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// 添加认证中间件
 func CustomMatcher(key string) (string, bool) {
 	switch key {
 	case "User-Id":
 		return key, true
 	default:
-		return runtime.DefaultHeaderMatcher(key)
+		return key, true
 	}
 }
 
@@ -32,6 +31,7 @@ func run() (err error) {
 	mux := runtime.NewServeMux(
 		runtime.WithIncomingHeaderMatcher(CustomMatcher),
 	)
+
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	err = cartpb.RegisterCartServiceHandlerFromEndpoint(ctx, mux, "cart-service:8888", opts)
