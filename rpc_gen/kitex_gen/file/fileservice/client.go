@@ -12,6 +12,7 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	UploadFile(ctx context.Context, Req *file.UploadFileReq, callOptions ...callopt.Option) (r *file.UploadFileResp, err error)
+	FrontendUploadFile(ctx context.Context, Req *file.FrontendUploadFileReq, callOptions ...callopt.Option) (r *file.FrontendUploadFileResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -46,4 +47,9 @@ type kFileServiceClient struct {
 func (p *kFileServiceClient) UploadFile(ctx context.Context, Req *file.UploadFileReq, callOptions ...callopt.Option) (r *file.UploadFileResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.UploadFile(ctx, Req)
+}
+
+func (p *kFileServiceClient) FrontendUploadFile(ctx context.Context, Req *file.FrontendUploadFileReq, callOptions ...callopt.Option) (r *file.FrontendUploadFileResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.FrontendUploadFile(ctx, Req)
 }
