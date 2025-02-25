@@ -49,8 +49,9 @@ type Config struct {
 	} `mapstructure:"redis"`
 
 	Gateway struct {
-		ServiceHost map[string]string `mapstructure:"service_host"`
-		Suffix      string            `mapstructure:"suffix"`
+		ServiceHost     map[string]string `mapstructure:"service_host"`
+		Suffix          string            `mapstructure:"suffix"`
+		GrpcGatewayAddr string            `mapstructure:"grpc_gateway_addr"`
 	} `mapstructure:"gateway"`
 }
 
