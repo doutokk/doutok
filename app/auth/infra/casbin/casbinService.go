@@ -6,6 +6,7 @@ import (
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/doutokk/doutok/app/auth/biz/dal"
 	"github.com/doutokk/doutok/app/auth/biz/dal/mysql"
 	"github.com/doutokk/doutok/common/utils"
 	"log"
@@ -60,7 +61,6 @@ func Init() {
 		hlog.Error(err)
 		panic("auth init failed")
 	}
-	InitPolicy()
 	err = enforcer.LoadPolicy()
 
 	if err != nil {
@@ -75,8 +75,25 @@ type RolePolicy struct {
 	Method   string `gorm:"column:v2"`
 }
 
-// 拿着csv用Ai生成就行
+// 拿着csv用Ai生成就行,放在cmd中
 func InitPolicy() {
+	dal.Init()
+	utils.WriteFile("infra/casbin/auth_model.conf", modelFile)
+	utils.WriteFile("infra/casbin/auth_policy.csv", policyFile)
+
+	// 鉴权中间件
+	adapter, err := gormadapter.NewAdapterByDB(mysql.DB)
+	if err != nil {
+		panic("auth init failed")
+	}
+
+	m, err := model.NewModelFromFile("infra/casbin/auth_model.conf")
+	enforcer, err = casbin.NewEnforcer(m, adapter)
+	if err != nil {
+		hlog.Error(err)
+		panic("auth init failed")
+	}
+
 	rolePolicies := []RolePolicy{
 		{"base", "/user/login", "POST"},
 		{"base", "/user/register", "POST"},
