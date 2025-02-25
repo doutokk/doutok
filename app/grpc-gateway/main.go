@@ -39,7 +39,7 @@ func run() (err error) {
 	err = orderpb.RegisterOrderServiceHandlerFromEndpoint(ctx, mux, "order-service:8888", opts)
 	err = userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "user-service:8888", opts)
 	err = productpb.RegisterProductCatalogServiceHandlerFromEndpoint(ctx, mux, "product-service:8888", opts)
-	err = filepb.RegisterFrontendFileServiceHandlerFromEndpoint(ctx, mux, "file-service:8888", opts)
+	err = filepb.RegisterFileServiceHandlerFromEndpoint(ctx, mux, "file-service:8888", opts)
 
 	if err != nil {
 		return err
