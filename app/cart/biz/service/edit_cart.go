@@ -6,8 +6,10 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/cart/biz/dal/model"
 	"github.com/doutokk/doutok/app/cart/biz/dal/query"
+	"github.com/doutokk/doutok/app/cart/infra/rpc"
 	"github.com/doutokk/doutok/common/utils"
 	cart "github.com/doutokk/doutok/rpc_gen/kitex_gen/cart"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 type EditCartService struct {
@@ -26,9 +28,12 @@ func (s *EditCartService) Run(req *cart.EditCartReq) (resp *cart.EditCartResp, e
 	klog.Warn("userId", userId)
 	for _, ids := range req.Items {
 
-		item, innerErr := query.Q.CartItem.GetByUserIdAndProductId(userId, ids.ProductId)
+		_, err := rpc.ProductClient.GetProduct(s.ctx, &product.GetProductReq{Id: ids.ProductId})
+		if err != nil {
+			return nil, fmt.Errorf("product %v not found", ids.ProductId)
+		}
 
-		// todo:检查商品是否存在
+		item, innerErr := query.Q.CartItem.GetByUserIdAndProductId(userId, ids.ProductId)
 
 		nowQuantity := ids.Quantity
 		if innerErr != nil {
