@@ -27,7 +27,6 @@ import (
 	"net"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -110,11 +109,11 @@ func writeFile(filePath string, byteFile []byte) {
 	}
 }
 
-func checkAuth(ctx context.Context, c *app.RequestContext) (bool, context.Context) {
+func checkAuth(ctx context.Context, c *app.RequestContext) bool {
 
 	// todo:测试，实际要在 auth 那里用 casbin
 	if proxyPool.GetTargetServiceName(c.Request.URI().String()) == "user" {
-		return true, ctx
+		return true
 	}
 
 	// 获取请求头中的 Authorization 字段
@@ -125,14 +124,13 @@ func checkAuth(ctx context.Context, c *app.RequestContext) (bool, context.Contex
 	// 验证 token
 	resp, err := rpc.AuthClient.VerifyTokenByRPC(ctx, req)
 	if err != nil || !resp.Res {
-		return false, ctx
+		return false
 	}
 
-	c.Request.Header.Set("user-id", strconv.Itoa(int(resp.UserId)))
-	ctx = context.WithValue(ctx, "user-id", strconv.Itoa(int(resp.UserId)))
-	hlog.Info(ctx.Value("user-id"))
+	userId := int(resp.UserId)
+	c.Request.Header.Set("User-Id", fmt.Sprintf("%d", userId))
 
-	return true, ctx
+	return true
 }
 
 func allowCors(c *app.RequestContext) {
@@ -244,7 +242,7 @@ func main() {
 			return
 		}
 
-		allow, ctx := checkAuth(ctx, c)
+		allow := checkAuth(ctx, c)
 		if !allow {
 			c.JSON(401, utils.H{"error": "Unauthorized"})
 			return
@@ -254,7 +252,6 @@ func main() {
 		proxy.SetDirector(func(req *protocol.Request) {
 			req.SetHost(targetHost + path)
 			req.SetRequestURI("http://" + targetHost + path)
-			req.Header.Set("userId", "7")
 		})
 
 		// 调用反向代理处理请求

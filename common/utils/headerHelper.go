@@ -2,20 +2,18 @@ package utils
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/kitex/pkg/remote/trans/nphttp2/metadata"
 	"strconv"
 )
 
-func GetUserIdRequest(c *app.RequestContext) int {
-	strId := c.Request.Header.Get("user_id")
-	userId, _ := strconv.Atoi(string(strId))
-	return userId
-}
-
 func GetUserId(ctx context.Context) int {
-	return 1
-}
 
-func GetUserIdFromCtx(ctx context.Context) int {
-	return ctx.Value("user_id").(int)
+	md, ok := metadata.FromIncomingContext(ctx)
+
+	if !ok {
+		return 0
+	}
+	userId, _ := strconv.Atoi(md.Get("user-id")[0])
+
+	return userId
 }
