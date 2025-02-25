@@ -77,7 +77,7 @@ func GetPolicy(req GetPolicyReq) (resp GetPolicyResp) {
 	fmt.Println("Policy:", encodedPolicy)
 	fmt.Println("Signature:", signature)
 	resp = GetPolicyResp{
-		Host:                fmt.Sprintf("https://%s.%s.aliyuncs.com", bucketName, region),
+		Host:                fmt.Sprintf("https://%s.oss-%s.aliyuncs.com", bucketName, region),
 		Key:                 req.FileName,
 		Policy:              encodedPolicy,
 		Signature:           signature,
