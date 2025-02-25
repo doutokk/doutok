@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
+	"github.com/doutokk/doutok/common/utils"
 	file "github.com/doutokk/doutok/rpc_gen/kitex_gen/file"
-	"strconv"
 )
 
 type FrontendUploadFileService struct {
@@ -19,10 +19,10 @@ func NewFrontendUploadFileService(ctx context.Context) *FrontendUploadFileServic
 func (s *FrontendUploadFileService) Run(req *file.FrontendUploadFileReq) (resp *file.FrontendUploadFileResp, err error) {
 	// Finish your business logic.
 
-	userID := 1
 	u := NewUploadFileService(s.ctx)
+	userId := utils.GetUserId(s.ctx)
 	resp1, err := u.Run(&file.UploadFileReq{
-		UserId:   strconv.Itoa(userID),
+		UserId:   uint64(userId),
 		FileName: req.FileName,
 	})
 	if err != nil {

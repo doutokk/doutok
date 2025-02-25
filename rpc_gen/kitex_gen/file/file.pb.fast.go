@@ -134,7 +134,7 @@ ReadFieldError:
 }
 
 func (x *UploadFileReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadString(buf, _type)
+	x.UserId, offset, err = fastpb.ReadUint64(buf, _type)
 	return offset, err
 }
 
@@ -352,10 +352,10 @@ func (x *UploadFileReq) FastWrite(buf []byte) (offset int) {
 }
 
 func (x *UploadFileReq) fastWriteField1(buf []byte) (offset int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetUserId())
+	offset += fastpb.WriteUint64(buf[offset:], 1, x.GetUserId())
 	return offset
 }
 
@@ -551,10 +551,10 @@ func (x *UploadFileReq) Size() (n int) {
 }
 
 func (x *UploadFileReq) sizeField1() (n int) {
-	if x.UserId == "" {
+	if x.UserId == 0 {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetUserId())
+	n += fastpb.SizeUint64(1, x.GetUserId())
 	return n
 }
 
