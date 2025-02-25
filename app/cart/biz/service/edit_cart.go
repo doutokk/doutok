@@ -44,20 +44,22 @@ func (s *EditCartService) Run(req *cart.EditCartReq) (resp *cart.EditCartResp, e
 				ProductId: ids.ProductId,
 				Quantity:  uint32(nowQuantity),
 			})
-
-		}
-		if innerErr != nil {
-			return nil, innerErr
-		}
-		if ids.Quantity == 0 {
-			// 删除
-			_, innerErr := ci.Where(ci.UserId.Eq(userId), ci.ProductId.Eq(ids.ProductId)).Delete()
 			if innerErr != nil {
 				return nil, innerErr
 			}
+
 		} else {
 
-			_, innerErr = ci.Where(ci.ID.Eq(item.ID)).Update(ci.Quantity, nowQuantity)
+			if ids.Quantity == 0 {
+				// 删除
+				_, innerErr := ci.Where(ci.UserId.Eq(userId), ci.ProductId.Eq(ids.ProductId)).Delete()
+				if innerErr != nil {
+					return nil, innerErr
+				}
+			} else {
+
+				_, innerErr = ci.Where(ci.ID.Eq(item.ID)).Update(ci.Quantity, nowQuantity)
+			}
 		}
 	}
 
