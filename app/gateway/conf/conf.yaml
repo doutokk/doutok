@@ -19,6 +19,7 @@ Gateway:
     "order": "order-service:8888"
     "cart": "cart-service:8888"
     "payment": "payment-service:8888"
+  grpc_gateway_addr: "grpc-gateway-service:8888"
 
 mysql:
   host: ""
