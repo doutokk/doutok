@@ -4,7 +4,6 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
-	"github.com/casbin/casbin/v2"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/doutokk/doutok/app/gateway/conf"
-	"github.com/doutokk/doutok/app/gateway/infra/proxyPool"
 	"github.com/doutokk/doutok/app/gateway/infra/rpc"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	consulapi "github.com/hashicorp/consul/api"
@@ -22,20 +20,11 @@ import (
 	hertzzap "github.com/hertz-contrib/logger/zap"
 	"github.com/hertz-contrib/registry/consul"
 	"github.com/hertz-contrib/reverseproxy"
-	"io/ioutil"
 	"log"
 	"net"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
-)
-
-var (
-	//go:embed conf/model.conf
-	modelFile []byte
-	//go:embed conf/policy.csv
-	policyFile []byte
 )
 
 // 自定义错误类型
@@ -57,79 +46,20 @@ func GetOutboundIP() (net.IP, error) {
 	return localAddr.IP, nil
 }
 
-// Casbin 中间件 todo:应该给 auth 做这件事
-func CasbinMiddleware(e *casbin.Enforcer) app.HandlerFunc {
-	return func(ctx context.Context, c *app.RequestContext) {
-		// todo:不硬编码获取角色
-		sub := "alice"
-		obj := string(c.Request.RequestURI())
-		act := string(c.Request.Method())
-		hlog.Info("sub: ", sub, " obj: ", obj, " act: ", act)
-
-		ok, err := e.Enforce(sub, obj, act)
-		if err != nil {
-			c.AbortWithError(consts.StatusInternalServerError, err)
-			hlog.Error(err)
-			return
-		}
-
-		if !ok {
-			c.AbortWithMsg("Forbidden", consts.StatusForbidden)
-			return
-		}
-		c.Next(ctx)
-	}
-}
-
-func writeFile(filePath string, byteFile []byte) {
-
-	// 获取目录路径
-	dirPath := filepath.Dir(filePath)
-
-	// 检查目录是否存在
-	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		// 目录不存在，创建目录
-		errr := os.MkdirAll(dirPath, 0755) // 0755 是权限
-		if errr != nil {
-			panic(errr)
-		}
-		fmt.Printf("目录 %s 创建成功\n", dirPath)
-	}
-
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		// 如果文件不存在，则创建并写入嵌入的内容
-		errr := ioutil.WriteFile(filePath, byteFile, 0644)
-		if errr != nil {
-			fmt.Println("无法写入文件：", errr)
-			return
-		}
-		fmt.Println("文件已写入：", filePath)
-	} else {
-		fmt.Println("文件已存在：", filePath)
-	}
-}
-
 func checkAuth(ctx context.Context, c *app.RequestContext) bool {
-
-	// todo:测试，实际要在 auth 那里用 casbin
-	if proxyPool.GetTargetServiceName(c.Request.URI().String()) == "user" {
-		return true
-	}
-
 	// 获取请求头中的 Authorization 字段
 	authorization := string(c.Request.Header.Peek("Authorization"))
 	req := new(auth.VerifyTokenReq)
 	req.Token = authorization
-
+	req.Method = string(c.Method())
+	req.Uri = getPath(c.Request.URI().String())
 	// 验证 token
 	resp, err := rpc.AuthClient.VerifyTokenByRPC(ctx, req)
 	if err != nil || !resp.Res {
 		return false
 	}
-
 	userId := int(resp.UserId)
 	c.Request.Header.Set("User-Id", fmt.Sprintf("%d", userId))
-
 	return true
 }
 
@@ -160,8 +90,6 @@ func allowCors(c *app.RequestContext) {
 }
 
 func main() {
-	writeFile("conf/model.conf", modelFile)
-	writeFile("conf/policy.csv", policyFile)
 	rpc.InitClient()
 
 	ip, err := GetOutboundIP()
@@ -225,12 +153,9 @@ func main() {
 		c.JSON(consts.StatusOK, utils.H{"ping": "pong1"})
 	})
 
-	// 鉴权中间件
-	enforcer, err := casbin.NewEnforcer("conf/model.conf", "conf/policy.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
-	h.Use(CasbinMiddleware(enforcer))
 	registerMiddleware()
 	targetHost := conf.GetConf().Gateway.GrpcGatewayAddr
 	proxy, _ := reverseproxy.NewSingleHostReverseProxy(targetHost)
