@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
@@ -27,7 +28,8 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	if req.CategoryName != "" {
 		cat, err := c.Where(c.Name.Eq(req.CategoryName)).Preload(c.Products).First()
 		if err != nil {
-			return nil, err
+			klog.Infof("error: %v", err)
+			return &product.ListProductsResp{Item: make([]*product.Product, 0)}, nil
 		}
 		products = make([]*model.Product, len(cat.Products))
 		for i, prod := range cat.Products {
@@ -36,9 +38,9 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	} else {
 		products, err = p.Preload(p.Categories).
 			Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1))).Find()
-	}
-	if err != nil {
-		return
+		if err != nil {
+			return nil, err
+		}
 	}
 	resp = &product.ListProductsResp{Item: make([]*product.Product, len(products))}
 	for i, prod := range products {
