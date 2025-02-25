@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/auth/biz/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 )
@@ -20,10 +21,12 @@ func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.Veri
 
 	result, err := utils.ValidateJWT(token)
 	if err != nil {
+		klog.Warnf("Token validate failed: %v %v", err, token)
 		return &auth.VerifyResp{Res: false}, err
 	}
 
 	userId := result.UserID
+	klog.Warnf("Token validate success: %v %v", userId, token)
 	return &auth.VerifyResp{
 		Res:    true,
 		UserId: int32(userId),
