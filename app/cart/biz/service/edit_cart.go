@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/cart/biz/dal/model"
 	"github.com/doutokk/doutok/app/cart/biz/dal/query"
 	"github.com/doutokk/doutok/common/utils"
@@ -22,6 +23,7 @@ func (s *EditCartService) Run(req *cart.EditCartReq) (resp *cart.EditCartResp, e
 	// TODO: add transaction
 	ci := query.Q.CartItem
 	userId := uint32(utils.GetUserId(s.ctx))
+	klog.Warn("userId", userId)
 	for _, ids := range req.Items {
 
 		item, innerErr := query.Q.CartItem.GetByUserIdAndProductId(userId, ids.ProductId)
