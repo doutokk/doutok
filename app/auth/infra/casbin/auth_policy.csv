@@ -1,0 +1,16 @@
+p, base, /user/login, POST
+p, base, /user/register, POST
+p, base, /product/*, GET
+p, base, /product, GET
+p, base, /product, POST
+
+g, user, base
+p, user, /cart, GET
+p, user, /cart/edit, POST
+p, user, /order, POST
+p, user, /order/*, GET
+p, user, /order, GET
+p, user, /payment, POST
+
+g, test, user
+g, tourist, base

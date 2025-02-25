@@ -16,15 +16,32 @@ func NewVerifyTokenByRPCService(ctx context.Context) *VerifyTokenByRPCService {
 
 // Run create note info
 func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.VerifyResp, err error) {
-	// Finish your business logic.
 	token := req.Token
 
 	result, err := utils.ValidateJWT(token)
+
+	var role string
+	// 说明token不合法或者没有token
 	if err != nil {
-		return &auth.VerifyResp{Res: false}, err
+		role = "tourist"
+	} else {
+		role = "test"
 	}
 
-	casbin.CheckAuthByRBAC("Alice", req.Uri, req.Method)
+	if !casbin.CheckAuthByRBAC(role, req.Uri, req.Method) {
+		return &auth.VerifyResp{
+			Res:    false,
+			UserId: 0,
+		}, nil
+	}
+
+	// 游客
+	if result == nil {
+		return &auth.VerifyResp{
+			Res:    true,
+			UserId: 0,
+		}, nil
+	}
 
 	userId := result.UserID
 	return &auth.VerifyResp{
