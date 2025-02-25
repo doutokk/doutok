@@ -7,6 +7,16 @@ option go_package="/auth";
 service AuthService {
   rpc DeliverTokenByRPC(DeliverTokenReq) returns (DeliveryResp) {}
   rpc VerifyTokenByRPC(VerifyTokenReq) returns (VerifyResp) {}
+  rpc CreateUserRole(CreateUserRoleReq) returns (CreateUserRoleResp) {}
+}
+
+message CreateUserRoleReq {
+  int32 user_id = 1;
+  string role = 2;
+}
+
+message CreateUserRoleResp {
+  bool res = 1;
 }
 
 message DeliverTokenReq {

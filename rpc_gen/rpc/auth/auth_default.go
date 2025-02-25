@@ -24,3 +24,12 @@ func VerifyTokenByRPC(ctx context.Context, req *auth.VerifyTokenReq, callOptions
 	}
 	return resp, nil
 }
+
+func CreateUserRole(ctx context.Context, req *auth.CreateUserRoleReq, callOptions ...callopt.Option) (resp *auth.CreateUserRoleResp, err error) {
+	resp, err = defaultClient.CreateUserRole(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "CreateUserRole call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
