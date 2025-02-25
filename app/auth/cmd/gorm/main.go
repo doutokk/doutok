@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/auth/biz/dal/model"
 	"github.com/doutokk/doutok/app/auth/biz/dal/mysql"
@@ -37,7 +38,7 @@ func main() {
 	// migrate the database
 	mysql.Init()
 
-	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.User{})
+	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.Role{}, &model.UserRole{}, &gormadapter.CasbinRule{})
 	if err != nil {
 		panic(err)
 	}

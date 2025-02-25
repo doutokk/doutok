@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/doutokk/doutok/app/auth/biz/dal"
 	"github.com/doutokk/doutok/app/auth/conf"
 	"github.com/doutokk/doutok/app/auth/infra/casbin"
 	"github.com/doutokk/doutok/common/mtl"
@@ -22,6 +23,7 @@ func main() {
 	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	opts := kitexInit()
+	dal.Init()
 	casbin.Init()
 
 	svr := authservice.NewServer(new(AuthServiceImpl), opts...)
