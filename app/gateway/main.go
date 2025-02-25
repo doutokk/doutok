@@ -57,7 +57,7 @@ func GetOutboundIP() (net.IP, error) {
 	return localAddr.IP, nil
 }
 
-// Casbin 中间件todo:应该给auth做这件事
+// Casbin 中间件 todo:应该给 auth 做这件事
 func CasbinMiddleware(e *casbin.Enforcer) app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// todo:不硬编码获取角色
@@ -100,18 +100,18 @@ func writeFile(filePath string, byteFile []byte) {
 		// 如果文件不存在，则创建并写入嵌入的内容
 		errr := ioutil.WriteFile(filePath, byteFile, 0644)
 		if errr != nil {
-			fmt.Println("无法写入文件:", errr)
+			fmt.Println("无法写入文件：", errr)
 			return
 		}
-		fmt.Println("文件已写入:", filePath)
+		fmt.Println("文件已写入：", filePath)
 	} else {
-		fmt.Println("文件已存在:", filePath)
+		fmt.Println("文件已存在：", filePath)
 	}
 }
 
 func checkAuth(ctx context.Context, c *app.RequestContext) bool {
 
-	// todo:测试，实际要在auth那里用casbin
+	// todo:测试，实际要在 auth 那里用 casbin
 	if proxyPool.GetTargetServiceName(c.Request.URI().String()) == "user" {
 		return true
 	}
@@ -193,7 +193,7 @@ func main() {
 		}),
 	)
 
-	// todo:为什么我h.Use的没被执行
+	// todo:为什么我 h.Use 的没被执行
 	h.Use(
 		cors.New(cors.Config{
 			AllowAllOrigins: true,
@@ -232,8 +232,7 @@ func main() {
 	}
 	h.Use(CasbinMiddleware(enforcer))
 	registerMiddleware()
-	//todo: 不要写死
-	targetHost := "10.21.32.14:8087"
+	targetHost := conf.GetConf().Gateway.GrpcGatewayAddr
 	proxy, _ := reverseproxy.NewSingleHostReverseProxy(targetHost)
 	// 定义路由，匹配所有路径
 	h.Any("/*path", func(ctx context.Context, c *app.RequestContext) {
