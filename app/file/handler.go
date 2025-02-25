@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/doutokk/doutok/app/file/biz/service"
-	
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/file"
 )
 
 // FileServiceImpl implements the last service interface defined in the IDL.
