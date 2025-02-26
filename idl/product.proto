@@ -23,7 +23,21 @@ service ProductCatalogService {
       get: "/product"''
     };
   }
+  rpc editProduct(EditProductReq) returns (EditProductResp) {
+    option (google.api.http) = {
+      put: "/product/edit"
+      body: "*"
+    };
+  }
 }
+
+message EditProductReq {
+  Product product = 1;
+}
+
+message EditProductResp {
+}
+
 
 message ListProductsReq{
   int32 page = 1;
