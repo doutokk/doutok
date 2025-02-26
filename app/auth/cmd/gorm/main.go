@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/doutokk/doutok/app/auth/infra/casbin"
 
+	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/doutokk/doutok/app/auth/biz/dal/model"
 	"github.com/doutokk/doutok/app/auth/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/auth/conf"
 	mysqldb "gorm.io/driver/mysql"
@@ -37,7 +38,9 @@ func main() {
 	// migrate the database
 	mysql.Init()
 
-	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&model.User{})
+	err = mysql.DB.Set("gorm:table_options", "CHARSET=utf8mb4").AutoMigrate(&gormadapter.CasbinRule{})
+	casbin.InitPolicy()
+
 	if err != nil {
 		panic(err)
 	}

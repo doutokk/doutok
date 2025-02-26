@@ -3,7 +3,6 @@ module github.com/doutokk/doutok/app/gateway
 go 1.23.4
 
 require (
-	github.com/casbin/casbin/v2 v2.61.0
 	github.com/cloudwego/hertz v0.9.5
 	github.com/cloudwego/kitex v0.12.1
 	github.com/doutokk/doutok/common v0.0.0-20250215020712-8ca923dc48e7
@@ -26,7 +25,6 @@ require (
 )
 
 require (
-	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/gopkg v0.1.1 // indirect

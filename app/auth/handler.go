@@ -22,3 +22,10 @@ func (s *AuthServiceImpl) VerifyTokenByRPC(ctx context.Context, req *auth.Verify
 
 	return resp, err
 }
+
+// CreateUserRole implements the AuthServiceImpl interface.
+func (s *AuthServiceImpl) CreateUserRole(ctx context.Context, req *auth.CreateUserRoleReq) (resp *auth.CreateUserRoleResp, err error) {
+	resp, err = service.NewCreateUserRoleService(ctx).Run(req)
+
+	return resp, err
+}

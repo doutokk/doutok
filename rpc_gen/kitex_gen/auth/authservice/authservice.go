@@ -29,6 +29,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"CreateUserRole": kitex.NewMethodInfo(
+		createUserRoleHandler,
+		newCreateUserRoleArgs,
+		newCreateUserRoleResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -401,6 +408,159 @@ func (p *VerifyTokenByRPCResult) GetResult() interface{} {
 	return p.Success
 }
 
+func createUserRoleHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(auth.CreateUserRoleReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(auth.AuthService).CreateUserRole(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *CreateUserRoleArgs:
+		success, err := handler.(auth.AuthService).CreateUserRole(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*CreateUserRoleResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newCreateUserRoleArgs() interface{} {
+	return &CreateUserRoleArgs{}
+}
+
+func newCreateUserRoleResult() interface{} {
+	return &CreateUserRoleResult{}
+}
+
+type CreateUserRoleArgs struct {
+	Req *auth.CreateUserRoleReq
+}
+
+func (p *CreateUserRoleArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(auth.CreateUserRoleReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *CreateUserRoleArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *CreateUserRoleArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *CreateUserRoleArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CreateUserRoleArgs) Unmarshal(in []byte) error {
+	msg := new(auth.CreateUserRoleReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CreateUserRoleArgs_Req_DEFAULT *auth.CreateUserRoleReq
+
+func (p *CreateUserRoleArgs) GetReq() *auth.CreateUserRoleReq {
+	if !p.IsSetReq() {
+		return CreateUserRoleArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CreateUserRoleArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CreateUserRoleArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type CreateUserRoleResult struct {
+	Success *auth.CreateUserRoleResp
+}
+
+var CreateUserRoleResult_Success_DEFAULT *auth.CreateUserRoleResp
+
+func (p *CreateUserRoleResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(auth.CreateUserRoleResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *CreateUserRoleResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *CreateUserRoleResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *CreateUserRoleResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CreateUserRoleResult) Unmarshal(in []byte) error {
+	msg := new(auth.CreateUserRoleResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CreateUserRoleResult) GetSuccess() *auth.CreateUserRoleResp {
+	if !p.IsSetSuccess() {
+		return CreateUserRoleResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CreateUserRoleResult) SetSuccess(x interface{}) {
+	p.Success = x.(*auth.CreateUserRoleResp)
+}
+
+func (p *CreateUserRoleResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CreateUserRoleResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -426,6 +586,16 @@ func (p *kClient) VerifyTokenByRPC(ctx context.Context, Req *auth.VerifyTokenReq
 	_args.Req = Req
 	var _result VerifyTokenByRPCResult
 	if err = p.c.Call(ctx, "VerifyTokenByRPC", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) CreateUserRole(ctx context.Context, Req *auth.CreateUserRoleReq) (r *auth.CreateUserRoleResp, err error) {
+	var _args CreateUserRoleArgs
+	_args.Req = Req
+	var _result CreateUserRoleResult
+	if err = p.c.Call(ctx, "CreateUserRole", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

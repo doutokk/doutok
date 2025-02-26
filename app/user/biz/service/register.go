@@ -5,6 +5,8 @@ import (
 	"errors"
 	"github.com/doutokk/doutok/app/user/biz/dal/model"
 	"github.com/doutokk/doutok/app/user/biz/dal/query"
+	"github.com/doutokk/doutok/app/user/infra/rpc"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/user"
 
 	"golang.org/x/crypto/bcrypt"
@@ -40,6 +42,8 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 		Email:          req.Email,
 		HashedPassword: string(hashedPassword),
 	}
+
+	tx := query.Q.Begin()
 	err = query.Q.User.Create(nu)
 	if err != nil {
 		return
@@ -47,6 +51,17 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 	resp = &user.RegisterResp{
 		UserId: int32(nu.ID),
 	}
+
+	roleReq := &auth.CreateUserRoleReq{
+		UserId: int32(nu.ID),
+		Role:   "user",
+	}
+	roleResp, err := rpc.AuthClient.CreateUserRole(s.ctx, roleReq)
+
+	if err != nil || !roleResp.Res {
+		tx.Rollback()
+	}
+	tx.Commit()
 
 	return
 }
