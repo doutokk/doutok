@@ -19,7 +19,7 @@ message UploadFileResp {
 }
 
 message UploadFileReq {
-    string user_id = 1;
+    uint64 user_id = 1;
     string file_name = 2;
 }
 

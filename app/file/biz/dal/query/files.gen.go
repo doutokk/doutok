@@ -32,8 +32,10 @@ func newFile(db *gorm.DB, opts ...gen.DOOption) file {
 	_file.CreatedAt = field.NewTime(tableName, "created_at")
 	_file.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_file.DeletedAt = field.NewField(tableName, "deleted_at")
-	_file.UserId = field.NewUint32(tableName, "user_id")
-	_file.FileName = field.NewString(tableName, "file_name")
+	_file.UserId = field.NewUint64(tableName, "user_id")
+	_file.FileOriginName = field.NewString(tableName, "file_origin_name")
+	_file.Key = field.NewString(tableName, "key")
+	_file.Usage = field.NewString(tableName, "usage")
 
 	_file.fillFieldMap()
 
@@ -43,13 +45,15 @@ func newFile(db *gorm.DB, opts ...gen.DOOption) file {
 type file struct {
 	fileDo
 
-	ALL       field.Asterisk
-	ID        field.Uint
-	CreatedAt field.Time
-	UpdatedAt field.Time
-	DeletedAt field.Field
-	UserId    field.Uint32
-	FileName  field.String
+	ALL            field.Asterisk
+	ID             field.Uint
+	CreatedAt      field.Time
+	UpdatedAt      field.Time
+	DeletedAt      field.Field
+	UserId         field.Uint64
+	FileOriginName field.String
+	Key            field.String
+	Usage          field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -70,8 +74,10 @@ func (f *file) updateTableName(table string) *file {
 	f.CreatedAt = field.NewTime(table, "created_at")
 	f.UpdatedAt = field.NewTime(table, "updated_at")
 	f.DeletedAt = field.NewField(table, "deleted_at")
-	f.UserId = field.NewUint32(table, "user_id")
-	f.FileName = field.NewString(table, "file_name")
+	f.UserId = field.NewUint64(table, "user_id")
+	f.FileOriginName = field.NewString(table, "file_origin_name")
+	f.Key = field.NewString(table, "key")
+	f.Usage = field.NewString(table, "usage")
 
 	f.fillFieldMap()
 
@@ -88,13 +94,15 @@ func (f *file) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (f *file) fillFieldMap() {
-	f.fieldMap = make(map[string]field.Expr, 6)
+	f.fieldMap = make(map[string]field.Expr, 8)
 	f.fieldMap["id"] = f.ID
 	f.fieldMap["created_at"] = f.CreatedAt
 	f.fieldMap["updated_at"] = f.UpdatedAt
 	f.fieldMap["deleted_at"] = f.DeletedAt
 	f.fieldMap["user_id"] = f.UserId
-	f.fieldMap["file_name"] = f.FileName
+	f.fieldMap["file_origin_name"] = f.FileOriginName
+	f.fieldMap["key"] = f.Key
+	f.fieldMap["usage"] = f.Usage
 }
 
 func (f file) clone(db *gorm.DB) file {
