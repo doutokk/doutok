@@ -3,7 +3,7 @@ module github.com/doutokk/doutok/app/auth
 go 1.23.4
 
 require (
-	github.com/casbin/casbin/v3 v3.0.0-beta.7
+	github.com/casbin/casbin/v2 v2.103.0
 	github.com/casbin/gorm-adapter/v3 v3.32.0
 	github.com/cloudwego/hertz v0.9.5
 	github.com/cloudwego/kitex v0.12.1
@@ -24,14 +24,12 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.6.1 // indirect
 	github.com/bytedance/gopkg v0.1.1 // indirect
 	github.com/bytedance/sonic v1.12.5 // indirect
 	github.com/bytedance/sonic/loader v0.2.0 // indirect
-	github.com/casbin/casbin/v2 v2.103.0 // indirect
 	github.com/casbin/govaluate v1.3.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
