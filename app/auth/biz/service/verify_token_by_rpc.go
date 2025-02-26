@@ -5,6 +5,7 @@ import (
 	"github.com/doutokk/doutok/app/auth/biz/utils"
 	"github.com/doutokk/doutok/app/auth/infra/casbin"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
+	"strconv"
 )
 
 type VerifyTokenByRPCService struct {
@@ -19,33 +20,24 @@ func (s *VerifyTokenByRPCService) Run(req *auth.VerifyTokenReq) (resp *auth.Veri
 	token := req.Token
 
 	result, err := utils.ValidateJWT(token)
+	resp = &auth.VerifyResp{}
+	var userId int
+
+	if result != nil && err == nil {
+		userId = result.UserID
+	} else {
+		userId = 0
+	}
 
 	var role string
 	// 说明token不合法或者没有token
-	if err != nil {
-		role = "tourist"
+	if userId == 0 {
+		role = "base"
 	} else {
-		role = "test"
+		role = strconv.Itoa(userId)
 	}
 
-	if !casbin.CheckAuthByRBAC(role, req.Uri, req.Method) {
-		return &auth.VerifyResp{
-			Res:    false,
-			UserId: 0,
-		}, nil
-	}
-
-	// 游客
-	if result == nil {
-		return &auth.VerifyResp{
-			Res:    true,
-			UserId: 0,
-		}, nil
-	}
-
-	userId := result.UserID
-	return &auth.VerifyResp{
-		Res:    true,
-		UserId: int32(userId),
-	}, nil
+	resp.Res = casbin.CheckAuthByRBAC(role, req.Uri, req.Method)
+	resp.UserId = int32(userId)
+	return resp, nil
 }

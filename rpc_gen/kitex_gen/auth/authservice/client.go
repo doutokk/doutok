@@ -13,6 +13,7 @@ import (
 type Client interface {
 	DeliverTokenByRPC(ctx context.Context, Req *auth.DeliverTokenReq, callOptions ...callopt.Option) (r *auth.DeliveryResp, err error)
 	VerifyTokenByRPC(ctx context.Context, Req *auth.VerifyTokenReq, callOptions ...callopt.Option) (r *auth.VerifyResp, err error)
+	CreateUserRole(ctx context.Context, Req *auth.CreateUserRoleReq, callOptions ...callopt.Option) (r *auth.CreateUserRoleResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +53,9 @@ func (p *kAuthServiceClient) DeliverTokenByRPC(ctx context.Context, Req *auth.De
 func (p *kAuthServiceClient) VerifyTokenByRPC(ctx context.Context, Req *auth.VerifyTokenReq, callOptions ...callopt.Option) (r *auth.VerifyResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.VerifyTokenByRPC(ctx, Req)
+}
+
+func (p *kAuthServiceClient) CreateUserRole(ctx context.Context, Req *auth.CreateUserRoleReq, callOptions ...callopt.Option) (r *auth.CreateUserRoleResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.CreateUserRole(ctx, Req)
 }
