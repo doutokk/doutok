@@ -12,5 +12,8 @@ p, user, /order/*, GET
 p, user, /order, GET
 p, user, /payment, POST
 
+g, admin, user
+p, admin, /product/edit, PUT
+
 g, test, user
 g, tourist, base
