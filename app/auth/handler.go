@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/doutokk/doutok/app/auth/biz/service"
-	
+	auth "github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
 )
 
 // AuthServiceImpl implements the last service interface defined in the IDL.
