@@ -23,11 +23,12 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 	// Finish your business logic.
 	// TODO: 事务支持
 	// 插入订单
+	userId := utils.GetUserId(s.ctx)
 	generateUUID, err := uuid.GenerateUUID()
 
 	ord := &model.Order{
 		OrderID:       generateUUID,
-		UserID:        uint32(utils.GetUserId(s.ctx)),
+		UserID:        uint32(userId),
 		UserCurrency:  req.UserCurrency,
 		Email:         req.Email,
 		StreetAddress: req.Address.StreetAddress,

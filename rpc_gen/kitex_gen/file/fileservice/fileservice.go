@@ -22,6 +22,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"FrontendUploadFile": kitex.NewMethodInfo(
+		frontendUploadFileHandler,
+		newFrontendUploadFileArgs,
+		newFrontendUploadFileResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -241,6 +248,159 @@ func (p *UploadFileResult) GetResult() interface{} {
 	return p.Success
 }
 
+func frontendUploadFileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(file.FrontendUploadFileReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(file.FileService).FrontendUploadFile(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *FrontendUploadFileArgs:
+		success, err := handler.(file.FileService).FrontendUploadFile(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*FrontendUploadFileResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newFrontendUploadFileArgs() interface{} {
+	return &FrontendUploadFileArgs{}
+}
+
+func newFrontendUploadFileResult() interface{} {
+	return &FrontendUploadFileResult{}
+}
+
+type FrontendUploadFileArgs struct {
+	Req *file.FrontendUploadFileReq
+}
+
+func (p *FrontendUploadFileArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(file.FrontendUploadFileReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *FrontendUploadFileArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *FrontendUploadFileArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *FrontendUploadFileArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *FrontendUploadFileArgs) Unmarshal(in []byte) error {
+	msg := new(file.FrontendUploadFileReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var FrontendUploadFileArgs_Req_DEFAULT *file.FrontendUploadFileReq
+
+func (p *FrontendUploadFileArgs) GetReq() *file.FrontendUploadFileReq {
+	if !p.IsSetReq() {
+		return FrontendUploadFileArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *FrontendUploadFileArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *FrontendUploadFileArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type FrontendUploadFileResult struct {
+	Success *file.FrontendUploadFileResp
+}
+
+var FrontendUploadFileResult_Success_DEFAULT *file.FrontendUploadFileResp
+
+func (p *FrontendUploadFileResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(file.FrontendUploadFileResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *FrontendUploadFileResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *FrontendUploadFileResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *FrontendUploadFileResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *FrontendUploadFileResult) Unmarshal(in []byte) error {
+	msg := new(file.FrontendUploadFileResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *FrontendUploadFileResult) GetSuccess() *file.FrontendUploadFileResp {
+	if !p.IsSetSuccess() {
+		return FrontendUploadFileResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *FrontendUploadFileResult) SetSuccess(x interface{}) {
+	p.Success = x.(*file.FrontendUploadFileResp)
+}
+
+func (p *FrontendUploadFileResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *FrontendUploadFileResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -256,6 +416,16 @@ func (p *kClient) UploadFile(ctx context.Context, Req *file.UploadFileReq) (r *f
 	_args.Req = Req
 	var _result UploadFileResult
 	if err = p.c.Call(ctx, "UploadFile", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) FrontendUploadFile(ctx context.Context, Req *file.FrontendUploadFileReq) (r *file.FrontendUploadFileResp, err error) {
+	var _args FrontendUploadFileArgs
+	_args.Req = Req
+	var _result FrontendUploadFileResult
+	if err = p.c.Call(ctx, "FrontendUploadFile", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/doutokk/doutok/common/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 
 	"github.com/doutokk/doutok/app/cart/infra/rpc"
@@ -22,12 +23,12 @@ func (s *FrontendGetCartService) Run(req *cart.FrontendGetCartReq) (resp *cart.F
 	// Finish your business logic.
 	cs := GetCartService{s.ctx}
 	cartResp, err := cs.Run(&cart.GetCartReq{
-		UserId: 1, //TODO: get user_id from token
+		UserId: uint32(utils.GetUserId(s.ctx)),
 	})
 	if err != nil {
 		return nil, err
 	}
-	items := make([]*cart.FrontendItem, len(cartResp.Cart.Items))
+	items := make([]*cart.FrontendItem, 0, len(cartResp.Cart.Items))
 	for _, item := range cartResp.Cart.Items {
 		productResp, err :=
 			rpc.ProductClient.GetProduct(s.ctx, &product.GetProductReq{Id: item.ProductId})

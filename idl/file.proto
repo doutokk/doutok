@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package file;
 
-option go_package = 'file';
+option go_package = '/file';
 
 
 import "google/api/annotations.proto";
@@ -26,6 +26,12 @@ message UploadFileReq {
 
 service FileService {
   rpc UploadFile(UploadFileReq) returns (UploadFileResp) {}
+  rpc FrontendUploadFile(FrontendUploadFileReq) returns (FrontendUploadFileResp) {
+    option (google.api.http) = {
+      post: "/file/upload"
+      body: "*"
+    };
+  }
 }
 
 
@@ -41,13 +47,4 @@ message FrontendUploadFileResp {
   string x_oss_credential = 6;
   string x_oss_date = 7;
   string x_oss_signature_version = 8;
-}
-
-service FrontendFileService {
-  rpc UploadFile(FrontendUploadFileReq) returns (FrontendUploadFileResp) {
-    option (google.api.http) = {
-      post: "/v1/file/upload"
-      body: "*"
-    };
-  }
 }
