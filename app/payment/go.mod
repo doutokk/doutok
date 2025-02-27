@@ -17,6 +17,7 @@ require (
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/smartwalle/alipay/v3 v3.2.24
 	github.com/spf13/viper v1.19.0
+	google.golang.org/grpc v1.70.0
 	gopkg.in/validator.v2 v2.0.1
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gen v0.3.26
@@ -139,7 +140,6 @@ require (
 	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250219182151-9fdb1cabc7b2 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250212204824-5a70512c5d8b // indirect
-	google.golang.org/grpc v1.70.0 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
