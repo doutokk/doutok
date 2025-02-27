@@ -134,10 +134,8 @@ github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8Yc
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
 github.com/dlclark/regexp2 v1.11.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
-github.com/doutokk/doutok/app/cart v0.0.0-20250227022946-33ac08258d60 h1:tGoukSsAOKDHgZN9uD0IaFl7C7WJlMOYtcL58vmARwk=
-github.com/doutokk/doutok/app/cart v0.0.0-20250227022946-33ac08258d60/go.mod h1:yOkQxVOAUN1BYE3Dg6nP1c1xiNyxqePjxJTPN5yP5mU=
-github.com/doutokk/doutok/app/checkout v0.0.0-20250227022946-33ac08258d60 h1:+cuOJp5jmzt0Jcv7hAZhFw9qoPhypTCk+iygpfvP+6I=
-github.com/doutokk/doutok/app/checkout v0.0.0-20250227022946-33ac08258d60/go.mod h1:A/GRgtqNb7gwMtp6Y7g32hLE3X9riJ6aiFYQFNuX6bY=
+github.com/doutokk/doutok/app/product v0.0.0-20250227022946-33ac08258d60 h1:oRMPlGKgrYlJvX/M8GBP7qyfN8jbygeY85eMn+TjDDU=
+github.com/doutokk/doutok/app/product v0.0.0-20250227022946-33ac08258d60/go.mod h1:mSFbfiXqUJcq2n9TeeFiovDkDF1GSOoEOBInyDULCYY=
 github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20 h1:Tgug5yYeuFOeKzLuG+8s1/LecxqC0VwWmjYvJBTtXYY=
 github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20/go.mod h1:V5yqB9HGUZAxGfm5/FZnq180qz9dbP2N6CsUnoTKpFA=
 github.com/doutokk/doutok/rpc_gen v0.0.0-20250214102652-89eec21c321b h1:GKY9GrkXAi3cpwDnUTAj7EoeQUUAnC1tW4wvDVpYLmM=

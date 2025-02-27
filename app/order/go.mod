@@ -6,8 +6,7 @@ replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
 	github.com/cloudwego/kitex v0.12.1
-	github.com/doutokk/doutok/app/cart v0.0.0-20250227022946-33ac08258d60
-	github.com/doutokk/doutok/app/checkout v0.0.0-20250227022946-33ac08258d60
+	github.com/doutokk/doutok/app/product v0.0.0-20250227022946-33ac08258d60
 	github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250214102652-89eec21c321b
 	github.com/hashicorp/go-uuid v1.0.3
