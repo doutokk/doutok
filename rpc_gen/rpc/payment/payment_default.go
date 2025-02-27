@@ -15,3 +15,30 @@ func Charge(ctx context.Context, req *payment.ChargeReq, callOptions ...callopt.
 	}
 	return resp, nil
 }
+
+func StartPayment(ctx context.Context, req *payment.StartPaymentReq, callOptions ...callopt.Option) (resp *payment.StartPaymentResp, err error) {
+	resp, err = defaultClient.StartPayment(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "StartPayment call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func CallBack(ctx context.Context, req *payment.CallBackReq, callOptions ...callopt.Option) (resp *payment.AlipayCallbackNotificationResp, err error) {
+	resp, err = defaultClient.CallBack(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "CallBack call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func GetOrderPayemntStatus(ctx context.Context, req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (resp *payment.GetOrderPayemntStatusResp, err error) {
+	resp, err = defaultClient.GetOrderPayemntStatus(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "GetOrderPayemntStatus call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
