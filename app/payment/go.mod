@@ -13,6 +13,7 @@ require (
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
 	github.com/kitex-contrib/registry-consul v0.1.0
 	github.com/kr/pretty v0.3.1
+	github.com/looplab/fsm v1.0.2
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/smartwalle/alipay/v3 v3.2.24
 	github.com/spf13/viper v1.19.0
