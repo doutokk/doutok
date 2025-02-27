@@ -3,34 +3,47 @@ package fsm
 import (
 	"context"
 	"fmt"
+	"github.com/doutokk/doutok/app/payment/biz/pay"
+	"time"
+
+	"github.com/doutokk/doutok/app/payment/biz/dal/model"
+	"github.com/doutokk/doutok/app/payment/biz/dal/query"
 
 	"github.com/looplab/fsm"
 )
 
-type OrderStatus string
+type PayOrderStatus string
 
 const (
-	CREATED OrderStatus = "CREATED"
-	PAYING  OrderStatus = "PAYING"
-	FINISH  OrderStatus = "FINISH"
+	CREATED PayOrderStatus = "CREATED"
+	PAYING  PayOrderStatus = "PAYING"
+	FINISH  PayOrderStatus = "FINISH"
 )
 
-type OrderEvent string
+type PayOrderEvent string
 
 const (
-	CreateOrder    OrderEvent = "CREATE_ORDER"
-	StartPayment   OrderEvent = "START_PAYMENT"
-	PaymentSuccess OrderEvent = "PAYMENT_SUCCESS"
-	PaymentFailed  OrderEvent = "PAYMENT_FAILED"
+	CreateOrder    PayOrderEvent = "CREATE_ORDER"
+	StartPayment   PayOrderEvent = "START_PAYMENT"
+	PaymentSuccess PayOrderEvent = "PAYMENT_SUCCESS"
+	PaymentFailed  PayOrderEvent = "PAYMENT_FAILED"
 )
 
-type OrderFSM struct {
-	FSM *fsm.FSM
+type PayOrderFSM struct {
+	fsm     *fsm.FSM
+	orderId string
+	data    CreatePayOrderReq
 }
 
-func NewOrder() *OrderFSM {
-	o := &OrderFSM{}
-	o.FSM = fsm.NewFSM(
+type CreatePayOrderReq struct {
+	UserId  uint32
+	OrderId string
+	Amount  float32
+}
+
+func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
+	o := &PayOrderFSM{}
+	o.fsm = fsm.NewFSM(
 		string(CREATED),
 		fsm.Events{
 			{Name: string(StartPayment), Src: []string{string(CREATED)}, Dst: string(PAYING)},
@@ -39,28 +52,49 @@ func NewOrder() *OrderFSM {
 		},
 		fsm.Callbacks{},
 	)
-	return o
-}
 
-// CreateOrder processes the CREATE_ORDER event
-func (o *OrderFSM) CreateOrder(ctx context.Context) error {
-	// This is typically the initial state, so no transition is needed
-	// Could add initialization logic here if needed
-	return nil
+	l := query.Q.PaymentLog
+	err := l.Create(&model.PaymentLog{
+		UserId:        req.UserId,
+		OrderId:       req.OrderId,
+		TransactionId: "",
+		Status:        string(CREATED),
+		Amount:        req.Amount,
+		PayAt:         time.Time{},
+	})
+	o.orderId = req.OrderId
+	o.data = req
+	if err != nil {
+		return nil, fmt.Errorf("failed to create payment log: %w", err)
+	}
+
+	return o, nil
 }
 
 // StartPayment processes the START_PAYMENT event
-func (o *OrderFSM) StartPayment(ctx context.Context) error {
-	err := o.FSM.Event(ctx, string(StartPayment))
+func (o *PayOrderFSM) StartPayment(ctx context.Context) (string, error) {
+	err := o.fsm.Event(ctx, string(StartPayment))
+
+	l := query.Q.PaymentLog
+	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(PAYING))
+
 	if err != nil {
-		return fmt.Errorf("failed to start payment: %w", err)
+		return "", fmt.Errorf("failed to start payment: %w", err)
 	}
-	return nil
+	url, err := pay.CreatePayOrder(o.orderId, float64(o.data.Amount))
+	if err != nil {
+		return "", err
+	}
+
+	return url, nil
 }
 
 // PaymentSuccess processes the PAYMENT_SUCCESS event
-func (o *OrderFSM) PaymentSuccess(ctx context.Context) error {
-	err := o.FSM.Event(ctx, string(PaymentSuccess))
+func (o *PayOrderFSM) PaymentSuccess(ctx context.Context) error {
+	err := o.fsm.Event(ctx, string(PaymentSuccess))
+	l := query.Q.PaymentLog
+	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(FINISH))
+
 	if err != nil {
 		return fmt.Errorf("failed to process successful payment: %w", err)
 	}
@@ -68,8 +102,10 @@ func (o *OrderFSM) PaymentSuccess(ctx context.Context) error {
 }
 
 // PaymentFailed processes the PAYMENT_FAILED event
-func (o *OrderFSM) PaymentFailed(ctx context.Context) error {
-	err := o.FSM.Event(ctx, string(PaymentFailed))
+func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
+	err := o.fsm.Event(ctx, string(PaymentFailed))
+	l := query.Q.PaymentLog
+	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(CREATED))
 	if err != nil {
 		return fmt.Errorf("failed to process payment failure: %w", err)
 	}
