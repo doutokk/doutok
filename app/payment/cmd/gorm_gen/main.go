@@ -13,6 +13,6 @@ func main() {
 		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
 	})
 
-	g.ApplyInterface(func(model.Querier) {}, model.User{})
+	g.ApplyInterface(func(model.Querier) {}, model.AllModels...)
 	g.Execute()
 }
