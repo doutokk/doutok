@@ -9,6 +9,10 @@ import "google/api/annotations.proto";
 
 service CartService {
   rpc AddItem(AddItemReq) returns (AddItemResp) {
+    option (google.api.http) = {
+      post : "/cart/items"
+      body : "*"
+    };
   }
   rpc GetCart(GetCartReq) returns (GetCartResp) {
   }
@@ -59,7 +63,6 @@ message CartItem {
 }
 
 message AddItemReq {
-  uint32 user_id = 1;
   CartItem item = 2;
 }
 
