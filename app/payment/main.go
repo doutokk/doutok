@@ -5,6 +5,7 @@ import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/doutokk/doutok/app/payment/biz/dal"
 	"github.com/doutokk/doutok/app/payment/conf"
+	"github.com/doutokk/doutok/app/payment/infra/rpc"
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/common/serversuite"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
@@ -21,6 +22,7 @@ func main() {
 	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	dal.Init()
+	rpc.InitClient()
 	opts := kitexInit()
 
 	svr := paymentservice.NewServer(new(PaymentServiceImpl), opts...)
