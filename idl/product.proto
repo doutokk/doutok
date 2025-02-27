@@ -29,6 +29,15 @@ service ProductCatalogService {
       body: "*"
     };
   }
+  rpc GetProductBatch(GetProductBatchReq) returns (GetProductBatchResp) {}
+}
+
+message GetProductBatchReq {
+  repeated uint32 ids = 1;
+}
+
+message GetProductBatchResp {
+  repeated Product item = 1;
 }
 
 message EditProductReq {

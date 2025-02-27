@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/doutokk/doutok/app/order/infra/rpc"
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order/orderservice"
 	"net"
@@ -28,6 +29,7 @@ func main() {
 	query.SetDefault(mysql.DB)
 	mtl.InitTracing(serviceName, conf.GetConf().Kitex.OtlpAddr)
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
+	rpc.InitClient()
 	opts := kitexInit()
 
 	svr := orderservice.NewServer(new(OrderServiceImpl), opts...)
