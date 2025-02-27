@@ -42,6 +42,26 @@ func (m *MockproductClient) EXPECT() *MockproductClientMockRecorder {
 	return m.recorder
 }
 
+// EditProduct mocks base method.
+func (m *MockproductClient) EditProduct(ctx context.Context, Req *product.EditProductReq, callOptions ...callopt.Option) (*product.EditProductResp, error) {
+	m.ctrl.T.Helper()
+	varargs := []any{ctx, Req}
+	for _, a := range callOptions {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "EditProduct", varargs...)
+	ret0, _ := ret[0].(*product.EditProductResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// EditProduct indicates an expected call of EditProduct.
+func (mr *MockproductClientMockRecorder) EditProduct(ctx, Req any, callOptions ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]any{ctx, Req}, callOptions...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EditProduct", reflect.TypeOf((*MockproductClient)(nil).EditProduct), varargs...)
+}
+
 // GetProduct mocks base method.
 func (m *MockproductClient) GetProduct(ctx context.Context, Req *product.GetProductReq, callOptions ...callopt.Option) (*product.GetProductResp, error) {
 	m.ctrl.T.Helper()
