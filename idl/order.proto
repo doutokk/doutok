@@ -4,25 +4,25 @@ package order;
 
 option go_package = "/order";
 
-//import "google/api/annotations.proto";
+import "google/api/annotations.proto";
 
 service OrderService {
   rpc PlaceOrder(PlaceOrderReq) returns (PlaceOrderResp) {
-//    option (google.api.http) = {
-//      post : "/order"
-//      body : "*"
-//    };
+    option (google.api.http) = {
+      post : "/order"
+      body : "*"
+    };
   }
   rpc ListOrder(ListOrderReq) returns (ListOrderResp) {
-//    option (google.api.http) = {
-//      get: "/order"
-//    };
+    option (google.api.http) = {
+      get: "/order"
+    };
   }
 
   rpc getOrder(getOrderReq) returns (getOrderResp){
-//    option (google.api.http) = {
-//      get: "/order/{id}"
-//    };
+    option (google.api.http) = {
+      get: "/order/{id}"
+    };
   }
 
   rpc MarkOrderPaid(MarkOrderPaidReq) returns (MarkOrderPaidResp) {}
