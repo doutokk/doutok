@@ -15,3 +15,24 @@ func (s *PaymentServiceImpl) Charge(ctx context.Context, req *payment.ChargeReq)
 
 	return resp, err
 }
+
+// StartPayment implements the PaymentServiceImpl interface.
+func (s *PaymentServiceImpl) StartPayment(ctx context.Context, req *payment.StartPaymentReq) (resp *payment.StartPaymentResp, err error) {
+	resp, err = service.NewStartPaymentService(ctx).Run(req)
+
+	return resp, err
+}
+
+// CallBack implements the PaymentServiceImpl interface.
+func (s *PaymentServiceImpl) CallBack(ctx context.Context, req *payment.CallBackReq) (resp *payment.AlipayCallbackNotificationResp, err error) {
+	resp, err = service.NewCallBackService(ctx).Run(req)
+
+	return resp, err
+}
+
+// GetOrderPayemntStatus implements the PaymentServiceImpl interface.
+func (s *PaymentServiceImpl) GetOrderPayemntStatus(ctx context.Context, req *payment.GetOrderPayemntStatusReq) (resp *payment.GetOrderPayemntStatusResp, err error) {
+	resp, err = service.NewGetOrderPayemntStatusService(ctx).Run(req)
+
+	return resp, err
+}
