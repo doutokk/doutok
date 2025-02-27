@@ -6,14 +6,17 @@ replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
 	github.com/cloudwego/kitex v0.12.1
+	github.com/doutokk/doutok/app/cart v0.0.0-20250227022946-33ac08258d60
+	github.com/doutokk/doutok/app/checkout v0.0.0-20250227022946-33ac08258d60
 	github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20
-	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
+	github.com/doutokk/doutok/rpc_gen v0.0.0-20250214102652-89eec21c321b
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
 	github.com/kr/pretty v0.3.1
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/spf13/viper v1.19.0
+	go.uber.org/mock v0.5.0
 	gopkg.in/validator.v2 v2.0.1
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gen v0.3.26
@@ -50,6 +53,7 @@ require (
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/pprof v0.0.0-20240727154555-813a5fbdbec8 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -124,7 +128,6 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/arch v0.6.0 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
 	golang.org/x/mod v0.22.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
@@ -140,6 +143,5 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/datatypes v1.2.5 // indirect
-	gorm.io/driver/postgres v1.5.9 // indirect
 	gorm.io/hints v1.1.2 // indirect
 )
