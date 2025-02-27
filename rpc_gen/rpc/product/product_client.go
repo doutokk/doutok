@@ -6,7 +6,7 @@ import (
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
+	
 )
 
 type RPCClient interface {
@@ -15,6 +15,7 @@ type RPCClient interface {
 	ListProducts(ctx context.Context, Req *product.ListProductsReq, callOptions ...callopt.Option) (r *product.ListProductsResp, err error)
 	GetProduct(ctx context.Context, Req *product.GetProductReq, callOptions ...callopt.Option) (r *product.GetProductResp, err error)
 	SearchProducts(ctx context.Context, Req *product.SearchProductsReq, callOptions ...callopt.Option) (r *product.SearchProductsResp, err error)
+	EditProduct(ctx context.Context, Req *product.EditProductReq, callOptions ...callopt.Option) (r *product.EditProductResp, err error)
 	GetProductBatch(ctx context.Context, Req *product.GetProductBatchReq, callOptions ...callopt.Option) (r *product.GetProductBatchResp, err error)
 }
 
@@ -54,6 +55,10 @@ func (c *clientImpl) GetProduct(ctx context.Context, Req *product.GetProductReq,
 
 func (c *clientImpl) SearchProducts(ctx context.Context, Req *product.SearchProductsReq, callOptions ...callopt.Option) (r *product.SearchProductsResp, err error) {
 	return c.kitexClient.SearchProducts(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) EditProduct(ctx context.Context, Req *product.EditProductReq, callOptions ...callopt.Option) (r *product.EditProductResp, err error) {
+	return c.kitexClient.EditProduct(ctx, Req, callOptions...)
 }
 
 func (c *clientImpl) GetProductBatch(ctx context.Context, Req *product.GetProductBatchReq, callOptions ...callopt.Option) (r *product.GetProductBatchResp, err error) {

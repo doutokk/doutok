@@ -34,6 +34,15 @@ func SearchProducts(ctx context.Context, req *product.SearchProductsReq, callOpt
 	return resp, nil
 }
 
+func EditProduct(ctx context.Context, req *product.EditProductReq, callOptions ...callopt.Option) (resp *product.EditProductResp, err error) {
+	resp, err = defaultClient.EditProduct(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "EditProduct call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
 func GetProductBatch(ctx context.Context, req *product.GetProductBatchReq, callOptions ...callopt.Option) (resp *product.GetProductBatchResp, err error) {
 	resp, err = defaultClient.GetProductBatch(ctx, req, callOptions...)
 	if err != nil {

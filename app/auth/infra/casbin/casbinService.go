@@ -107,6 +107,7 @@ func InitPolicy() {
 		{"user", "/order/*", "GET"},
 		{"user", "/order", "GET"},
 		{"user", "/payment", "POST"},
+		{"admin", "/product/edit", "PUT"},
 	}
 
 	// 遍历并插入
@@ -121,6 +122,7 @@ func InitPolicy() {
 
 	CreateUserRole("test", "user")
 	CreateUserRole("user", "base")
+	CreateUserRole("admin", "user")
 }
 
 // 创建角色组权限, 已有的会忽略ca

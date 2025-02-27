@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/doutokk/doutok/app/product/biz/service"
-	
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
 // ProductCatalogServiceImpl implements the last service interface defined in the IDL.
@@ -33,6 +33,13 @@ func (s *ProductCatalogServiceImpl) SearchProducts(ctx context.Context, req *pro
 // GetProductBatch implements the ProductCatalogServiceImpl interface.
 func (s *ProductCatalogServiceImpl) GetProductBatch(ctx context.Context, req *product.GetProductBatchReq) (resp *product.GetProductBatchResp, err error) {
 	resp, err = service.NewGetProductBatchService(ctx).Run(req)
+
+	return resp, err
+}
+
+// EditProduct implements the ProductCatalogServiceImpl interface.
+func (s *ProductCatalogServiceImpl) EditProduct(ctx context.Context, req *product.EditProductReq) (resp *product.EditProductResp, err error) {
+	resp, err = service.NewEditProductService(ctx).Run(req)
 
 	return resp, err
 }

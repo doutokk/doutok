@@ -22,6 +22,7 @@ const (
 	ProductCatalogService_ListProducts_FullMethodName   = "/product.ProductCatalogService/ListProducts"
 	ProductCatalogService_GetProduct_FullMethodName     = "/product.ProductCatalogService/GetProduct"
 	ProductCatalogService_SearchProducts_FullMethodName = "/product.ProductCatalogService/SearchProducts"
+	ProductCatalogService_EditProduct_FullMethodName    = "/product.ProductCatalogService/editProduct"
 )
 
 // ProductCatalogServiceClient is the client API for ProductCatalogService service.
@@ -31,6 +32,7 @@ type ProductCatalogServiceClient interface {
 	ListProducts(ctx context.Context, in *ListProductsReq, opts ...grpc.CallOption) (*ListProductsResp, error)
 	GetProduct(ctx context.Context, in *GetProductReq, opts ...grpc.CallOption) (*GetProductResp, error)
 	SearchProducts(ctx context.Context, in *SearchProductsReq, opts ...grpc.CallOption) (*SearchProductsResp, error)
+	EditProduct(ctx context.Context, in *EditProductReq, opts ...grpc.CallOption) (*EditProductResp, error)
 }
 
 type productCatalogServiceClient struct {
@@ -71,6 +73,16 @@ func (c *productCatalogServiceClient) SearchProducts(ctx context.Context, in *Se
 	return out, nil
 }
 
+func (c *productCatalogServiceClient) EditProduct(ctx context.Context, in *EditProductReq, opts ...grpc.CallOption) (*EditProductResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EditProductResp)
+	err := c.cc.Invoke(ctx, ProductCatalogService_EditProduct_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductCatalogServiceServer is the server API for ProductCatalogService service.
 // All implementations must embed UnimplementedProductCatalogServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type ProductCatalogServiceServer interface {
 	ListProducts(context.Context, *ListProductsReq) (*ListProductsResp, error)
 	GetProduct(context.Context, *GetProductReq) (*GetProductResp, error)
 	SearchProducts(context.Context, *SearchProductsReq) (*SearchProductsResp, error)
+	EditProduct(context.Context, *EditProductReq) (*EditProductResp, error)
 	mustEmbedUnimplementedProductCatalogServiceServer()
 }
 
@@ -96,6 +109,9 @@ func (UnimplementedProductCatalogServiceServer) GetProduct(context.Context, *Get
 }
 func (UnimplementedProductCatalogServiceServer) SearchProducts(context.Context, *SearchProductsReq) (*SearchProductsResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchProducts not implemented")
+}
+func (UnimplementedProductCatalogServiceServer) EditProduct(context.Context, *EditProductReq) (*EditProductResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditProduct not implemented")
 }
 func (UnimplementedProductCatalogServiceServer) mustEmbedUnimplementedProductCatalogServiceServer() {}
 func (UnimplementedProductCatalogServiceServer) testEmbeddedByValue()                               {}
@@ -172,6 +188,24 @@ func _ProductCatalogService_SearchProducts_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductCatalogService_EditProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditProductReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductCatalogServiceServer).EditProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductCatalogService_EditProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductCatalogServiceServer).EditProduct(ctx, req.(*EditProductReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductCatalogService_ServiceDesc is the grpc.ServiceDesc for ProductCatalogService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +224,10 @@ var ProductCatalogService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchProducts",
 			Handler:    _ProductCatalogService_SearchProducts_Handler,
+		},
+		{
+			MethodName: "editProduct",
+			Handler:    _ProductCatalogService_EditProduct_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
