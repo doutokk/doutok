@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/doutokk/doutok/app/payment/biz/fsm"
 	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
 )
 
@@ -20,6 +21,14 @@ func (s *GetOrderPayemntStatusService) Run(req *payment.GetOrderPayemntStatusReq
 	// Finish your business logic.
 
 	fmt.Printf("GetOrderPayemntStatusService is called with req: %+v\n", req)
+
+	orderFSM, err := fsm.RestoreFromDB(req.OrderId)
+	if err != nil {
+		return nil, err
+	}
+	resp = &payment.GetOrderPayemntStatusResp{
+		Status: string(orderFSM.GetStatus()),
+	}
 
 	return
 }
