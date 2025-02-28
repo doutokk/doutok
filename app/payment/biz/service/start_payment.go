@@ -26,7 +26,7 @@ func (s *StartPaymentService) Run(req *payment.StartPaymentReq) (resp *payment.S
 	// Finish your business logic.
 
 	fmt.Printf("StartPaymentService is called with req: %+v\n", req)
-	userId := utils.GetUserId(s.ctx)
+	userId := utils.GetUserId(&s.ctx)
 	oi := req.OrderId
 	r, err := rpc.OrderClient.GetOrder(s.ctx, &order.GetOrderReq{Id: oi})
 	if err != nil {
