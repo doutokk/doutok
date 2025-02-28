@@ -23,9 +23,9 @@ var (
 )
 
 /*
-按如下约定:
+按如下约定：
   1. 所有策略只针对角色组设置
-  2. 用户关联到组(一个用户可以有多个组)
+  2. 用户关联到组 (一个用户可以有多个组)
 +-------+-------+-----------+--------+----+----+----+
 | ptype | v0    | v1        | v2     | v3 | v4 | v5 |
 +-------+-------+-----------+--------+----+----+----+
@@ -75,7 +75,7 @@ type RolePolicy struct {
 	Method   string `gorm:"column:v2"`
 }
 
-// 拿着csv用Ai生成就行,放在cmd中
+// 拿着 csv 用 Ai 生成就行，放在 cmd 中
 func InitPolicy() {
 	dal.Init()
 	utils.WriteFile("infra/casbin/auth_model.conf", modelFile)
@@ -101,12 +101,17 @@ func InitPolicy() {
 		{"base", "/product", "GET"},
 		{"base", "/product", "POST"},
 
+		// alipay callback
+		{"base", "/payment/callback", "POST"},
+
 		{"user", "/cart", "GET"},
 		{"user", "/cart/edit", "POST"},
 		{"user", "/order", "POST"},
 		{"user", "/order/*", "GET"},
 		{"user", "/order", "GET"},
 		{"user", "/payment", "POST"},
+		{"user", "/payment/*/status", "POST"},
+
 		{"admin", "/product/edit", "PUT"},
 	}
 
@@ -125,9 +130,9 @@ func InitPolicy() {
 	CreateUserRole("admin", "user")
 }
 
-// 创建角色组权限, 已有的会忽略ca
+// 创建角色组权限，已有的会忽略 ca
 func CreateRolePolicy(r RolePolicy) error {
-	// 不直接操作数据库，利用enforcer简化操作
+	// 不直接操作数据库，利用 enforcer 简化操作
 	err := enforcer.LoadPolicy()
 	if err != nil {
 		return err
@@ -158,7 +163,7 @@ func DeleteRolePolicy(r RolePolicy) error {
 	return enforcer.SavePolicy()
 }
 
-// 角色组中添加用户, 没有组默认创建
+// 角色组中添加用户，没有组默认创建
 func CreateUserRole(username, rolename string) error {
 	_, err := enforcer.AddGroupingPolicy(username, rolename)
 	if err != nil {
@@ -176,9 +181,9 @@ func DeleteUserRole(username, rolename string) error {
 	return enforcer.SavePolicy()
 }
 
-// 这里还需要uri和method
+// 这里还需要 uri 和 method
 func CheckAuthByRBAC(sub string, obj string, act string) bool {
-	// todo:现在是魔改路径,取出obj ？和？后面的参数
+	// todo:现在是魔改路径，取出 obj？和？后面的参数
 	obj = processObj(obj)
 	ok, err := enforcer.Enforce(sub, obj, act)
 	if err != nil {
@@ -191,7 +196,7 @@ func CheckAuthByRBAC(sub string, obj string, act string) bool {
 	return true
 }
 
-// 取出路径的?后面的参数
+// 取出路径的？后面的参数
 func processObj(obj string) string {
 	index := strings.Index(obj, "?")
 	if index > -1 {

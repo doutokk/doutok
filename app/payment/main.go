@@ -4,6 +4,8 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
 	"github.com/doutokk/doutok/app/payment/biz/dal"
+	"github.com/doutokk/doutok/app/payment/biz/dal/mysql"
+	"github.com/doutokk/doutok/app/payment/biz/dal/query"
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/app/payment/infra/rpc"
 	"github.com/doutokk/doutok/common/mtl"
@@ -23,6 +25,7 @@ func main() {
 	mtl.InitMetric(serviceName, "8383", conf.GetConf().Registry.RegistryAddress[0])
 	dal.Init()
 	rpc.InitClient()
+	query.SetDefault(mysql.DB)
 	opts := kitexInit()
 
 	svr := paymentservice.NewServer(new(PaymentServiceImpl), opts...)

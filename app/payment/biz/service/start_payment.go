@@ -36,20 +36,38 @@ func (s *StartPaymentService) Run(req *payment.StartPaymentReq) (resp *payment.S
 		klog.Warn("用户名和订单 id 不匹配")
 		return nil, errors.New("")
 	}
-	amount := 0.0
-	for _, item := range r.Order.OrderItems {
-		amount += float64(item.Cost)
+	var orderFSM *fsm.PayOrderFSM
+	orderFSM, err = fsm.RestoreFromDB(oi)
+	if err == nil && orderFSM.GetStatus() != fsm.CREATED {
+		klog.Warn("订单状态不正确")
+		return nil, errors.New("订单状态不正确")
 	}
 
-	orderFSM, err := fsm.NewOrder(fsm.CreatePayOrderReq{
-		UserId:  uint32(userId),
-		OrderId: req.OrderId,
-		Amount:  float32(amount),
-	})
+	if err != nil {
+		amount := 0.0
+		for _, item := range r.Order.OrderItems {
+			amount += float64(item.Cost)
+		}
+		orderFSM, err = fsm.NewOrder(fsm.CreatePayOrderReq{
+			UserId:  userId,
+			OrderId: req.OrderId,
+			Amount:  float32(amount),
+		})
+	}
 	if err != nil {
 		return nil, err
 	}
 	fmt.Printf("orderFSM: %+v\n", orderFSM)
+
+	// 生成支付链接
+	url, err := orderFSM.StartPayment(s.ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resp = &payment.StartPaymentResp{
+		PaymentUrl: url,
+	}
 
 	return
 }

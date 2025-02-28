@@ -41,6 +41,29 @@ type CreatePayOrderReq struct {
 	Amount  float32
 }
 
+// 状态机似乎放错地方了，感觉放在 order 模块内更合适，或者说两边涉及到钱的，都应该有一个自己的状态机
+
+func RestoreFromDB(orderId string) (*PayOrderFSM, error) {
+	l := query.Q.PaymentLog
+	paymentLog, err := l.Where(l.OrderId.Eq(orderId)).First()
+	if err != nil {
+		return nil, fmt.Errorf("failed to restore payment log: %w", err)
+	}
+
+	o := &PayOrderFSM{}
+	o.fsm = fsm.NewFSM(
+		paymentLog.Status,
+		fsm.Events{
+			{Name: string(StartPayment), Src: []string{string(CREATED)}, Dst: string(PAYING)},
+			{Name: string(PaymentSuccess), Src: []string{string(PAYING)}, Dst: string(FINISH)},
+			{Name: string(PaymentFailed), Src: []string{string(PAYING)}, Dst: string(CREATED)},
+		},
+		fsm.Callbacks{},
+	)
+	o.orderId = orderId
+	return o, nil
+}
+
 func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 	o := &PayOrderFSM{}
 	o.fsm = fsm.NewFSM(
@@ -60,7 +83,7 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 		TransactionId: "",
 		Status:        string(CREATED),
 		Amount:        req.Amount,
-		PayAt:         time.Time{},
+		PayAt:         time.Now(),
 	})
 	o.orderId = req.OrderId
 	o.data = req
@@ -110,4 +133,8 @@ func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
 		return fmt.Errorf("failed to process payment failure: %w", err)
 	}
 	return nil
+}
+
+func (o *PayOrderFSM) GetStatus() PayOrderStatus {
+	return PayOrderStatus(o.fsm.Current())
 }
