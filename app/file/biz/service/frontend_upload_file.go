@@ -20,7 +20,7 @@ func (s *FrontendUploadFileService) Run(req *file.FrontendUploadFileReq) (resp *
 	// Finish your business logic.
 
 	u := NewUploadFileService(s.ctx)
-	userId := utils.GetUserId(s.ctx)
+	userId := utils.GetUserId(&s.ctx)
 	resp1, err := u.Run(&file.UploadFileReq{
 		UserId:   uint64(userId),
 		FileName: req.FileName,

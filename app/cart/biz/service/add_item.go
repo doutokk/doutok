@@ -22,7 +22,7 @@ func (s *AddItemService) Run(req *cart.AddItemReq) (resp *cart.AddItemResp, err 
 	if req.Item.Quantity <= 0 {
 		return nil, fmt.Errorf("quantity must be greater than 0")
 	}
-	userId := uint32(utils.GetUserId(s.ctx))
+	userId := utils.GetUserId(&s.ctx)
 
 	// 获取用户的购物车商品
 	ci := query.Q.CartItem

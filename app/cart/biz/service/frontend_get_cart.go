@@ -23,7 +23,7 @@ func (s *FrontendGetCartService) Run(req *cart.FrontendGetCartReq) (resp *cart.F
 	// Finish your business logic.
 	cs := GetCartService{s.ctx}
 	cartResp, err := cs.Run(&cart.GetCartReq{
-		UserId: uint32(utils.GetUserId(s.ctx)),
+		UserId: utils.GetUserId(&s.ctx),
 	})
 	if err != nil {
 		return nil, err
