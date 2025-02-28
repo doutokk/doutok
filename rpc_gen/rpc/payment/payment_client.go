@@ -6,7 +6,7 @@ import (
 
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
-
+	
 )
 
 type RPCClient interface {
@@ -14,7 +14,7 @@ type RPCClient interface {
 	Service() string
 	Charge(ctx context.Context, Req *payment.ChargeReq, callOptions ...callopt.Option) (r *payment.ChargeResp, err error)
 	StartPayment(ctx context.Context, Req *payment.StartPaymentReq, callOptions ...callopt.Option) (r *payment.StartPaymentResp, err error)
-	CallBack(ctx context.Context, Req *payment.CallBackReq, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error)
+	CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error)
 	GetOrderPayemntStatus(ctx context.Context, Req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (r *payment.GetOrderPayemntStatusResp, err error)
 }
 
@@ -52,7 +52,7 @@ func (c *clientImpl) StartPayment(ctx context.Context, Req *payment.StartPayment
 	return c.kitexClient.StartPayment(ctx, Req, callOptions...)
 }
 
-func (c *clientImpl) CallBack(ctx context.Context, Req *payment.CallBackReq, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error) {
+func (c *clientImpl) CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error) {
 	return c.kitexClient.CallBack(ctx, Req, callOptions...)
 }
 

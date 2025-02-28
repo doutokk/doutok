@@ -419,7 +419,7 @@ func callBackHandler(ctx context.Context, handler interface{}, arg, result inter
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(payment.CallBackReq)
+		req := new(payment.AlipayCallbackNotification)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
@@ -449,12 +449,12 @@ func newCallBackResult() interface{} {
 }
 
 type CallBackArgs struct {
-	Req *payment.CallBackReq
+	Req *payment.AlipayCallbackNotification
 }
 
 func (p *CallBackArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
 	if !p.IsSetReq() {
-		p.Req = new(payment.CallBackReq)
+		p.Req = new(payment.AlipayCallbackNotification)
 	}
 	return p.Req.FastRead(buf, _type, number)
 }
@@ -481,7 +481,7 @@ func (p *CallBackArgs) Marshal(out []byte) ([]byte, error) {
 }
 
 func (p *CallBackArgs) Unmarshal(in []byte) error {
-	msg := new(payment.CallBackReq)
+	msg := new(payment.AlipayCallbackNotification)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -489,9 +489,9 @@ func (p *CallBackArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var CallBackArgs_Req_DEFAULT *payment.CallBackReq
+var CallBackArgs_Req_DEFAULT *payment.AlipayCallbackNotification
 
-func (p *CallBackArgs) GetReq() *payment.CallBackReq {
+func (p *CallBackArgs) GetReq() *payment.AlipayCallbackNotification {
 	if !p.IsSetReq() {
 		return CallBackArgs_Req_DEFAULT
 	}
@@ -751,7 +751,7 @@ func (p *kClient) StartPayment(ctx context.Context, Req *payment.StartPaymentReq
 	return _result.GetSuccess(), nil
 }
 
-func (p *kClient) CallBack(ctx context.Context, Req *payment.CallBackReq) (r *payment.AlipayCallbackNotificationResp, err error) {
+func (p *kClient) CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification) (r *payment.AlipayCallbackNotificationResp, err error) {
 	var _args CallBackArgs
 	_args.Req = Req
 	var _result CallBackResult

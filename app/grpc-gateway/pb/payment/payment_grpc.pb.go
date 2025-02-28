@@ -31,7 +31,7 @@ const (
 type PaymentServiceClient interface {
 	Charge(ctx context.Context, in *ChargeReq, opts ...grpc.CallOption) (*ChargeResp, error)
 	StartPayment(ctx context.Context, in *StartPaymentReq, opts ...grpc.CallOption) (*StartPaymentResp, error)
-	CallBack(ctx context.Context, in *CallBackReq, opts ...grpc.CallOption) (*AlipayCallbackNotificationResp, error)
+	CallBack(ctx context.Context, in *AlipayCallbackNotification, opts ...grpc.CallOption) (*AlipayCallbackNotificationResp, error)
 	GetOrderPayemntStatus(ctx context.Context, in *GetOrderPayemntStatusReq, opts ...grpc.CallOption) (*GetOrderPayemntStatusResp, error)
 }
 
@@ -63,7 +63,7 @@ func (c *paymentServiceClient) StartPayment(ctx context.Context, in *StartPaymen
 	return out, nil
 }
 
-func (c *paymentServiceClient) CallBack(ctx context.Context, in *CallBackReq, opts ...grpc.CallOption) (*AlipayCallbackNotificationResp, error) {
+func (c *paymentServiceClient) CallBack(ctx context.Context, in *AlipayCallbackNotification, opts ...grpc.CallOption) (*AlipayCallbackNotificationResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AlipayCallbackNotificationResp)
 	err := c.cc.Invoke(ctx, PaymentService_CallBack_FullMethodName, in, out, cOpts...)
@@ -89,7 +89,7 @@ func (c *paymentServiceClient) GetOrderPayemntStatus(ctx context.Context, in *Ge
 type PaymentServiceServer interface {
 	Charge(context.Context, *ChargeReq) (*ChargeResp, error)
 	StartPayment(context.Context, *StartPaymentReq) (*StartPaymentResp, error)
-	CallBack(context.Context, *CallBackReq) (*AlipayCallbackNotificationResp, error)
+	CallBack(context.Context, *AlipayCallbackNotification) (*AlipayCallbackNotificationResp, error)
 	GetOrderPayemntStatus(context.Context, *GetOrderPayemntStatusReq) (*GetOrderPayemntStatusResp, error)
 	mustEmbedUnimplementedPaymentServiceServer()
 }
@@ -107,7 +107,7 @@ func (UnimplementedPaymentServiceServer) Charge(context.Context, *ChargeReq) (*C
 func (UnimplementedPaymentServiceServer) StartPayment(context.Context, *StartPaymentReq) (*StartPaymentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartPayment not implemented")
 }
-func (UnimplementedPaymentServiceServer) CallBack(context.Context, *CallBackReq) (*AlipayCallbackNotificationResp, error) {
+func (UnimplementedPaymentServiceServer) CallBack(context.Context, *AlipayCallbackNotification) (*AlipayCallbackNotificationResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CallBack not implemented")
 }
 func (UnimplementedPaymentServiceServer) GetOrderPayemntStatus(context.Context, *GetOrderPayemntStatusReq) (*GetOrderPayemntStatusResp, error) {
@@ -171,7 +171,7 @@ func _PaymentService_StartPayment_Handler(srv interface{}, ctx context.Context, 
 }
 
 func _PaymentService_CallBack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CallBackReq)
+	in := new(AlipayCallbackNotification)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func _PaymentService_CallBack_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: PaymentService_CallBack_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PaymentServiceServer).CallBack(ctx, req.(*CallBackReq))
+		return srv.(PaymentServiceServer).CallBack(ctx, req.(*AlipayCallbackNotification))
 	}
 	return interceptor(ctx, in, info, handler)
 }

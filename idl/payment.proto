@@ -14,7 +14,7 @@ service PaymentService {
       body: "*"
     };
   }
-  rpc CallBack(CallBackReq) returns (AlipayCallbackNotificationResp) {
+  rpc CallBack(AlipayCallbackNotification) returns (AlipayCallbackNotificationResp) {
     option (google.api.http) = {
       post: "/payment/callback"
       body: "*"

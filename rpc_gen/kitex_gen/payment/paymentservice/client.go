@@ -13,7 +13,7 @@ import (
 type Client interface {
 	Charge(ctx context.Context, Req *payment.ChargeReq, callOptions ...callopt.Option) (r *payment.ChargeResp, err error)
 	StartPayment(ctx context.Context, Req *payment.StartPaymentReq, callOptions ...callopt.Option) (r *payment.StartPaymentResp, err error)
-	CallBack(ctx context.Context, Req *payment.CallBackReq, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error)
+	CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error)
 	GetOrderPayemntStatus(ctx context.Context, Req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (r *payment.GetOrderPayemntStatusResp, err error)
 }
 
@@ -56,7 +56,7 @@ func (p *kPaymentServiceClient) StartPayment(ctx context.Context, Req *payment.S
 	return p.kClient.StartPayment(ctx, Req)
 }
 
-func (p *kPaymentServiceClient) CallBack(ctx context.Context, Req *payment.CallBackReq, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error) {
+func (p *kPaymentServiceClient) CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.CallBack(ctx, Req)
 }

@@ -61,7 +61,7 @@ func local_request_PaymentService_StartPayment_0(ctx context.Context, marshaler 
 
 func request_PaymentService_CallBack_0(ctx context.Context, marshaler runtime.Marshaler, client PaymentServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq CallBackReq
+		protoReq AlipayCallbackNotification
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
@@ -73,7 +73,7 @@ func request_PaymentService_CallBack_0(ctx context.Context, marshaler runtime.Ma
 
 func local_request_PaymentService_CallBack_0(ctx context.Context, marshaler runtime.Marshaler, server PaymentServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq CallBackReq
+		protoReq AlipayCallbackNotification
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {

@@ -25,7 +25,7 @@ func StartPayment(ctx context.Context, req *payment.StartPaymentReq, callOptions
 	return resp, nil
 }
 
-func CallBack(ctx context.Context, req *payment.CallBackReq, callOptions ...callopt.Option) (resp *payment.AlipayCallbackNotificationResp, err error) {
+func CallBack(ctx context.Context, req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (resp *payment.AlipayCallbackNotificationResp, err error) {
 	resp, err = defaultClient.CallBack(ctx, req, callOptions...)
 	if err != nil {
 		klog.CtxErrorf(ctx, "CallBack call failed,err =%+v", err)
