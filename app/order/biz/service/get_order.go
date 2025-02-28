@@ -19,7 +19,7 @@ func NewGetOrderService(ctx context.Context) *GetOrderService {
 
 // Run create note info
 func (s *GetOrderService) Run(req *order.GetOrderReq) (resp *order.GetOrderResp, err error) {
-	userId := utils.GetUserId(s.ctx)
+	userId := utils.GetUserId(&s.ctx)
 	resp = new(order.GetOrderResp)
 	o := query.Q.Order
 	oi := query.Q.OrderItem

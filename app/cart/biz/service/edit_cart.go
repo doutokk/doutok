@@ -24,7 +24,7 @@ func (s *EditCartService) Run(req *cart.EditCartReq) (resp *cart.EditCartResp, e
 	// Finish your business logic.
 	// TODO: add transaction
 	ci := query.Q.CartItem
-	userId := uint32(utils.GetUserId(s.ctx))
+	userId := utils.GetUserId(&s.ctx)
 	klog.Warn("userId", userId)
 	for _, ids := range req.Items {
 

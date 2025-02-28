@@ -19,7 +19,7 @@ func NewListOrderService(ctx context.Context) *ListOrderService {
 
 // Run create note info
 func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderResp, err error) {
-	//userId := utils.GetUserId(s.ctx)
+	//userId := utils.GetUserId(&s.ctx)
 	userId := 7
 	// Finish your business logic.
 	o := query.Q.Order
