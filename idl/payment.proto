@@ -2,11 +2,29 @@ syntax = "proto3";
 
 package payment;
 
-option go_package = "payment";
+option go_package = "/payment";
 
+import "google/api/annotations.proto";
 
 service PaymentService {
   rpc Charge(ChargeReq) returns (ChargeResp) {}
+  rpc StartPayment(StartPaymentReq) returns (StartPaymentResp) {
+    option (google.api.http) = {
+      post: "/payment"
+      body: "*"
+    };
+  }
+  rpc CallBack(AlipayCallbackNotification) returns (AlipayCallbackNotificationResp) {
+    option (google.api.http) = {
+      post: "/payment/callback"
+      body: "*"
+    };
+  }
+  rpc GetOrderPayemntStatus(GetOrderPayemntStatusReq) returns (GetOrderPayemntStatusResp) {
+    option (google.api.http) = {
+      post: "/payment/{order_id}/status"
+    };
+  }
 }
 
 message CreditCardInfo {
@@ -25,4 +43,55 @@ message ChargeReq {
 
 message ChargeResp {
   string transaction_id = 1;
+}
+
+message StartPaymentReq {
+  string order_id = 1;
+}
+message StartPaymentResp {
+  string payment_url = 1;
+}
+
+message CallBackReq {
+  string order_id = 1;
+  string transaction_id = 2;
+  string status = 3;
+}
+
+message AlipayCallbackNotification {
+  string gmt_create = 1;         // Creation time
+  string charset = 2;            // Character encoding
+  string gmt_payment = 3;        // Payment time
+  string notify_time = 4;        // Notification time
+  string subject = 5;            // Order subject/title
+  string sign = 6;               // Signature
+  string buyer_id = 7;           // Buyer ID
+  string invoice_amount = 8;     // Invoice amount
+  string version = 9;            // API version
+  string notify_id = 10;         // Notification ID
+  string fund_bill_list = 11;    // Payment source details (JSON string)
+  string notify_type = 12;       // Notification type
+  string out_trade_no = 13;      // Merchant order number
+  string total_amount = 14;      // Total amount
+  string trade_status = 15;      // Trade status
+  string trade_no = 16;          // Alipay trade number
+  string auth_app_id = 17;       // Authorized app ID
+  string receipt_amount = 18;    // Receipt amount
+  string point_amount = 19;      // Point amount used
+  string buyer_pay_amount = 20;  // Buyer payment amount
+  string app_id = 21;            // App ID
+  string sign_type = 22;         // Signature type
+  string seller_id = 23;         // Seller ID
+}
+
+message AlipayCallbackNotificationResp {
+  string success = 1;
+}
+
+message GetOrderPayemntStatusReq {
+  string order_id = 1;
+}
+
+message GetOrderPayemntStatusResp {
+  string status = 1;
 }

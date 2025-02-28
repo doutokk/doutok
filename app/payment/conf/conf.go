@@ -47,6 +47,12 @@ type Config struct {
 		Password string `mapstructure:"password"`
 		DB       int    `mapstructure:"db"`
 	} `mapstructure:"redis"`
+
+	Alipay struct {
+		AppID       string `mapstructure:"app_id"`
+		PrivateKey  string `mapstructure:"private_key"`
+		CallBackUrl string `mapstructure:"callback_url"`
+	} `mapstructure:"alipay"`
 }
 
 // GetConf gets configuration instance

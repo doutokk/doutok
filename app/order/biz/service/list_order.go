@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/doutokk/doutok/app/order/biz/dal/query"
 	"github.com/doutokk/doutok/app/order/infra/rpc"
+	"github.com/doutokk/doutok/common/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
@@ -19,8 +20,7 @@ func NewListOrderService(ctx context.Context) *ListOrderService {
 
 // Run create note info
 func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderResp, err error) {
-	//userId := utils.GetUserId(&s.ctx)
-	userId := 7
+	userId := utils.GetUserId(&s.ctx)
 	// Finish your business logic.
 	o := query.Q.Order
 	oi := query.Q.OrderItem

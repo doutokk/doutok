@@ -7,6 +7,7 @@ import (
 	cartpb "github.com/doutokk/doutok/app/grpc-gateway/pb/cart"
 	filepb "github.com/doutokk/doutok/app/grpc-gateway/pb/file"
 	orderpb "github.com/doutokk/doutok/app/grpc-gateway/pb/order"
+	paymentpb "github.com/doutokk/doutok/app/grpc-gateway/pb/payment"
 	productpb "github.com/doutokk/doutok/app/grpc-gateway/pb/product"
 	userpb "github.com/doutokk/doutok/app/grpc-gateway/pb/user"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -40,12 +41,13 @@ func run() (err error) {
 	err = userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "user-service:8888", opts)
 	err = productpb.RegisterProductCatalogServiceHandlerFromEndpoint(ctx, mux, "product-service:8888", opts)
 	err = filepb.RegisterFileServiceHandlerFromEndpoint(ctx, mux, "file-service:8888", opts)
+	err = paymentpb.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, ":8888", opts)
 
 	if err != nil {
 		return err
 	}
 
-	return http.ListenAndServe("0.0.0.0:8888", mux)
+	return http.ListenAndServe("0.0.0.0:8887", mux)
 }
 
 func main() {

@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"github.com/cloudwego/kitex/client"
-	"github.com/doutokk/doutok/app/product/conf"
+	"github.com/doutokk/doutok/app/order/conf"
 	"github.com/doutokk/doutok/common/clientsuite"
 	"github.com/doutokk/doutok/common/utils"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/cart/cartservice"

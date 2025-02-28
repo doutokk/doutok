@@ -13,6 +13,9 @@ type RPCClient interface {
 	KitexClient() paymentservice.Client
 	Service() string
 	Charge(ctx context.Context, Req *payment.ChargeReq, callOptions ...callopt.Option) (r *payment.ChargeResp, err error)
+	StartPayment(ctx context.Context, Req *payment.StartPaymentReq, callOptions ...callopt.Option) (r *payment.StartPaymentResp, err error)
+	CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error)
+	GetOrderPayemntStatus(ctx context.Context, Req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (r *payment.GetOrderPayemntStatusResp, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -43,4 +46,16 @@ func (c *clientImpl) KitexClient() paymentservice.Client {
 
 func (c *clientImpl) Charge(ctx context.Context, Req *payment.ChargeReq, callOptions ...callopt.Option) (r *payment.ChargeResp, err error) {
 	return c.kitexClient.Charge(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) StartPayment(ctx context.Context, Req *payment.StartPaymentReq, callOptions ...callopt.Option) (r *payment.StartPaymentResp, err error) {
+	return c.kitexClient.StartPayment(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error) {
+	return c.kitexClient.CallBack(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) GetOrderPayemntStatus(ctx context.Context, Req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (r *payment.GetOrderPayemntStatusResp, err error) {
+	return c.kitexClient.GetOrderPayemntStatus(ctx, Req, callOptions...)
 }
