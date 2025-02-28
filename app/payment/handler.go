@@ -24,7 +24,7 @@ func (s *PaymentServiceImpl) StartPayment(ctx context.Context, req *payment.Star
 }
 
 // CallBack implements the PaymentServiceImpl interface.
-func (s *PaymentServiceImpl) CallBack(ctx context.Context, req *payment.CallBackReq) (resp *payment.AlipayCallbackNotificationResp, err error) {
+func (s *PaymentServiceImpl) CallBack(ctx context.Context, req *payment.AlipayCallbackNotification) (resp *payment.AlipayCallbackNotificationResp, err error) {
 	resp, err = service.NewCallBackService(ctx).Run(req)
 
 	return resp, err

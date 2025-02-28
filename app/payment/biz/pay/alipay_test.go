@@ -42,7 +42,7 @@ func Test_createPayOrder(t *testing.T) {
 
 func Test_verifyCallback(t *testing.T) {
 	type args struct {
-		params CallbackParams
+		params ReturnCallbackParams
 	}
 	tests := []struct {
 		name string
@@ -52,7 +52,7 @@ func Test_verifyCallback(t *testing.T) {
 		{
 			name: "1",
 			args: args{
-				params: CallbackParams{
+				params: ReturnCallbackParams{
 					Charset:     "utf-8",
 					OutTradeNo:  "2025-02-27 13:08:47.1056417 +0800 CST m=+0.005788301",
 					Method:      "alipay.trade.page.pay.return",
@@ -72,8 +72,8 @@ func Test_verifyCallback(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := VerifyCallback(tt.args.params); got != tt.want {
-				t.Errorf("VerifyCallback() = %v, want %v", got, tt.want)
+			if got := VerifyReturnCallback(tt.args.params); got != tt.want {
+				t.Errorf("VerifyReturnCallback() = %v, want %v", got, tt.want)
 			}
 		})
 	}
