@@ -3,6 +3,9 @@ package serversuite
 import (
 	"github.com/doutokk/doutok/common/mtl"
 
+	"context"
+	"fmt"
+	"github.com/cloudwego/kitex/pkg/endpoint"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/pkg/transmeta"
@@ -18,9 +21,23 @@ type CommonServerSuite struct {
 	RegistryAddr       string
 }
 
+// PrintReqRespMiddleware 打印请求和响应内容的中间件
+func PrintReqRespMiddleware(next endpoint.Endpoint) endpoint.Endpoint {
+	return func(ctx context.Context, req, resp interface{}) error {
+		// 打印请求内容
+		fmt.Printf("RPC Request: %+v\n", req)
+		// 调用下一个中间件或最终的业务处理
+		err := next(ctx, req, resp)
+		// 打印响应内容
+		fmt.Printf("RPC Response: %+v\n", resp)
+		return err
+	}
+}
+
 func (s CommonServerSuite) Options() []server.Option {
 	opts := []server.Option{
 		server.WithMetaHandler(transmeta.ServerHTTP2Handler),
+		server.WithMiddleware(PrintReqRespMiddleware),
 	}
 
 	// 注册到 consul
