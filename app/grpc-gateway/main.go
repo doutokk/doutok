@@ -41,7 +41,7 @@ func run() (err error) {
 	err = userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "user-service:8888", opts)
 	err = productpb.RegisterProductCatalogServiceHandlerFromEndpoint(ctx, mux, "product-service:8888", opts)
 	err = filepb.RegisterFileServiceHandlerFromEndpoint(ctx, mux, "file-service:8888", opts)
-	err = paymentpb.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, ":8888", opts)
+	err = paymentpb.RegisterPaymentServiceHandlerFromEndpoint(ctx, mux, "payment-service:8888", opts)
 
 	if err != nil {
 		return err
