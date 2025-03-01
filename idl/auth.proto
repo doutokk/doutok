@@ -31,6 +31,7 @@ message VerifyTokenReq {
 
 message DeliveryResp {
   string token = 1;
+  repeated string roles = 2;
 }
 
 message VerifyResp {
