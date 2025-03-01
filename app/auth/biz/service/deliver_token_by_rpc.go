@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 	"github.com/doutokk/doutok/app/auth/biz/utils"
+	"github.com/doutokk/doutok/app/auth/infra/casbin"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/auth"
+	"strconv"
 	"time"
 )
 
@@ -26,7 +28,10 @@ func (s *DeliverTokenByRPCService) Run(req *auth.DeliverTokenReq) (resp *auth.De
 		}, err
 	}
 
+	roles, err := casbin.GetUserRoles(strconv.Itoa(int(req.UserId)))
+
 	return &auth.DeliveryResp{
 		Token: jwt,
+		Roles: roles,
 	}, nil
 }

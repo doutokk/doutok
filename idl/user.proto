@@ -37,4 +37,5 @@ message LoginReq {
 
 message LoginResp {
   string token = 1;
+  repeated string roles = 2;
 }

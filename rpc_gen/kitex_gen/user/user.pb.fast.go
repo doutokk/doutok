@@ -115,6 +115,11 @@ func (x *LoginResp) FastRead(buf []byte, _type int8, number int32) (offset int, 
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -130,6 +135,16 @@ ReadFieldError:
 
 func (x *LoginResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
 	x.Token, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *LoginResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	var v string
+	v, offset, err = fastpb.ReadString(buf, _type)
+	if err != nil {
+		return offset, err
+	}
+	x.Roles = append(x.Roles, v)
 	return offset, err
 }
 
@@ -204,6 +219,7 @@ func (x *LoginResp) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
 	return offset
 }
 
@@ -212,6 +228,16 @@ func (x *LoginResp) fastWriteField1(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 1, x.GetToken())
+	return offset
+}
+
+func (x *LoginResp) fastWriteField2(buf []byte) (offset int) {
+	if len(x.Roles) == 0 {
+		return offset
+	}
+	for i := range x.GetRoles() {
+		offset += fastpb.WriteString(buf[offset:], 2, x.GetRoles()[i])
+	}
 	return offset
 }
 
@@ -286,6 +312,7 @@ func (x *LoginResp) Size() (n int) {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField2()
 	return n
 }
 
@@ -294,6 +321,16 @@ func (x *LoginResp) sizeField1() (n int) {
 		return n
 	}
 	n += fastpb.SizeString(1, x.GetToken())
+	return n
+}
+
+func (x *LoginResp) sizeField2() (n int) {
+	if len(x.Roles) == 0 {
+		return n
+	}
+	for i := range x.GetRoles() {
+		n += fastpb.SizeString(2, x.GetRoles()[i])
+	}
 	return n
 }
 
@@ -313,6 +350,7 @@ var fieldIDToName_LoginReq = map[int32]string{
 
 var fieldIDToName_LoginResp = map[int32]string{
 	1: "Token",
+	2: "Roles",
 }
 
 var _ = annotations.File_google_api_annotations_proto

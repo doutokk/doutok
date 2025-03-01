@@ -37,12 +37,14 @@ func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error)
 	authReq.UserId = int32(us.ID)
 
 	authResp, err := rpc.AuthClient.DeliverTokenByRPC(s.ctx, authReq)
+
 	if err != nil {
 		return nil, err
 	}
 
 	resp = &user.LoginResp{
 		Token: authResp.Token,
+		Roles: authResp.Roles,
 	}
 
 	return

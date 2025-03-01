@@ -204,3 +204,12 @@ func processObj(obj string) string {
 	}
 	return obj
 }
+
+func GetUserRoles(userId string) ([]string, error) {
+	// 获取用户角色
+	roles, err := enforcer.GetRolesForUser(userId)
+	if err != nil {
+		return nil, err
+	}
+	return roles, nil
+}
