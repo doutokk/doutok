@@ -1,6 +1,7 @@
 package serversuite
 
 import (
+	"github.com/cloudwego/hertz/pkg/common/json"
 	"github.com/doutokk/doutok/common/mtl"
 
 	"context"
@@ -21,23 +22,42 @@ type CommonServerSuite struct {
 	RegistryAddr       string
 }
 
-// PrintReqRespMiddleware 打印请求和响应内容的中间件
-func PrintReqRespMiddleware(next endpoint.Endpoint) endpoint.Endpoint {
+func LoggingMiddleware(next endpoint.Endpoint) endpoint.Endpoint {
 	return func(ctx context.Context, req, resp interface{}) error {
-		// 打印请求内容
-		fmt.Printf("RPC Request: %+v\n", req)
-		// 调用下一个中间件或最终的业务处理
-		err := next(ctx, req, resp)
-		// 打印响应内容
-		fmt.Printf("RPC Response: %+v\n", resp)
+		// 获取 RPC 方法信息
+		ri := rpcinfo.GetRPCInfo(ctx)
+		method := ri.To().Method()
+
+		// 序列化请求
+		reqJSON, err := json.MarshalIndent(req, "", "  ")
+		if err != nil {
+			fmt.Printf("[%s] Marshal request error: %v\n", method, err)
+		} else {
+			fmt.Printf("[%s] REQUEST:\n%s\n", method, string(reqJSON))
+		}
+
+		// 执行后续调用
+		err = next(ctx, req, resp)
+
+		// 序列化响应
+		respJSON, marshalErr := json.MarshalIndent(resp, "", "  ")
+		if marshalErr != nil {
+			fmt.Printf("[%s] Marshal response error: %v\n", method, marshalErr)
+		} else {
+			if err != nil {
+				fmt.Printf("[%s] RESPONSE ERROR: %v\n", method, err)
+			} else {
+				fmt.Printf("[%s] RESPONSE:\n%s\n", method, string(respJSON))
+			}
+		}
+
 		return err
 	}
 }
-
 func (s CommonServerSuite) Options() []server.Option {
 	opts := []server.Option{
 		server.WithMetaHandler(transmeta.ServerHTTP2Handler),
-		server.WithMiddleware(PrintReqRespMiddleware),
+		server.WithMiddleware(LoggingMiddleware),
 	}
 
 	// 注册到 consul
