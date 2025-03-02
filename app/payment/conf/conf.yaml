@@ -26,3 +26,4 @@ alipay:
   app_id: "202100011768"
   private_key: "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDQ5Q5Q"
   callback_url: "http://localhost:8888/payment/alipay/callback"
+  notifyback_url: "http://localhost:8888/payment/alipay/notify"

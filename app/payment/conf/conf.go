@@ -49,9 +49,10 @@ type Config struct {
 	} `mapstructure:"redis"`
 
 	Alipay struct {
-		AppID       string `mapstructure:"app_id"`
-		PrivateKey  string `mapstructure:"private_key"`
-		CallBackUrl string `mapstructure:"callback_url"`
+		AppID         string `mapstructure:"app_id"`
+		PrivateKey    string `mapstructure:"private_key"`
+		CallBackUrl   string `mapstructure:"callback_url"`
+		NotifyBackUrl string `mapstructure:"notifyback_url"`
 	} `mapstructure:"alipay"`
 }
 

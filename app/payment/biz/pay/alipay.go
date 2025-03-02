@@ -41,7 +41,7 @@ func init() {
 func CreatePayOrder(orderId string, amount float64) (url string, err error) {
 	p := alipay.TradePagePay{}
 	p.ProductCode = "FAST_INSTANT_TRADE_PAY"
-	p.NotifyURL = c.CallBackUrl
+	p.NotifyURL = c.NotifyBackUrl
 	p.ReturnURL = c.CallBackUrl
 	p.Subject = "Order: " + orderId
 	p.OutTradeNo = orderId
