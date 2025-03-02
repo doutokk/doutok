@@ -150,3 +150,18 @@ func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
 func (o *PayOrderFSM) GetStatus() PayOrderStatus {
 	return PayOrderStatus(o.fsm.Current())
 }
+
+func (o *PayOrderFSM) DirectCheck(params pay.ReturnCallbackParams) bool {
+	fmt.Println("DirectCheck")
+	if pay.VerifyReturnCallback(params) {
+		o.PaymentSuccess(context.Background())
+		return true
+	}
+
+	if _, ok := pay.TradeQuery(context.Background(), params.TradeNo); ok {
+		o.PaymentSuccess(context.Background())
+		return true
+	}
+
+	return false
+}
