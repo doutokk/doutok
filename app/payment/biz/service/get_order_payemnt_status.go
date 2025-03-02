@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/doutokk/doutok/app/payment/biz/fsm"
 	payment "github.com/doutokk/doutok/rpc_gen/kitex_gen/payment"
+	"strings"
 )
 
 type GetOrderPayemntStatusService struct {
@@ -24,6 +25,9 @@ func (s *GetOrderPayemntStatusService) Run(req *payment.GetOrderPayemntStatusReq
 
 	orderFSM, err := fsm.RestoreFromDB(req.OrderId)
 	if err != nil {
+		if strings.Contains(err.Error(), "record not found") {
+			return &payment.GetOrderPayemntStatusResp{Status: "Uncreated"}, nil
+		}
 		return nil, err
 	}
 	resp = &payment.GetOrderPayemntStatusResp{
