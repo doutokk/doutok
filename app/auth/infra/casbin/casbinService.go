@@ -2,6 +2,9 @@ package casbin
 
 import (
 	_ "embed"
+	"log"
+	"strings"
+
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
@@ -9,8 +12,6 @@ import (
 	"github.com/doutokk/doutok/app/auth/biz/dal"
 	"github.com/doutokk/doutok/app/auth/biz/dal/mysql"
 	"github.com/doutokk/doutok/common/utils"
-	"log"
-	"strings"
 )
 
 var (
@@ -103,6 +104,7 @@ func InitPolicy() {
 
 		// alipay callback
 		{"base", "/payment/callback", "POST"},
+		{"base", "/payment/direct", "POST"},
 
 		{"user", "/cart", "GET"},
 		{"user", "/cart/edit", "POST"},
