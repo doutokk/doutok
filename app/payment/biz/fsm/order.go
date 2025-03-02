@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/doutokk/doutok/app/payment/biz/pay"
+	//"github.com/doutokk/doutok/app/payment/infra/rpc"
+	//"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"time"
 
 	"github.com/doutokk/doutok/app/payment/biz/dal/model"
@@ -61,6 +63,15 @@ func RestoreFromDB(orderId string) (*PayOrderFSM, error) {
 		fsm.Callbacks{},
 	)
 	o.orderId = orderId
+	//order, err := rpc.OrderClient.GetOrder(context.Background(), &order.GetOrderReq{Id: orderId})
+	//if err != nil {
+	//	return nil, fmt.Errorf("failed to get order: %w", err)
+	//}
+	o.data = CreatePayOrderReq{
+		UserId:  uint32(paymentLog.UserId),
+		OrderId: orderId,
+		Amount:  paymentLog.Amount,
+	}
 	return o, nil
 }
 
