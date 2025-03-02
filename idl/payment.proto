@@ -25,6 +25,12 @@ service PaymentService {
       post: "/payment/{order_id}/status"
     };
   }
+  rpc Cancel(CancelPaymentReq) returns (CancelPaymentResp) {
+    option (google.api.http) = {
+      post: "/payment/{order_id}/cancel"
+      body: "*"
+    };
+  }
 }
 
 message CreditCardInfo {
@@ -94,4 +100,13 @@ message GetOrderPayemntStatusReq {
 
 message GetOrderPayemntStatusResp {
   string status = 1;
+}
+
+message CancelPaymentReq {
+  string order_id = 1;
+}
+
+message CancelPaymentResp {
+  bool success = 1;
+  string message = 2;
 }

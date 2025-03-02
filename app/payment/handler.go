@@ -36,3 +36,10 @@ func (s *PaymentServiceImpl) GetOrderPayemntStatus(ctx context.Context, req *pay
 
 	return resp, err
 }
+
+// Cancel implements the PaymentServiceImpl interface.
+func (s *PaymentServiceImpl) Cancel(ctx context.Context, req *payment.CancelPaymentReq) (resp *payment.CancelPaymentResp, err error) {
+	resp, err = service.NewCancelService(ctx).Run(req)
+
+	return resp, err
+}

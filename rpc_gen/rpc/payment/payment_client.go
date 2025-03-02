@@ -16,6 +16,7 @@ type RPCClient interface {
 	StartPayment(ctx context.Context, Req *payment.StartPaymentReq, callOptions ...callopt.Option) (r *payment.StartPaymentResp, err error)
 	CallBack(ctx context.Context, Req *payment.AlipayCallbackNotification, callOptions ...callopt.Option) (r *payment.AlipayCallbackNotificationResp, err error)
 	GetOrderPayemntStatus(ctx context.Context, Req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (r *payment.GetOrderPayemntStatusResp, err error)
+	Cancel(ctx context.Context, Req *payment.CancelPaymentReq, callOptions ...callopt.Option) (r *payment.CancelPaymentResp, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -58,4 +59,8 @@ func (c *clientImpl) CallBack(ctx context.Context, Req *payment.AlipayCallbackNo
 
 func (c *clientImpl) GetOrderPayemntStatus(ctx context.Context, Req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (r *payment.GetOrderPayemntStatusResp, err error) {
 	return c.kitexClient.GetOrderPayemntStatus(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) Cancel(ctx context.Context, Req *payment.CancelPaymentReq, callOptions ...callopt.Option) (r *payment.CancelPaymentResp, err error) {
+	return c.kitexClient.Cancel(ctx, Req, callOptions...)
 }

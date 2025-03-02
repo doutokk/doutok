@@ -42,3 +42,12 @@ func GetOrderPayemntStatus(ctx context.Context, req *payment.GetOrderPayemntStat
 	}
 	return resp, nil
 }
+
+func Cancel(ctx context.Context, req *payment.CancelPaymentReq, callOptions ...callopt.Option) (resp *payment.CancelPaymentResp, err error) {
+	resp, err = defaultClient.Cancel(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "Cancel call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

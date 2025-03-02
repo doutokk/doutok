@@ -23,6 +23,7 @@ const (
 	PaymentService_StartPayment_FullMethodName          = "/payment.PaymentService/StartPayment"
 	PaymentService_CallBack_FullMethodName              = "/payment.PaymentService/CallBack"
 	PaymentService_GetOrderPayemntStatus_FullMethodName = "/payment.PaymentService/GetOrderPayemntStatus"
+	PaymentService_Cancel_FullMethodName                = "/payment.PaymentService/Cancel"
 )
 
 // PaymentServiceClient is the client API for PaymentService service.
@@ -33,6 +34,7 @@ type PaymentServiceClient interface {
 	StartPayment(ctx context.Context, in *StartPaymentReq, opts ...grpc.CallOption) (*StartPaymentResp, error)
 	CallBack(ctx context.Context, in *AlipayCallbackNotification, opts ...grpc.CallOption) (*AlipayCallbackNotificationResp, error)
 	GetOrderPayemntStatus(ctx context.Context, in *GetOrderPayemntStatusReq, opts ...grpc.CallOption) (*GetOrderPayemntStatusResp, error)
+	Cancel(ctx context.Context, in *CancelPaymentReq, opts ...grpc.CallOption) (*CancelPaymentResp, error)
 }
 
 type paymentServiceClient struct {
@@ -83,6 +85,16 @@ func (c *paymentServiceClient) GetOrderPayemntStatus(ctx context.Context, in *Ge
 	return out, nil
 }
 
+func (c *paymentServiceClient) Cancel(ctx context.Context, in *CancelPaymentReq, opts ...grpc.CallOption) (*CancelPaymentResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelPaymentResp)
+	err := c.cc.Invoke(ctx, PaymentService_Cancel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentServiceServer is the server API for PaymentService service.
 // All implementations must embed UnimplementedPaymentServiceServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type PaymentServiceServer interface {
 	StartPayment(context.Context, *StartPaymentReq) (*StartPaymentResp, error)
 	CallBack(context.Context, *AlipayCallbackNotification) (*AlipayCallbackNotificationResp, error)
 	GetOrderPayemntStatus(context.Context, *GetOrderPayemntStatusReq) (*GetOrderPayemntStatusResp, error)
+	Cancel(context.Context, *CancelPaymentReq) (*CancelPaymentResp, error)
 	mustEmbedUnimplementedPaymentServiceServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedPaymentServiceServer) CallBack(context.Context, *AlipayCallba
 }
 func (UnimplementedPaymentServiceServer) GetOrderPayemntStatus(context.Context, *GetOrderPayemntStatusReq) (*GetOrderPayemntStatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOrderPayemntStatus not implemented")
+}
+func (UnimplementedPaymentServiceServer) Cancel(context.Context, *CancelPaymentReq) (*CancelPaymentResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
 }
 func (UnimplementedPaymentServiceServer) mustEmbedUnimplementedPaymentServiceServer() {}
 func (UnimplementedPaymentServiceServer) testEmbeddedByValue()                        {}
@@ -206,6 +222,24 @@ func _PaymentService_GetOrderPayemntStatus_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentService_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelPaymentReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentServiceServer).Cancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentService_Cancel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentServiceServer).Cancel(ctx, req.(*CancelPaymentReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentService_ServiceDesc is the grpc.ServiceDesc for PaymentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOrderPayemntStatus",
 			Handler:    _PaymentService_GetOrderPayemntStatus_Handler,
+		},
+		{
+			MethodName: "Cancel",
+			Handler:    _PaymentService_Cancel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
