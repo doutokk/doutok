@@ -31,6 +31,12 @@ service PaymentService {
       body: "*"
     };
   }
+  rpc DirectPayment(DirectPaymentReq) returns (DirectPaymentResp) {
+    option (google.api.http) = {
+      post: "/payment/direct"
+      body: "*"
+    };
+  }
 }
 
 message CreditCardInfo {
@@ -109,4 +115,25 @@ message CancelPaymentReq {
 message CancelPaymentResp {
   bool success = 1;
   string message = 2;
+}
+
+message DirectPaymentReq {
+  string charset = 1;
+  string out_trade_no = 2;
+  string method = 3;
+  string total_amount = 4;
+  string sign = 5;
+  string trade_no = 6;
+  string auth_app_id = 7;
+  string version = 8;
+  string app_id = 9;
+  string sign_type = 10;
+  string seller_id = 11;
+  string timestamp = 12;
+}
+
+message DirectPaymentResp {
+  bool success = 1;
+  string message = 2;
+  string trade_no = 3;
 }

@@ -51,3 +51,12 @@ func Cancel(ctx context.Context, req *payment.CancelPaymentReq, callOptions ...c
 	}
 	return resp, nil
 }
+
+func DirectPayment(ctx context.Context, req *payment.DirectPaymentReq, callOptions ...callopt.Option) (resp *payment.DirectPaymentResp, err error) {
+	resp, err = defaultClient.DirectPayment(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "DirectPayment call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

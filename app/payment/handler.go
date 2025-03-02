@@ -43,3 +43,10 @@ func (s *PaymentServiceImpl) Cancel(ctx context.Context, req *payment.CancelPaym
 
 	return resp, err
 }
+
+// DirectPayment implements the PaymentServiceImpl interface.
+func (s *PaymentServiceImpl) DirectPayment(ctx context.Context, req *payment.DirectPaymentReq) (resp *payment.DirectPaymentResp, err error) {
+	resp, err = service.NewDirectPaymentService(ctx).Run(req)
+
+	return resp, err
+}

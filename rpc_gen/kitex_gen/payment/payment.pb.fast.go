@@ -628,6 +628,186 @@ func (x *CancelPaymentResp) fastReadField2(buf []byte, _type int8) (offset int, 
 	return offset, err
 }
 
+func (x *DirectPaymentReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 6:
+		offset, err = x.fastReadField6(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 7:
+		offset, err = x.fastReadField7(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 8:
+		offset, err = x.fastReadField8(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 9:
+		offset, err = x.fastReadField9(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 10:
+		offset, err = x.fastReadField10(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 11:
+		offset, err = x.fastReadField11(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 12:
+		offset, err = x.fastReadField12(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_DirectPaymentReq[number], err)
+}
+
+func (x *DirectPaymentReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Charset, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.OutTradeNo, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Method, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.TotalAmount, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Sign, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+	x.TradeNo, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField7(buf []byte, _type int8) (offset int, err error) {
+	x.AuthAppId, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField8(buf []byte, _type int8) (offset int, err error) {
+	x.Version, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField9(buf []byte, _type int8) (offset int, err error) {
+	x.AppId, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField10(buf []byte, _type int8) (offset int, err error) {
+	x.SignType, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField11(buf []byte, _type int8) (offset int, err error) {
+	x.SellerId, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentReq) fastReadField12(buf []byte, _type int8) (offset int, err error) {
+	x.Timestamp, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentResp) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_DirectPaymentResp[number], err)
+}
+
+func (x *DirectPaymentResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Success, offset, err = fastpb.ReadBool(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Message, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *DirectPaymentResp) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.TradeNo, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
 func (x *CreditCardInfo) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -1096,6 +1276,155 @@ func (x *CancelPaymentResp) fastWriteField2(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 2, x.GetMessage())
+	return offset
+}
+
+func (x *DirectPaymentReq) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
+	offset += x.fastWriteField6(buf[offset:])
+	offset += x.fastWriteField7(buf[offset:])
+	offset += x.fastWriteField8(buf[offset:])
+	offset += x.fastWriteField9(buf[offset:])
+	offset += x.fastWriteField10(buf[offset:])
+	offset += x.fastWriteField11(buf[offset:])
+	offset += x.fastWriteField12(buf[offset:])
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField1(buf []byte) (offset int) {
+	if x.Charset == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 1, x.GetCharset())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField2(buf []byte) (offset int) {
+	if x.OutTradeNo == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetOutTradeNo())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField3(buf []byte) (offset int) {
+	if x.Method == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetMethod())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField4(buf []byte) (offset int) {
+	if x.TotalAmount == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetTotalAmount())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField5(buf []byte) (offset int) {
+	if x.Sign == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetSign())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField6(buf []byte) (offset int) {
+	if x.TradeNo == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 6, x.GetTradeNo())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField7(buf []byte) (offset int) {
+	if x.AuthAppId == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 7, x.GetAuthAppId())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField8(buf []byte) (offset int) {
+	if x.Version == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 8, x.GetVersion())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField9(buf []byte) (offset int) {
+	if x.AppId == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 9, x.GetAppId())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField10(buf []byte) (offset int) {
+	if x.SignType == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 10, x.GetSignType())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField11(buf []byte) (offset int) {
+	if x.SellerId == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 11, x.GetSellerId())
+	return offset
+}
+
+func (x *DirectPaymentReq) fastWriteField12(buf []byte) (offset int) {
+	if x.Timestamp == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 12, x.GetTimestamp())
+	return offset
+}
+
+func (x *DirectPaymentResp) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
+	return offset
+}
+
+func (x *DirectPaymentResp) fastWriteField1(buf []byte) (offset int) {
+	if !x.Success {
+		return offset
+	}
+	offset += fastpb.WriteBool(buf[offset:], 1, x.GetSuccess())
+	return offset
+}
+
+func (x *DirectPaymentResp) fastWriteField2(buf []byte) (offset int) {
+	if x.Message == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetMessage())
+	return offset
+}
+
+func (x *DirectPaymentResp) fastWriteField3(buf []byte) (offset int) {
+	if x.TradeNo == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetTradeNo())
 	return offset
 }
 
@@ -1570,6 +1899,155 @@ func (x *CancelPaymentResp) sizeField2() (n int) {
 	return n
 }
 
+func (x *DirectPaymentReq) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	n += x.sizeField3()
+	n += x.sizeField4()
+	n += x.sizeField5()
+	n += x.sizeField6()
+	n += x.sizeField7()
+	n += x.sizeField8()
+	n += x.sizeField9()
+	n += x.sizeField10()
+	n += x.sizeField11()
+	n += x.sizeField12()
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField1() (n int) {
+	if x.Charset == "" {
+		return n
+	}
+	n += fastpb.SizeString(1, x.GetCharset())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField2() (n int) {
+	if x.OutTradeNo == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetOutTradeNo())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField3() (n int) {
+	if x.Method == "" {
+		return n
+	}
+	n += fastpb.SizeString(3, x.GetMethod())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField4() (n int) {
+	if x.TotalAmount == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetTotalAmount())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField5() (n int) {
+	if x.Sign == "" {
+		return n
+	}
+	n += fastpb.SizeString(5, x.GetSign())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField6() (n int) {
+	if x.TradeNo == "" {
+		return n
+	}
+	n += fastpb.SizeString(6, x.GetTradeNo())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField7() (n int) {
+	if x.AuthAppId == "" {
+		return n
+	}
+	n += fastpb.SizeString(7, x.GetAuthAppId())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField8() (n int) {
+	if x.Version == "" {
+		return n
+	}
+	n += fastpb.SizeString(8, x.GetVersion())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField9() (n int) {
+	if x.AppId == "" {
+		return n
+	}
+	n += fastpb.SizeString(9, x.GetAppId())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField10() (n int) {
+	if x.SignType == "" {
+		return n
+	}
+	n += fastpb.SizeString(10, x.GetSignType())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField11() (n int) {
+	if x.SellerId == "" {
+		return n
+	}
+	n += fastpb.SizeString(11, x.GetSellerId())
+	return n
+}
+
+func (x *DirectPaymentReq) sizeField12() (n int) {
+	if x.Timestamp == "" {
+		return n
+	}
+	n += fastpb.SizeString(12, x.GetTimestamp())
+	return n
+}
+
+func (x *DirectPaymentResp) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	n += x.sizeField3()
+	return n
+}
+
+func (x *DirectPaymentResp) sizeField1() (n int) {
+	if !x.Success {
+		return n
+	}
+	n += fastpb.SizeBool(1, x.GetSuccess())
+	return n
+}
+
+func (x *DirectPaymentResp) sizeField2() (n int) {
+	if x.Message == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetMessage())
+	return n
+}
+
+func (x *DirectPaymentResp) sizeField3() (n int) {
+	if x.TradeNo == "" {
+		return n
+	}
+	n += fastpb.SizeString(3, x.GetTradeNo())
+	return n
+}
+
 var fieldIDToName_CreditCardInfo = map[int32]string{
 	1: "CreditCardNumber",
 	2: "CreditCardCvv",
@@ -1647,6 +2125,27 @@ var fieldIDToName_CancelPaymentReq = map[int32]string{
 var fieldIDToName_CancelPaymentResp = map[int32]string{
 	1: "Success",
 	2: "Message",
+}
+
+var fieldIDToName_DirectPaymentReq = map[int32]string{
+	1:  "Charset",
+	2:  "OutTradeNo",
+	3:  "Method",
+	4:  "TotalAmount",
+	5:  "Sign",
+	6:  "TradeNo",
+	7:  "AuthAppId",
+	8:  "Version",
+	9:  "AppId",
+	10: "SignType",
+	11: "SellerId",
+	12: "Timestamp",
+}
+
+var fieldIDToName_DirectPaymentResp = map[int32]string{
+	1: "Success",
+	2: "Message",
+	3: "TradeNo",
 }
 
 var _ = annotations.File_google_api_annotations_proto

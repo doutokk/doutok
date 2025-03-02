@@ -24,6 +24,7 @@ const (
 	PaymentService_CallBack_FullMethodName              = "/payment.PaymentService/CallBack"
 	PaymentService_GetOrderPayemntStatus_FullMethodName = "/payment.PaymentService/GetOrderPayemntStatus"
 	PaymentService_Cancel_FullMethodName                = "/payment.PaymentService/Cancel"
+	PaymentService_DirectPayment_FullMethodName         = "/payment.PaymentService/DirectPayment"
 )
 
 // PaymentServiceClient is the client API for PaymentService service.
@@ -35,6 +36,7 @@ type PaymentServiceClient interface {
 	CallBack(ctx context.Context, in *AlipayCallbackNotification, opts ...grpc.CallOption) (*AlipayCallbackNotificationResp, error)
 	GetOrderPayemntStatus(ctx context.Context, in *GetOrderPayemntStatusReq, opts ...grpc.CallOption) (*GetOrderPayemntStatusResp, error)
 	Cancel(ctx context.Context, in *CancelPaymentReq, opts ...grpc.CallOption) (*CancelPaymentResp, error)
+	DirectPayment(ctx context.Context, in *DirectPaymentReq, opts ...grpc.CallOption) (*DirectPaymentResp, error)
 }
 
 type paymentServiceClient struct {
@@ -95,6 +97,16 @@ func (c *paymentServiceClient) Cancel(ctx context.Context, in *CancelPaymentReq,
 	return out, nil
 }
 
+func (c *paymentServiceClient) DirectPayment(ctx context.Context, in *DirectPaymentReq, opts ...grpc.CallOption) (*DirectPaymentResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DirectPaymentResp)
+	err := c.cc.Invoke(ctx, PaymentService_DirectPayment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentServiceServer is the server API for PaymentService service.
 // All implementations must embed UnimplementedPaymentServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type PaymentServiceServer interface {
 	CallBack(context.Context, *AlipayCallbackNotification) (*AlipayCallbackNotificationResp, error)
 	GetOrderPayemntStatus(context.Context, *GetOrderPayemntStatusReq) (*GetOrderPayemntStatusResp, error)
 	Cancel(context.Context, *CancelPaymentReq) (*CancelPaymentResp, error)
+	DirectPayment(context.Context, *DirectPaymentReq) (*DirectPaymentResp, error)
 	mustEmbedUnimplementedPaymentServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedPaymentServiceServer) GetOrderPayemntStatus(context.Context, 
 }
 func (UnimplementedPaymentServiceServer) Cancel(context.Context, *CancelPaymentReq) (*CancelPaymentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
+}
+func (UnimplementedPaymentServiceServer) DirectPayment(context.Context, *DirectPaymentReq) (*DirectPaymentResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DirectPayment not implemented")
 }
 func (UnimplementedPaymentServiceServer) mustEmbedUnimplementedPaymentServiceServer() {}
 func (UnimplementedPaymentServiceServer) testEmbeddedByValue()                        {}
@@ -240,6 +256,24 @@ func _PaymentService_Cancel_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentService_DirectPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DirectPaymentReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentServiceServer).DirectPayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentService_DirectPayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentServiceServer).DirectPayment(ctx, req.(*DirectPaymentReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentService_ServiceDesc is the grpc.ServiceDesc for PaymentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +300,10 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Cancel",
 			Handler:    _PaymentService_Cancel_Handler,
+		},
+		{
+			MethodName: "DirectPayment",
+			Handler:    _PaymentService_DirectPayment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

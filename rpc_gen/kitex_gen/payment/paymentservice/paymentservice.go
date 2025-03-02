@@ -50,6 +50,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"DirectPayment": kitex.NewMethodInfo(
+		directPaymentHandler,
+		newDirectPaymentArgs,
+		newDirectPaymentResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -881,6 +888,159 @@ func (p *CancelResult) GetResult() interface{} {
 	return p.Success
 }
 
+func directPaymentHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(payment.DirectPaymentReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(payment.PaymentService).DirectPayment(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *DirectPaymentArgs:
+		success, err := handler.(payment.PaymentService).DirectPayment(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*DirectPaymentResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newDirectPaymentArgs() interface{} {
+	return &DirectPaymentArgs{}
+}
+
+func newDirectPaymentResult() interface{} {
+	return &DirectPaymentResult{}
+}
+
+type DirectPaymentArgs struct {
+	Req *payment.DirectPaymentReq
+}
+
+func (p *DirectPaymentArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(payment.DirectPaymentReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *DirectPaymentArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *DirectPaymentArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *DirectPaymentArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *DirectPaymentArgs) Unmarshal(in []byte) error {
+	msg := new(payment.DirectPaymentReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var DirectPaymentArgs_Req_DEFAULT *payment.DirectPaymentReq
+
+func (p *DirectPaymentArgs) GetReq() *payment.DirectPaymentReq {
+	if !p.IsSetReq() {
+		return DirectPaymentArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *DirectPaymentArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *DirectPaymentArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type DirectPaymentResult struct {
+	Success *payment.DirectPaymentResp
+}
+
+var DirectPaymentResult_Success_DEFAULT *payment.DirectPaymentResp
+
+func (p *DirectPaymentResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(payment.DirectPaymentResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *DirectPaymentResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *DirectPaymentResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *DirectPaymentResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *DirectPaymentResult) Unmarshal(in []byte) error {
+	msg := new(payment.DirectPaymentResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *DirectPaymentResult) GetSuccess() *payment.DirectPaymentResp {
+	if !p.IsSetSuccess() {
+		return DirectPaymentResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *DirectPaymentResult) SetSuccess(x interface{}) {
+	p.Success = x.(*payment.DirectPaymentResp)
+}
+
+func (p *DirectPaymentResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *DirectPaymentResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -936,6 +1096,16 @@ func (p *kClient) Cancel(ctx context.Context, Req *payment.CancelPaymentReq) (r 
 	_args.Req = Req
 	var _result CancelResult
 	if err = p.c.Call(ctx, "Cancel", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) DirectPayment(ctx context.Context, Req *payment.DirectPaymentReq) (r *payment.DirectPaymentResp, err error) {
+	var _args DirectPaymentArgs
+	_args.Req = Req
+	var _result DirectPaymentResult
+	if err = p.c.Call(ctx, "DirectPayment", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
