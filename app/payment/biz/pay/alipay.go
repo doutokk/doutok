@@ -4,11 +4,9 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
-	"net/url"
-	"time"
-
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/smartwalle/alipay/v3"
+	"net/url"
 )
 
 var (
@@ -44,7 +42,7 @@ func CreatePayOrder(orderId string, amount float64) (url string, err error) {
 	p.ProductCode = "FAST_INSTANT_TRADE_PAY"
 	p.NotifyURL = c.NotifyBackUrl
 	p.ReturnURL = c.CallBackUrl
-	p.Subject = "Order: " + orderId + time.Now().String()
+	p.Subject = "Order: " + orderId
 	p.OutTradeNo = orderId
 	p.TotalAmount = fmt.Sprintf("%.2f", amount)
 
