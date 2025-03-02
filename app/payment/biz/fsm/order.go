@@ -128,6 +128,7 @@ func (o *PayOrderFSM) PaymentSuccess(ctx context.Context) error {
 func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
 	err := o.fsm.Event(ctx, string(PaymentFailed))
 	l := query.Q.PaymentLog
+	pay.CancelOrder(o.orderId)
 	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(CREATED))
 	if err != nil {
 		return fmt.Errorf("failed to process payment failure: %w", err)

@@ -178,3 +178,14 @@ func TradeQuery(ctx context.Context, tradeNo string) (status string, ok bool) {
 	status = string(result.TradeStatus)
 	return status, status == "TRADE_SUCCESS"
 }
+
+func CancelOrder(tradeNo string) (ok bool) {
+	param := alipay.TradeCancel{
+		OutTradeNo: tradeNo,
+	}
+	_, err := client.TradeCancel(context.Background(), param)
+	if err != nil {
+		return false
+	}
+	return true
+}

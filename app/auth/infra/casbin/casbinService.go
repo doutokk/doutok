@@ -111,6 +111,7 @@ func InitPolicy() {
 		{"user", "/order", "GET"},
 		{"user", "/payment", "POST"},
 		{"user", "/payment/*/status", "POST"},
+		{"user", "/payment/*/cancel", "POST"},
 
 		{"admin", "/product/edit", "PUT"},
 	}
