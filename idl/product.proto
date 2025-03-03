@@ -76,6 +76,7 @@ message GetProductResp {
 
 message ListProductsResp {
   repeated Product item = 1;
+  int32 total = 2;
 }
 
 message GetProductReq {
@@ -92,6 +93,7 @@ message SearchProductsReq {
 
 message SearchProductsResp {
   repeated Product item = 1;
+  int32 total = 2;
 }
 
 message CreateProductReq {
