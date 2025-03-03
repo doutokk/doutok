@@ -136,6 +136,7 @@ func InitPolicy() {
 
 		{"admin", "/product/edit", "PUT"},
 		{"admin", "/product/create", "POST"},
+		{"admin", "/product/*", "DELETE"},
 	}
 
 	// 遍历并插入
