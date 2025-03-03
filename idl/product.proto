@@ -101,5 +101,5 @@ message CreateProductReq {
 }
 
 message CreateProductResp {
-  Product product = 1;
+  uint32 id = 1;
 }

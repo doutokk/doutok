@@ -476,13 +476,8 @@ ReadFieldError:
 }
 
 func (x *CreateProductResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	var v Product
-	offset, err = fastpb.ReadMessage(buf, _type, &v)
-	if err != nil {
-		return offset, err
-	}
-	x.Product = &v
-	return offset, nil
+	x.Id, offset, err = fastpb.ReadUint32(buf, _type)
+	return offset, err
 }
 
 func (x *GetProductBatchReq) FastWrite(buf []byte) (offset int) {
@@ -791,10 +786,10 @@ func (x *CreateProductResp) FastWrite(buf []byte) (offset int) {
 }
 
 func (x *CreateProductResp) fastWriteField1(buf []byte) (offset int) {
-	if x.Product == nil {
+	if x.Id == 0 {
 		return offset
 	}
-	offset += fastpb.WriteMessage(buf[offset:], 1, x.GetProduct())
+	offset += fastpb.WriteUint32(buf[offset:], 1, x.GetId())
 	return offset
 }
 
@@ -1104,10 +1099,10 @@ func (x *CreateProductResp) Size() (n int) {
 }
 
 func (x *CreateProductResp) sizeField1() (n int) {
-	if x.Product == nil {
+	if x.Id == 0 {
 		return n
 	}
-	n += fastpb.SizeMessage(1, x.GetProduct())
+	n += fastpb.SizeUint32(1, x.GetId())
 	return n
 }
 
@@ -1169,7 +1164,7 @@ var fieldIDToName_CreateProductReq = map[int32]string{
 }
 
 var fieldIDToName_CreateProductResp = map[int32]string{
-	1: "Product",
+	1: "Id",
 }
 
 var _ = annotations.File_google_api_annotations_proto
