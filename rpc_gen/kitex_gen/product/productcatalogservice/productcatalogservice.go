@@ -57,6 +57,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"DeleteProduct": kitex.NewMethodInfo(
+		deleteProductHandler,
+		newDeleteProductArgs,
+		newDeleteProductResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -1041,6 +1048,159 @@ func (p *CreateProductResult) GetResult() interface{} {
 	return p.Success
 }
 
+func deleteProductHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(product.DeleteProductReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(product.ProductCatalogService).DeleteProduct(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *DeleteProductArgs:
+		success, err := handler.(product.ProductCatalogService).DeleteProduct(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*DeleteProductResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newDeleteProductArgs() interface{} {
+	return &DeleteProductArgs{}
+}
+
+func newDeleteProductResult() interface{} {
+	return &DeleteProductResult{}
+}
+
+type DeleteProductArgs struct {
+	Req *product.DeleteProductReq
+}
+
+func (p *DeleteProductArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(product.DeleteProductReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *DeleteProductArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *DeleteProductArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *DeleteProductArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *DeleteProductArgs) Unmarshal(in []byte) error {
+	msg := new(product.DeleteProductReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var DeleteProductArgs_Req_DEFAULT *product.DeleteProductReq
+
+func (p *DeleteProductArgs) GetReq() *product.DeleteProductReq {
+	if !p.IsSetReq() {
+		return DeleteProductArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *DeleteProductArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *DeleteProductArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type DeleteProductResult struct {
+	Success *product.DeleteProductResp
+}
+
+var DeleteProductResult_Success_DEFAULT *product.DeleteProductResp
+
+func (p *DeleteProductResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(product.DeleteProductResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *DeleteProductResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *DeleteProductResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *DeleteProductResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *DeleteProductResult) Unmarshal(in []byte) error {
+	msg := new(product.DeleteProductResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *DeleteProductResult) GetSuccess() *product.DeleteProductResp {
+	if !p.IsSetSuccess() {
+		return DeleteProductResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *DeleteProductResult) SetSuccess(x interface{}) {
+	p.Success = x.(*product.DeleteProductResp)
+}
+
+func (p *DeleteProductResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *DeleteProductResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -1106,6 +1266,16 @@ func (p *kClient) CreateProduct(ctx context.Context, Req *product.CreateProductR
 	_args.Req = Req
 	var _result CreateProductResult
 	if err = p.c.Call(ctx, "CreateProduct", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) DeleteProduct(ctx context.Context, Req *product.DeleteProductReq) (r *product.DeleteProductResp, err error) {
+	var _args DeleteProductArgs
+	_args.Req = Req
+	var _result DeleteProductResult
+	if err = p.c.Call(ctx, "DeleteProduct", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

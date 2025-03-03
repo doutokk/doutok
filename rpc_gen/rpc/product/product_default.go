@@ -60,3 +60,12 @@ func CreateProduct(ctx context.Context, req *product.CreateProductReq, callOptio
 	}
 	return resp, nil
 }
+
+func DeleteProduct(ctx context.Context, req *product.DeleteProductReq, callOptions ...callopt.Option) (resp *product.DeleteProductResp, err error) {
+	resp, err = defaultClient.DeleteProduct(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "DeleteProduct call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
