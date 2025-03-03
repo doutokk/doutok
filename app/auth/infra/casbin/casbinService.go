@@ -137,6 +137,7 @@ func InitPolicy() {
 		{"admin", "/product/edit", "PUT"},
 		{"admin", "/product/create", "POST"},
 		{"admin", "/product/*", "DELETE"},
+		{"admin", "/file/upload", "POST"},
 	}
 
 	// 遍历并插入
