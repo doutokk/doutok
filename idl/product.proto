@@ -30,6 +30,12 @@ service ProductCatalogService {
     };
   }
   rpc GetProductBatch(GetProductBatchReq) returns (GetProductBatchResp) {}
+  rpc CreateProduct(CreateProductReq) returns (CreateProductResp) {
+    option (google.api.http) = {
+      post: "/product/create"
+      body: "*"
+    };
+  }
 }
 
 message GetProductBatchReq {
@@ -84,4 +90,16 @@ message SearchProductsReq {
 
 message SearchProductsResp {
   repeated Product item = 1;
+}
+
+message CreateProductReq {
+  string name = 1;
+  string description = 2;
+  string picture = 3;
+  float price = 4;
+  repeated string categories = 5;
+}
+
+message CreateProductResp {
+  uint32 id = 1;
 }

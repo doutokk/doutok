@@ -51,3 +51,12 @@ func GetProductBatch(ctx context.Context, req *product.GetProductBatchReq, callO
 	}
 	return resp, nil
 }
+
+func CreateProduct(ctx context.Context, req *product.CreateProductReq, callOptions ...callopt.Option) (resp *product.CreateProductResp, err error) {
+	resp, err = defaultClient.CreateProduct(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "CreateProduct call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

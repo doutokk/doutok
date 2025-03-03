@@ -43,3 +43,10 @@ func (s *ProductCatalogServiceImpl) EditProduct(ctx context.Context, req *produc
 
 	return resp, err
 }
+
+// CreateProduct implements the ProductCatalogServiceImpl interface.
+func (s *ProductCatalogServiceImpl) CreateProduct(ctx context.Context, req *product.CreateProductReq) (resp *product.CreateProductResp, err error) {
+	resp, err = service.NewCreateProductService(ctx).Run(req)
+
+	return resp, err
+}
