@@ -36,6 +36,11 @@ service ProductCatalogService {
       body: "*"
     };
   }
+  rpc DeleteProduct(DeleteProductReq) returns (DeleteProductResp) {
+    option (google.api.http) = {
+      delete: "/product/{id=*}"
+    };
+  }
 }
 
 message GetProductBatchReq {
@@ -106,4 +111,12 @@ message CreateProductReq {
 
 message CreateProductResp {
   uint32 id = 1;
+}
+
+message DeleteProductReq {
+  uint32 id = 1;
+}
+
+message DeleteProductResp {
+  bool success = 1;
 }
