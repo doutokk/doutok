@@ -19,7 +19,8 @@ func NewSearchProductsService(ctx context.Context) *SearchProductsService {
 func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *product.SearchProductsResp, err error) {
 	// Finish your business logic.
 	p := query.Product
-	prods, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Preload(p.Categories).Find()
+	prods, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Preload(p.Categories).
+		Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1))).Find()
 	if err != nil {
 		return
 	}

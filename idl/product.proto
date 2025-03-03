@@ -86,6 +86,8 @@ message GetProductReq {
 
 message SearchProductsReq {
   string query = 1;
+  int32 page = 2;
+  int64 pageSize = 3;
 }
 
 message SearchProductsResp {
