@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
@@ -23,26 +24,42 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	p := query.Product
 	c := query.ProductCategory
 	var products []*model.Product
+	var total int64
+
 	// 还是不太会用 gorm，这里的逻辑是如果请求中有分类名，就根据分类名查找商品，否则查找所有商品
 	// 没搞定直接多对多查询的，所以先查出分类，再查出关联的商品
 	if req.CategoryName != "" {
 		cat, err := c.Where(c.Name.Eq(req.CategoryName)).Preload(c.Products).First()
 		if err != nil {
 			klog.Infof("error: %v", err)
-			return &product.ListProductsResp{Item: make([]*product.Product, 0)}, nil
+			return &product.ListProductsResp{
+				Item:  make([]*product.Product, 0),
+				Total: 0,
+			}, nil
 		}
 		products = make([]*model.Product, len(cat.Products))
 		for i, prod := range cat.Products {
 			products[i] = &prod
 		}
+		total = int64(len(cat.Products))
 	} else {
+		// Get total count first
+		total, err = p.Count()
+		if err != nil {
+			return nil, err
+		}
+
 		products, err = p.Preload(p.Categories).
 			Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1))).Find()
 		if err != nil {
 			return nil, err
 		}
 	}
-	resp = &product.ListProductsResp{Item: make([]*product.Product, len(products))}
+
+	resp = &product.ListProductsResp{
+		Item:  make([]*product.Product, len(products)),
+		Total: int32(total),
+	}
 	for i, prod := range products {
 		cats := make([]string, len(prod.Categories))
 		for i, cat := range prod.Categories {

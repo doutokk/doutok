@@ -282,6 +282,11 @@ func (x *ListProductsResp) FastRead(buf []byte, _type int8, number int32) (offse
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -303,6 +308,11 @@ func (x *ListProductsResp) fastReadField1(buf []byte, _type int8) (offset int, e
 	}
 	x.Item = append(x.Item, &v)
 	return offset, nil
+}
+
+func (x *ListProductsResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Total, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
 }
 
 func (x *GetProductReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
@@ -382,6 +392,11 @@ func (x *SearchProductsResp) FastRead(buf []byte, _type int8, number int32) (off
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -403,6 +418,11 @@ func (x *SearchProductsResp) fastReadField1(buf []byte, _type int8) (offset int,
 	}
 	x.Item = append(x.Item, &v)
 	return offset, nil
+}
+
+func (x *SearchProductsResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Total, offset, err = fastpb.ReadInt32(buf, _type)
+	return offset, err
 }
 
 func (x *CreateProductReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
@@ -680,6 +700,7 @@ func (x *ListProductsResp) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
 	return offset
 }
 
@@ -690,6 +711,14 @@ func (x *ListProductsResp) fastWriteField1(buf []byte) (offset int) {
 	for i := range x.GetItem() {
 		offset += fastpb.WriteMessage(buf[offset:], 1, x.GetItem()[i])
 	}
+	return offset
+}
+
+func (x *ListProductsResp) fastWriteField2(buf []byte) (offset int) {
+	if x.Total == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetTotal())
 	return offset
 }
 
@@ -748,6 +777,7 @@ func (x *SearchProductsResp) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
 	return offset
 }
 
@@ -758,6 +788,14 @@ func (x *SearchProductsResp) fastWriteField1(buf []byte) (offset int) {
 	for i := range x.GetItem() {
 		offset += fastpb.WriteMessage(buf[offset:], 1, x.GetItem()[i])
 	}
+	return offset
+}
+
+func (x *SearchProductsResp) fastWriteField2(buf []byte) (offset int) {
+	if x.Total == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetTotal())
 	return offset
 }
 
@@ -1011,6 +1049,7 @@ func (x *ListProductsResp) Size() (n int) {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField2()
 	return n
 }
 
@@ -1021,6 +1060,14 @@ func (x *ListProductsResp) sizeField1() (n int) {
 	for i := range x.GetItem() {
 		n += fastpb.SizeMessage(1, x.GetItem()[i])
 	}
+	return n
+}
+
+func (x *ListProductsResp) sizeField2() (n int) {
+	if x.Total == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(2, x.GetTotal())
 	return n
 }
 
@@ -1079,6 +1126,7 @@ func (x *SearchProductsResp) Size() (n int) {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField2()
 	return n
 }
 
@@ -1089,6 +1137,14 @@ func (x *SearchProductsResp) sizeField1() (n int) {
 	for i := range x.GetItem() {
 		n += fastpb.SizeMessage(1, x.GetItem()[i])
 	}
+	return n
+}
+
+func (x *SearchProductsResp) sizeField2() (n int) {
+	if x.Total == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(2, x.GetTotal())
 	return n
 }
 
@@ -1197,6 +1253,7 @@ var fieldIDToName_GetProductResp = map[int32]string{
 
 var fieldIDToName_ListProductsResp = map[int32]string{
 	1: "Item",
+	2: "Total",
 }
 
 var fieldIDToName_GetProductReq = map[int32]string{
@@ -1211,6 +1268,7 @@ var fieldIDToName_SearchProductsReq = map[int32]string{
 
 var fieldIDToName_SearchProductsResp = map[int32]string{
 	1: "Item",
+	2: "Total",
 }
 
 var fieldIDToName_CreateProductReq = map[int32]string{
