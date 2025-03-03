@@ -50,6 +50,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"CreateProduct": kitex.NewMethodInfo(
+		createProductHandler,
+		newCreateProductArgs,
+		newCreateProductResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -881,6 +888,159 @@ func (p *GetProductBatchResult) GetResult() interface{} {
 	return p.Success
 }
 
+func createProductHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(product.CreateProductReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(product.ProductCatalogService).CreateProduct(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *CreateProductArgs:
+		success, err := handler.(product.ProductCatalogService).CreateProduct(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*CreateProductResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newCreateProductArgs() interface{} {
+	return &CreateProductArgs{}
+}
+
+func newCreateProductResult() interface{} {
+	return &CreateProductResult{}
+}
+
+type CreateProductArgs struct {
+	Req *product.CreateProductReq
+}
+
+func (p *CreateProductArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(product.CreateProductReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *CreateProductArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *CreateProductArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *CreateProductArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CreateProductArgs) Unmarshal(in []byte) error {
+	msg := new(product.CreateProductReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CreateProductArgs_Req_DEFAULT *product.CreateProductReq
+
+func (p *CreateProductArgs) GetReq() *product.CreateProductReq {
+	if !p.IsSetReq() {
+		return CreateProductArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CreateProductArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CreateProductArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type CreateProductResult struct {
+	Success *product.CreateProductResp
+}
+
+var CreateProductResult_Success_DEFAULT *product.CreateProductResp
+
+func (p *CreateProductResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(product.CreateProductResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *CreateProductResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *CreateProductResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *CreateProductResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CreateProductResult) Unmarshal(in []byte) error {
+	msg := new(product.CreateProductResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CreateProductResult) GetSuccess() *product.CreateProductResp {
+	if !p.IsSetSuccess() {
+		return CreateProductResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CreateProductResult) SetSuccess(x interface{}) {
+	p.Success = x.(*product.CreateProductResp)
+}
+
+func (p *CreateProductResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CreateProductResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -936,6 +1096,16 @@ func (p *kClient) GetProductBatch(ctx context.Context, Req *product.GetProductBa
 	_args.Req = Req
 	var _result GetProductBatchResult
 	if err = p.c.Call(ctx, "GetProductBatch", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) CreateProduct(ctx context.Context, Req *product.CreateProductReq) (r *product.CreateProductResp, err error) {
+	var _args CreateProductArgs
+	_args.Req = Req
+	var _result CreateProductResult
+	if err = p.c.Call(ctx, "CreateProduct", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
