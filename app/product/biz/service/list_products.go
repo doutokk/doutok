@@ -2,6 +2,11 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/doutokk/doutok/app/product/biz/dal/redis"
+	"time"
+
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
@@ -12,19 +17,29 @@ type ListProductsService struct {
 	ctx context.Context
 }
 
-// NewListProductsService new ListProductsService
 func NewListProductsService(ctx context.Context) *ListProductsService {
 	return &ListProductsService{ctx: ctx}
 }
 
-// Run create note info
 func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.ListProductsResp, err error) {
-	// Finish your business logic.
+	// Redis key todo：常量类
+	cacheKey := fmt.Sprintf("products:category:%s:page:%d:size:%d", req.CategoryName, req.Page, req.PageSize)
+
+	// 尝试从 Redis 获取缓存数据
+	cachedData, err := redis.RedisClient.Get(s.ctx, cacheKey).Result()
+	if err == nil {
+		// 缓存命中，反序列化数据并返回
+		var cachedResp product.ListProductsResp
+		if err := json.Unmarshal([]byte(cachedData), &cachedResp); err == nil {
+			return &cachedResp, nil
+		}
+	}
+
+	// 缓存未命中，查询数据库
 	p := query.Product
 	c := query.ProductCategory
 	var products []*model.Product
-	// 还是不太会用 gorm，这里的逻辑是如果请求中有分类名，就根据分类名查找商品，否则查找所有商品
-	// 没搞定直接多对多查询的，所以先查出分类，再查出关联的商品
+
 	if req.CategoryName != "" {
 		cat, err := c.Where(c.Name.Eq(req.CategoryName)).Preload(c.Products).First()
 		if err != nil {
@@ -42,6 +57,7 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 			return nil, err
 		}
 	}
+
 	resp = &product.ListProductsResp{Item: make([]*product.Product, len(products))}
 	for i, prod := range products {
 		cats := make([]string, len(prod.Categories))
@@ -56,6 +72,12 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 			Price:       prod.Price,
 			Categories:  cats,
 		}
+	}
+
+	// 序列化响应并存入 Redis
+	data, err := json.Marshal(resp)
+	if err == nil {
+		redis.RedisClient.Set(s.ctx, cacheKey, data, time.Minute*10)
 	}
 
 	return
