@@ -3,11 +3,15 @@ package service
 import (
 	"context"
 	"fmt"
+
+	"errors"
+
 	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	"github.com/doutokk/doutok/app/product/biz/dal/redis"
 	"github.com/doutokk/doutok/app/product/constants"
 	product "github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
+	"gorm.io/gorm"
 )
 
 type CreateProductService struct {
@@ -20,12 +24,31 @@ func NewCreateProductService(ctx context.Context) *CreateProductService {
 
 func (s *CreateProductService) Run(req *product.CreateProductReq) (resp *product.CreateProductResp, err error) {
 	p := query.Q.Product
+	pc := query.Q.ProductCategory
 	cats := make([]model.ProductCategory, 0)
-	for _, cat := range req.Categories {
-		cats = append(cats, model.ProductCategory{
-			Name: cat,
-		})
+
+	for _, catName := range req.Categories {
+		// 先查询分类是否存在
+		existingCat, errCat := pc.Where(pc.Name.Eq(catName)).First()
+		if errCat == nil {
+			// 分类已存在，使用现有分类
+			cats = append(cats, *existingCat)
+		} else if errors.Is(errCat, gorm.ErrRecordNotFound) {
+			// 分类不存在，创建新分类
+			newCat := &model.ProductCategory{
+				Name: catName,
+			}
+			errCreate := pc.Create(newCat)
+			if errCreate != nil {
+				return nil, errCreate
+			}
+			cats = append(cats, *newCat)
+		} else {
+			// 其他错误
+			return nil, errCat
+		}
 	}
+
 	m := &model.Product{
 		Name:        req.Name,
 		Description: req.Description,
@@ -35,7 +58,7 @@ func (s *CreateProductService) Run(req *product.CreateProductReq) (resp *product
 	}
 	err = p.Create(m)
 	if err != nil {
-		return
+		return nil, err
 	}
 	resp = &product.CreateProductResp{
 		Id: uint32(m.ID),
@@ -54,6 +77,5 @@ func (s *CreateProductService) Run(req *product.CreateProductReq) (resp *product
 		cacheKey := fmt.Sprintf(constants.ProductCategoryKeyPattern, req.Categories[0], lastPage, pageSize)
 		redis.RedisClient.Del(s.ctx, cacheKey)
 	}
-
-	return
+	return resp, nil
 }

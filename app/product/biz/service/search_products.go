@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
@@ -23,12 +24,22 @@ func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *produ
 		req.PageSize = 10
 	}
 	p := query.Product
+
+	// Get total count first
+	total, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Count()
+	if err != nil {
+		return
+	}
+
 	prods, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Preload(p.Categories).
 		Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1))).Find()
 	if err != nil {
 		return
 	}
-	resp = &product.SearchProductsResp{Item: make([]*product.Product, len(prods))}
+	resp = &product.SearchProductsResp{
+		Item:  make([]*product.Product, len(prods)),
+		Total: int32(total),
+	}
 	for i, prod := range prods {
 		cats := make([]string, len(prod.Categories))
 		for i, cat := range prod.Categories {

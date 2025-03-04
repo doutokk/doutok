@@ -18,6 +18,7 @@ type RPCClient interface {
 	EditProduct(ctx context.Context, Req *product.EditProductReq, callOptions ...callopt.Option) (r *product.EditProductResp, err error)
 	GetProductBatch(ctx context.Context, Req *product.GetProductBatchReq, callOptions ...callopt.Option) (r *product.GetProductBatchResp, err error)
 	CreateProduct(ctx context.Context, Req *product.CreateProductReq, callOptions ...callopt.Option) (r *product.CreateProductResp, err error)
+	DeleteProduct(ctx context.Context, Req *product.DeleteProductReq, callOptions ...callopt.Option) (r *product.DeleteProductResp, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -68,4 +69,8 @@ func (c *clientImpl) GetProductBatch(ctx context.Context, Req *product.GetProduc
 
 func (c *clientImpl) CreateProduct(ctx context.Context, Req *product.CreateProductReq, callOptions ...callopt.Option) (r *product.CreateProductResp, err error) {
 	return c.kitexClient.CreateProduct(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) DeleteProduct(ctx context.Context, Req *product.DeleteProductReq, callOptions ...callopt.Option) (r *product.DeleteProductResp, err error) {
+	return c.kitexClient.DeleteProduct(ctx, Req, callOptions...)
 }

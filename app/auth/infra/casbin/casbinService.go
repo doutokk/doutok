@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
@@ -58,6 +59,8 @@ func Init() {
 
 	m, err := model.NewModelFromFile("infra/casbin/auth_model.conf")
 	enforcer, err = casbin.NewEnforcer(m, adapter)
+	// 开启自动保存
+	enforcer.EnableAutoSave(true)
 	if err != nil {
 		hlog.Error(err)
 		panic("auth init failed")
@@ -66,6 +69,22 @@ func Init() {
 
 	if err != nil {
 		panic("auth init failed")
+	}
+
+	go startAutoReloadPolicy(5 * time.Minute)
+}
+
+func startAutoReloadPolicy(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		hlog.Info("Reloading Casbin policies...")
+		if err := enforcer.LoadPolicy(); err != nil {
+			hlog.Error("Failed to reload Casbin policies:", err)
+		} else {
+			hlog.Info("Casbin policies reloaded successfully.")
+		}
 	}
 }
 
@@ -117,6 +136,8 @@ func InitPolicy() {
 
 		{"admin", "/product/edit", "PUT"},
 		{"admin", "/product/create", "POST"},
+		{"admin", "/product/*", "DELETE"},
+		{"admin", "/file/upload", "POST"},
 	}
 
 	// 遍历并插入
@@ -145,7 +166,7 @@ func CreateRolePolicy(r RolePolicy) error {
 	if err != nil {
 		return err
 	}
-	return enforcer.SavePolicy()
+	return nil
 }
 
 // 修改角色组权限
@@ -155,7 +176,7 @@ func UpdateRolePolicy(old, new RolePolicy) error {
 	if err != nil {
 		return err
 	}
-	return enforcer.SavePolicy()
+	return nil
 }
 
 // 删除角色组权限
@@ -164,7 +185,7 @@ func DeleteRolePolicy(r RolePolicy) error {
 	if err != nil {
 		return err
 	}
-	return enforcer.SavePolicy()
+	return nil
 }
 
 // 角色组中添加用户，没有组默认创建
@@ -173,7 +194,7 @@ func CreateUserRole(username, rolename string) error {
 	if err != nil {
 		return err
 	}
-	return enforcer.SavePolicy()
+	return nil
 }
 
 // 角色组中删除用户
@@ -182,7 +203,7 @@ func DeleteUserRole(username, rolename string) error {
 	if err != nil {
 		return err
 	}
-	return enforcer.SavePolicy()
+	return nil
 }
 
 // 这里还需要 uri 和 method
