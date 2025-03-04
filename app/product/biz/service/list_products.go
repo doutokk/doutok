@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/doutokk/doutok/app/product/biz/dal/redis"
+	"github.com/doutokk/doutok/app/product/constants"
 	"time"
 
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -23,7 +24,7 @@ func NewListProductsService(ctx context.Context) *ListProductsService {
 
 func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.ListProductsResp, err error) {
 	// Redis key todo：常量类
-	cacheKey := fmt.Sprintf("products:category:%s:page:%d:size:%d", req.CategoryName, req.Page, req.PageSize)
+	cacheKey := fmt.Sprintf(constants.ProductCategoryKeyPattern, req.CategoryName, req.Page, req.PageSize)
 
 	// 尝试从 Redis 获取缓存数据
 	cachedData, err := redis.RedisClient.Get(s.ctx, cacheKey).Result()
