@@ -6,6 +6,7 @@ require (
 	github.com/cloudwego/hertz v0.9.6
 	github.com/cloudwego/kitex v0.12.3
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213052720-14edd7edb015
+	github.com/go-redsync/redsync/v4 v4.13.0
 	github.com/golang/mock v1.6.0
 	github.com/hertz-contrib/obs-opentelemetry/provider v0.3.0
 	github.com/kitex-contrib/monitor-prometheus v0.2.0
@@ -13,6 +14,7 @@ require (
 	github.com/kitex-contrib/obs-opentelemetry/logging/zap v0.0.0-20241120035129-55da83caab1b
 	github.com/kitex-contrib/registry-consul v0.1.0
 	github.com/prometheus/client_golang v1.21.0
+	github.com/redis/go-redis/v9 v9.5.1
 	go.opentelemetry.io/otel v1.34.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.34.0
 	go.opentelemetry.io/otel/sdk v1.34.0
@@ -41,6 +43,7 @@ require (
 	github.com/cloudwego/runtimex v0.1.1 // indirect
 	github.com/cloudwego/thriftgo v0.3.19 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
