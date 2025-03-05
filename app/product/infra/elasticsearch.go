@@ -169,6 +169,34 @@ func DeleteProduct(ctx context.Context, productId uint32) error {
 	return nil
 }
 
+// 更新商品
+func UpdateProduct(ctx context.Context, prod *product.Product) error {
+	// 将商品数据转换为 JSON
+	data, err := json.Marshal(prod)
+	if err != nil {
+		return fmt.Errorf("error marshalling product: %v", err)
+	}
+
+	// 执行 ES 更新请求
+	res, err := esClient.Index(
+		"products",                      // 索引名称
+		strings.NewReader(string(data)), // 商品数据
+		esClient.Index.WithContext(ctx), // 上下文
+		esClient.Index.WithDocumentID(strconv.Itoa(int(prod.Id))), // 文档 ID
+	)
+	if err != nil {
+		return fmt.Errorf("error updating product: %v", err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		return fmt.Errorf("error response from Elasticsearch: %s", res.String())
+	}
+
+	log.Printf("Updated product with ID: %d", prod.Id)
+	return nil
+}
+
 // 解析商品数据
 func extractProducts(hits []struct {
 	Source product.Product `json:"_source"`
