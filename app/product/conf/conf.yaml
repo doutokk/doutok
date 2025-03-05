@@ -18,7 +18,7 @@ mysql:
 
 
 elasticsearch:
-  address: "http://localhost:9200"
+  address: "http://10.21.32.14:9200"
   username: ""
   password: ""
 
