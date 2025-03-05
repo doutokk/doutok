@@ -34,6 +34,16 @@ func main() {
 		log.Fatalf("Error creating Elasticsearch client: %v", err)
 	}
 
+	// Clear the Elasticsearch index
+	_, err = esClient.DeleteByQuery(
+		[]string{"products"},
+		strings.NewReader(`{"query": {"match_all": {}}}`),
+		esClient.DeleteByQuery.WithContext(context.Background()),
+	)
+	if err != nil {
+		log.Fatalf("Error clearing Elasticsearch index: %v", err)
+	}
+
 	// Insert products into Elasticsearch
 	for _, prod := range products {
 		var categories []string
