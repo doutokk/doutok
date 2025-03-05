@@ -3,9 +3,13 @@ package fsm
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/doutokk/doutok/app/payment/biz/pay"
+
+	//"github.com/doutokk/doutok/app/payment/infra/rpc"
+	//"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
+	"time"
+
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/common/lock"
 
@@ -18,9 +22,10 @@ import (
 type PayOrderStatus string
 
 const (
-	CREATED PayOrderStatus = "CREATED"
-	PAYING  PayOrderStatus = "PAYING"
-	FINISH  PayOrderStatus = "FINISH"
+	CREATED   PayOrderStatus = "CREATED"
+	PAYING    PayOrderStatus = "PAYING"
+	FINISH    PayOrderStatus = "FINISH"
+	CANCELLED PayOrderStatus = "CANCELLED" // New state for cancelled orders
 )
 
 type PayOrderEvent string
@@ -30,6 +35,7 @@ const (
 	StartPayment   PayOrderEvent = "START_PAYMENT"
 	PaymentSuccess PayOrderEvent = "PAYMENT_SUCCESS"
 	PaymentFailed  PayOrderEvent = "PAYMENT_FAILED"
+	CancelOrder    PayOrderEvent = "CANCEL_ORDER" // New event for cancelling orders
 )
 
 type PayOrderFSM struct {
@@ -60,6 +66,7 @@ func RestoreFromDB(orderId string) (*PayOrderFSM, error) {
 			{Name: string(StartPayment), Src: []string{string(CREATED)}, Dst: string(PAYING)},
 			{Name: string(PaymentSuccess), Src: []string{string(PAYING)}, Dst: string(FINISH)},
 			{Name: string(PaymentFailed), Src: []string{string(PAYING)}, Dst: string(CREATED)},
+			{Name: string(CancelOrder), Src: []string{string(CREATED), string(PAYING)}, Dst: string(CANCELLED)},
 		},
 		fsm.Callbacks{},
 	)
@@ -88,6 +95,7 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 			{Name: string(StartPayment), Src: []string{string(CREATED)}, Dst: string(PAYING)},
 			{Name: string(PaymentSuccess), Src: []string{string(PAYING)}, Dst: string(FINISH)},
 			{Name: string(PaymentFailed), Src: []string{string(PAYING)}, Dst: string(CREATED)},
+			{Name: string(CancelOrder), Src: []string{string(CREATED), string(PAYING)}, Dst: string(CANCELLED)},
 		},
 		fsm.Callbacks{},
 	)
@@ -209,6 +217,29 @@ func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to process payment failure: %w", err)
 	}
+	return nil
+}
+
+// CancelPayment processes the CANCEL_ORDER event
+func (o *PayOrderFSM) CancelPayment(ctx context.Context) error {
+	previousState := o.fsm.Current()
+	err := o.fsm.Event(ctx, string(CancelOrder))
+	if err != nil {
+		return fmt.Errorf("failed to change state to cancelled: %w", err)
+	}
+
+	// If the order was in PAYING state, cancel the payment with the payment provider
+	if o.fsm.Current() == string(CANCELLED) && previousState == string(PAYING) {
+		pay.CancelOrder(o.orderId)
+	}
+
+	// Update database
+	l := query.Q.PaymentLog
+	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(CANCELLED))
+	if err != nil {
+		return fmt.Errorf("failed to update payment status to cancelled: %w", err)
+	}
+
 	return nil
 }
 

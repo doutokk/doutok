@@ -25,6 +25,7 @@ const (
 	PaymentService_GetOrderPayemntStatus_FullMethodName = "/payment.PaymentService/GetOrderPayemntStatus"
 	PaymentService_Cancel_FullMethodName                = "/payment.PaymentService/Cancel"
 	PaymentService_DirectPayment_FullMethodName         = "/payment.PaymentService/DirectPayment"
+	PaymentService_CancelOrder_FullMethodName           = "/payment.PaymentService/CancelOrder"
 )
 
 // PaymentServiceClient is the client API for PaymentService service.
@@ -37,6 +38,7 @@ type PaymentServiceClient interface {
 	GetOrderPayemntStatus(ctx context.Context, in *GetOrderPayemntStatusReq, opts ...grpc.CallOption) (*GetOrderPayemntStatusResp, error)
 	Cancel(ctx context.Context, in *CancelPaymentReq, opts ...grpc.CallOption) (*CancelPaymentResp, error)
 	DirectPayment(ctx context.Context, in *DirectPaymentReq, opts ...grpc.CallOption) (*DirectPaymentResp, error)
+	CancelOrder(ctx context.Context, in *CancelOrderReq, opts ...grpc.CallOption) (*CancelOrderResp, error)
 }
 
 type paymentServiceClient struct {
@@ -107,6 +109,16 @@ func (c *paymentServiceClient) DirectPayment(ctx context.Context, in *DirectPaym
 	return out, nil
 }
 
+func (c *paymentServiceClient) CancelOrder(ctx context.Context, in *CancelOrderReq, opts ...grpc.CallOption) (*CancelOrderResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelOrderResp)
+	err := c.cc.Invoke(ctx, PaymentService_CancelOrder_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentServiceServer is the server API for PaymentService service.
 // All implementations must embed UnimplementedPaymentServiceServer
 // for forward compatibility.
@@ -117,6 +129,7 @@ type PaymentServiceServer interface {
 	GetOrderPayemntStatus(context.Context, *GetOrderPayemntStatusReq) (*GetOrderPayemntStatusResp, error)
 	Cancel(context.Context, *CancelPaymentReq) (*CancelPaymentResp, error)
 	DirectPayment(context.Context, *DirectPaymentReq) (*DirectPaymentResp, error)
+	CancelOrder(context.Context, *CancelOrderReq) (*CancelOrderResp, error)
 	mustEmbedUnimplementedPaymentServiceServer()
 }
 
@@ -144,6 +157,9 @@ func (UnimplementedPaymentServiceServer) Cancel(context.Context, *CancelPaymentR
 }
 func (UnimplementedPaymentServiceServer) DirectPayment(context.Context, *DirectPaymentReq) (*DirectPaymentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DirectPayment not implemented")
+}
+func (UnimplementedPaymentServiceServer) CancelOrder(context.Context, *CancelOrderReq) (*CancelOrderResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelOrder not implemented")
 }
 func (UnimplementedPaymentServiceServer) mustEmbedUnimplementedPaymentServiceServer() {}
 func (UnimplementedPaymentServiceServer) testEmbeddedByValue()                        {}
@@ -274,6 +290,24 @@ func _PaymentService_DirectPayment_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentService_CancelOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelOrderReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentServiceServer).CancelOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentService_CancelOrder_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentServiceServer).CancelOrder(ctx, req.(*CancelOrderReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentService_ServiceDesc is the grpc.ServiceDesc for PaymentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +338,10 @@ var PaymentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DirectPayment",
 			Handler:    _PaymentService_DirectPayment_Handler,
+		},
+		{
+			MethodName: "CancelOrder",
+			Handler:    _PaymentService_CancelOrder_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
