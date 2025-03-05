@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/doutokk/doutok/app/payment/infra/rpc"
+	"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/payment/biz/fsm"
@@ -24,14 +26,14 @@ func NewCancelOrderService(ctx context.Context) *CancelOrderService {
 func (s *CancelOrderService) Run(req *payment.CancelOrderReq) (resp *payment.CancelOrderResp, err error) {
 	// Get user ID from context
 	userId := utils.GetUserId(&s.ctx)
-
-	// Check if the user ID in request matches with context
-	if req.UserId != uint32(userId) {
-		klog.Warn("User ID mismatch in cancel order request")
-		return &payment.CancelOrderResp{
-			Success: false,
-			Message: "User ID mismatch",
-		}, errors.New("unauthorized")
+	oi := req.OrderId
+	r, err := rpc.OrderClient.GetOrder(s.ctx, &order.GetOrderReq{Id: oi})
+	if err != nil {
+		return
+	}
+	if r.Order.UserId != uint32(userId) {
+		klog.Warn("用户名和订单 id 不匹配")
+		return nil, errors.New("")
 	}
 
 	fmt.Printf("CancelOrderService is called with req: %+v\n", req)
