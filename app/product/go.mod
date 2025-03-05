@@ -8,6 +8,7 @@ require (
 	github.com/cloudwego/kitex v0.12.3
 	github.com/doutokk/doutok/common v0.0.0-20250220123934-f2d5efcb2a20
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250213063132-1d342a229dad
+	github.com/elastic/go-elasticsearch/v8 v8.17.1
 	github.com/joho/godotenv v1.5.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
 	github.com/kr/pretty v0.3.1
@@ -44,6 +45,7 @@ require (
 	github.com/cloudwego/thriftgo v0.3.19 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/elastic/elastic-transport-go/v8 v8.6.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
