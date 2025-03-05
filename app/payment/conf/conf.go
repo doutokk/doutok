@@ -54,6 +54,11 @@ type Config struct {
 		CallBackUrl   string `mapstructure:"callback_url"`
 		NotifyBackUrl string `mapstructure:"notifyback_url"`
 	} `mapstructure:"alipay"`
+
+	RocketMQ struct {
+		NamesrvAddr string `mapstructure:"namesrv_addr"`
+		GroupID     string `mapstructure:"group_id"`
+	} `mapstructure:"rocketmq"`
 }
 
 // GetConf gets configuration instance
