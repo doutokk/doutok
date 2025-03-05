@@ -2,10 +2,15 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"time"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
+	"github.com/doutokk/doutok/app/product/biz/dal/redis"
+	"github.com/doutokk/doutok/app/product/constants"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
@@ -13,21 +18,30 @@ type ListProductsService struct {
 	ctx context.Context
 }
 
-// NewListProductsService new ListProductsService
 func NewListProductsService(ctx context.Context) *ListProductsService {
 	return &ListProductsService{ctx: ctx}
 }
 
-// Run create note info
 func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.ListProductsResp, err error) {
-	// Finish your business logic.
+	// Redis key
+	cacheKey := fmt.Sprintf(constants.ProductCategoryKeyPattern, req.CategoryName, req.Page, req.PageSize)
+
+	// Try to get cached data from Redis
+	cachedData, err := redis.RedisClient.Get(s.ctx, cacheKey).Result()
+	if err == nil {
+		// Cache hit, deserialize data and return
+		var cachedResp product.ListProductsResp
+		if err := json.Unmarshal([]byte(cachedData), &cachedResp); err == nil {
+			return &cachedResp, nil
+		}
+	}
+
+	// Cache miss, query the database
 	p := query.Product
 	c := query.ProductCategory
 	var products []*model.Product
 	var total int64
 
-	// 还是不太会用 gorm，这里的逻辑是如果请求中有分类名，就根据分类名查找商品，否则查找所有商品
-	// 没搞定直接多对多查询的，所以先查出分类，再查出关联的商品
 	if req.CategoryName != "" {
 		cat, err := c.Where(c.Name.Eq(req.CategoryName)).Preload(c.Products).First()
 		if err != nil {
@@ -62,8 +76,8 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	}
 	for i, prod := range products {
 		cats := make([]string, len(prod.Categories))
-		for i, cat := range prod.Categories {
-			cats[i] = cat.Name
+		for j, cat := range prod.Categories {
+			cats[j] = cat.Name
 		}
 		resp.Item[i] = &product.Product{
 			Id:          uint32(prod.ID),
@@ -75,5 +89,11 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 		}
 	}
 
-	return
+	// Serialize response and store in Redis
+	data, err := json.Marshal(resp)
+	if err == nil {
+		redis.RedisClient.Set(s.ctx, cacheKey, data, time.Minute*10)
+	}
+
+	return resp, nil
 }
