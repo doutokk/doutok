@@ -42,11 +42,22 @@ func (s *CancelOrderService) Run(req *payment.CancelOrderReq) (resp *payment.Can
 	var orderFSM *fsm.PayOrderFSM
 	orderFSM, err = fsm.RestoreFromDB(req.OrderId)
 	if err != nil {
-		klog.Errorf("Failed to restore order FSM: %v", err)
-		return &payment.CancelOrderResp{
-			Success: false,
-			Message: "Order not found",
-		}, err
+
+		amount := 0.0
+		for _, item := range r.Order.OrderItems {
+			amount += float64(item.Cost)
+		}
+		orderFSM, err = fsm.NewOrder(fsm.CreatePayOrderReq{
+			UserId:  userId,
+			OrderId: req.OrderId,
+			Amount:  float32(amount),
+		})
+
+		//klog.Errorf("Failed to restore order FSM: %v", err)
+		//return &payment.CancelOrderResp{
+		//	Success: false,
+		//	Message: "Order not found",
+		//}, err
 	}
 
 	// Cancel the order
