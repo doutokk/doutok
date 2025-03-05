@@ -5,15 +5,13 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/doutokk/doutok/app/payment/biz/dal/model"
+	"github.com/doutokk/doutok/app/payment/biz/dal/query"
 	"github.com/doutokk/doutok/app/payment/biz/mq"
 	"github.com/doutokk/doutok/app/payment/biz/pay"
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/common/lock"
-
-	"github.com/doutokk/doutok/app/payment/biz/dal/model"
-	"github.com/doutokk/doutok/app/payment/biz/dal/query"
-
-	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/looplab/fsm"
 )
 
