@@ -37,6 +37,12 @@ service PaymentService {
       body: "*"
     };
   }
+  rpc CancelOrder(CancelOrderReq) returns (CancelOrderResp) {
+    option (google.api.http) = {
+      post: "/order/{order_id}/cancel"
+      body: "*"
+    };
+  }
 }
 
 message CreditCardInfo {
@@ -136,4 +142,16 @@ message DirectPaymentResp {
   bool success = 1;
   string message = 2;
   string trade_no = 3;
+}
+
+message CancelOrderReq {
+  string order_id = 1;
+  string reason = 2;
+  uint32 user_id = 3;
+}
+
+message CancelOrderResp {
+  bool success = 1;
+  string message = 2;
+  string order_status = 3;
 }

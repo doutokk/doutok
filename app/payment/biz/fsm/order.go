@@ -3,10 +3,15 @@ package fsm
 import (
 	"context"
 	"fmt"
+
 	"github.com/doutokk/doutok/app/payment/biz/pay"
+
 	//"github.com/doutokk/doutok/app/payment/infra/rpc"
 	//"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"time"
+
+	"github.com/doutokk/doutok/app/payment/conf"
+	"github.com/doutokk/doutok/common/lock"
 
 	"github.com/doutokk/doutok/app/payment/biz/dal/model"
 	"github.com/doutokk/doutok/app/payment/biz/dal/query"
@@ -17,9 +22,10 @@ import (
 type PayOrderStatus string
 
 const (
-	CREATED PayOrderStatus = "CREATED"
-	PAYING  PayOrderStatus = "PAYING"
-	FINISH  PayOrderStatus = "FINISH"
+	CREATED   PayOrderStatus = "CREATED"
+	PAYING    PayOrderStatus = "PAYING"
+	FINISH    PayOrderStatus = "FINISH"
+	CANCELLED PayOrderStatus = "CANCELLED" // New state for cancelled orders
 )
 
 type PayOrderEvent string
@@ -29,6 +35,7 @@ const (
 	StartPayment   PayOrderEvent = "START_PAYMENT"
 	PaymentSuccess PayOrderEvent = "PAYMENT_SUCCESS"
 	PaymentFailed  PayOrderEvent = "PAYMENT_FAILED"
+	CancelOrder    PayOrderEvent = "CANCEL_ORDER" // New event for cancelling orders
 )
 
 type PayOrderFSM struct {
@@ -59,6 +66,7 @@ func RestoreFromDB(orderId string) (*PayOrderFSM, error) {
 			{Name: string(StartPayment), Src: []string{string(CREATED)}, Dst: string(PAYING)},
 			{Name: string(PaymentSuccess), Src: []string{string(PAYING)}, Dst: string(FINISH)},
 			{Name: string(PaymentFailed), Src: []string{string(PAYING)}, Dst: string(CREATED)},
+			{Name: string(CancelOrder), Src: []string{string(CREATED), string(PAYING)}, Dst: string(CANCELLED)},
 		},
 		fsm.Callbacks{},
 	)
@@ -75,6 +83,10 @@ func RestoreFromDB(orderId string) (*PayOrderFSM, error) {
 	return o, nil
 }
 
+// Redis address should come from configuration
+var redLock = lock.NewRedLock(conf.GetConf().Redis.Address)
+
+// NewOrder creates a new payment order with distributed locking
 func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 	o := &PayOrderFSM{}
 	o.fsm = fsm.NewFSM(
@@ -83,12 +95,28 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 			{Name: string(StartPayment), Src: []string{string(CREATED)}, Dst: string(PAYING)},
 			{Name: string(PaymentSuccess), Src: []string{string(PAYING)}, Dst: string(FINISH)},
 			{Name: string(PaymentFailed), Src: []string{string(PAYING)}, Dst: string(CREATED)},
+			{Name: string(CancelOrder), Src: []string{string(CREATED), string(PAYING)}, Dst: string(CANCELLED)},
 		},
 		fsm.Callbacks{},
 	)
 
+	// Acquire lock for this order
+	lockKey := fmt.Sprintf("payment_order_lock:%s", req.OrderId)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
+	if err != nil {
+		return nil, fmt.Errorf("failed to acquire lock: %w", err)
+	}
+	if !locked {
+		return nil, fmt.Errorf("could not acquire lock for order %s", req.OrderId)
+	}
+
+	defer func() {
+		// Release lock when function returns
+		redLock.Unlock(lockKey)
+	}()
+
 	l := query.Q.PaymentLog
-	err := l.Create(&model.PaymentLog{
+	err = l.Create(&model.PaymentLog{
 		UserId:        req.UserId,
 		OrderId:       req.OrderId,
 		TransactionId: "",
@@ -107,7 +135,22 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 
 // StartPayment processes the START_PAYMENT event
 func (o *PayOrderFSM) StartPayment(ctx context.Context) (string, error) {
-	err := o.fsm.Event(ctx, string(StartPayment))
+	// Acquire lock for this order
+	lockKey := fmt.Sprintf("payment_order_lock:%s", o.orderId)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
+	if err != nil {
+		return "", fmt.Errorf("failed to acquire lock: %w", err)
+	}
+	if !locked {
+		return "", fmt.Errorf("could not acquire lock for order %s", o.orderId)
+	}
+
+	defer func() {
+		// Release lock when function returns
+		redLock.Unlock(lockKey)
+	}()
+
+	err = o.fsm.Event(ctx, string(StartPayment))
 
 	l := query.Q.PaymentLog
 	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(PAYING))
@@ -125,7 +168,22 @@ func (o *PayOrderFSM) StartPayment(ctx context.Context) (string, error) {
 
 // PaymentSuccess processes the PAYMENT_SUCCESS event
 func (o *PayOrderFSM) PaymentSuccess(ctx context.Context) error {
-	err := o.fsm.Event(ctx, string(PaymentSuccess))
+	// Acquire lock for this order
+	lockKey := fmt.Sprintf("payment_order_lock:%s", o.orderId)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
+	if err != nil {
+		return fmt.Errorf("failed to acquire lock: %w", err)
+	}
+	if !locked {
+		return fmt.Errorf("could not acquire lock for order %s", o.orderId)
+	}
+
+	defer func() {
+		// Release lock when function returns
+		redLock.Unlock(lockKey)
+	}()
+
+	err = o.fsm.Event(ctx, string(PaymentSuccess))
 	l := query.Q.PaymentLog
 	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(FINISH))
 
@@ -137,7 +195,22 @@ func (o *PayOrderFSM) PaymentSuccess(ctx context.Context) error {
 
 // PaymentFailed processes the PAYMENT_FAILED event
 func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
-	err := o.fsm.Event(ctx, string(PaymentFailed))
+	// Acquire lock for this order
+	lockKey := fmt.Sprintf("payment_order_lock:%s", o.orderId)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
+	if err != nil {
+		return fmt.Errorf("failed to acquire lock: %w", err)
+	}
+	if !locked {
+		return fmt.Errorf("could not acquire lock for order %s", o.orderId)
+	}
+
+	defer func() {
+		// Release lock when function returns
+		redLock.Unlock(lockKey)
+	}()
+
+	err = o.fsm.Event(ctx, string(PaymentFailed))
 	l := query.Q.PaymentLog
 	pay.CancelOrder(o.orderId)
 	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(CREATED))
@@ -147,18 +220,45 @@ func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
 	return nil
 }
 
+// CancelPayment processes the CANCEL_ORDER event
+func (o *PayOrderFSM) CancelPayment(ctx context.Context) error {
+	previousState := o.fsm.Current()
+	err := o.fsm.Event(ctx, string(CancelOrder))
+	if err != nil {
+		return fmt.Errorf("failed to change state to cancelled: %w", err)
+	}
+
+	// If the order was in PAYING state, cancel the payment with the payment provider
+	if o.fsm.Current() == string(CANCELLED) && previousState == string(PAYING) {
+		pay.CancelOrder(o.orderId)
+	}
+
+	// Update database
+	l := query.Q.PaymentLog
+	_, err = l.Where(l.OrderId.Eq(o.orderId)).Update(l.Status, string(CANCELLED))
+	if err != nil {
+		return fmt.Errorf("failed to update payment status to cancelled: %w", err)
+	}
+
+	return nil
+}
+
 func (o *PayOrderFSM) GetStatus() PayOrderStatus {
 	return PayOrderStatus(o.fsm.Current())
 }
 
 func (o *PayOrderFSM) DirectCheck(params pay.ReturnCallbackParams) bool {
 	fmt.Println("DirectCheck")
+
+	// Add locking only for the state-changing operations
 	if pay.VerifyReturnCallback(params) {
+		// The call to PaymentSuccess already includes locking
 		o.PaymentSuccess(context.Background())
 		return true
 	}
 
 	if _, ok := pay.TradeQuery(context.Background(), params.TradeNo); ok {
+		// The call to PaymentSuccess already includes locking
 		o.PaymentSuccess(context.Background())
 		return true
 	}

@@ -6,7 +6,7 @@ replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
 require (
 	github.com/cloudwego/kitex v0.12.3
-	github.com/doutokk/doutok/common v0.0.0-20250228054030-051e213e0282
+	github.com/doutokk/doutok/common v0.0.0-20250305072307-bb11ca9f930e
 	github.com/doutokk/doutok/rpc_gen v0.0.0-20250228054030-051e213e0282
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
@@ -53,9 +53,9 @@ require (
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/go-redsync/redsync/v4 v4.13.0 // indirect
 	github.com/go-sql-driver/mysql v1.9.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/btree v1.1.3 // indirect
 	github.com/google/pprof v0.0.0-20250208200701-d0013a598941 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1 // indirect
 	github.com/hashicorp/consul/api v1.31.2 // indirect
