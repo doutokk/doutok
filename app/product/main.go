@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/doutokk/doutok/app/product/infra"
 	"github.com/doutokk/doutok/common/mtl"
 	"github.com/doutokk/doutok/common/serversuite"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product/productcatalogservice"
@@ -26,6 +27,7 @@ func main() {
 	dal.Init()
 	// use go run cmd/gorm_gen/main.go to generate the code
 	query.SetDefault(mysql.DB)
+	infra.InitElasticsearch()
 	opts := kitexInit()
 
 	svr := productcatalogservice.NewServer(new(ProductCatalogServiceImpl), opts...)
