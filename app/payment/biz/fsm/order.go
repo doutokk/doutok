@@ -3,19 +3,17 @@ package fsm
 import (
 	"context"
 	"fmt"
-
-	"github.com/doutokk/doutok/app/payment/biz/pay"
-
-	//"github.com/doutokk/doutok/app/payment/infra/rpc"
-	//"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"time"
 
+	"github.com/doutokk/doutok/app/payment/biz/mq"
+	"github.com/doutokk/doutok/app/payment/biz/pay"
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/common/lock"
 
 	"github.com/doutokk/doutok/app/payment/biz/dal/model"
 	"github.com/doutokk/doutok/app/payment/biz/dal/query"
 
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/looplab/fsm"
 )
 
@@ -128,6 +126,13 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 	o.data = req
 	if err != nil {
 		return nil, fmt.Errorf("failed to create payment log: %w", err)
+	}
+
+	// Send delayed message for auto-cancellation after 30 minutes
+	err = mq.SendOrderCancelDelayedMessage(req.OrderId, req.UserId, 30*time.Minute)
+	if err != nil {
+		klog.Warnf("Failed to schedule auto-cancellation for order %s: %v", req.OrderId, err)
+		// Don't fail the order creation if scheduling fails
 	}
 
 	return o, nil

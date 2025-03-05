@@ -1,11 +1,16 @@
 package main
 
 import (
+	"net"
+	"os"
+
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
 	"github.com/doutokk/doutok/app/payment/biz/dal"
 	"github.com/doutokk/doutok/app/payment/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/payment/biz/dal/query"
+	"github.com/doutokk/doutok/app/payment/biz/mq"
+	"github.com/doutokk/doutok/app/payment/biz/service"
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/app/payment/infra/rpc"
 	"github.com/doutokk/doutok/common/mtl"
@@ -13,8 +18,6 @@ import (
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/payment/paymentservice"
 	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"net"
-	"os"
 )
 
 var serviceName = conf.GetConf().Kitex.Service
@@ -28,9 +31,23 @@ func main() {
 	query.SetDefault(mysql.DB)
 	opts := kitexInit()
 
+	// Initialize RocketMQ
+	err := mq.Initialize()
+	if err != nil {
+		klog.Fatalf("Failed to initialize RocketMQ: %v", err)
+	}
+	defer mq.CleanUp()
+
+	// Start auto-cancellation consumer
+	autoCancelService := service.NewAutoCancelOrderService()
+	err = mq.StartOrderCancelConsumer(autoCancelService.HandleOrderCancel)
+	if err != nil {
+		klog.Fatalf("Failed to start order cancellation consumer: %v", err)
+	}
+
 	svr := paymentservice.NewServer(new(PaymentServiceImpl), opts...)
 
-	err := svr.Run()
+	err = svr.Run()
 	if err != nil {
 		klog.Error(err.Error())
 	}
