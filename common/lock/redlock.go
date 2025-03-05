@@ -2,6 +2,7 @@ package lock
 
 import (
 	"context"
+	"sync"
 	"time"
 
 	"github.com/go-redsync/redsync/v4"
@@ -13,6 +14,10 @@ import (
 type RedLock struct {
 	rs      *redsync.Redsync
 	mutexes map[string]*redsync.Mutex
+	// 新增字段，用于跟踪自动续期的上下文和取消函数
+	renewCtx    map[string]context.Context
+	renewCancel map[string]context.CancelFunc
+	mu          sync.Mutex // 保护并发访问maps
 }
 
 // NewRedLock 创建一个新的分布式锁工具实例
@@ -29,8 +34,10 @@ func NewRedLock(redisAddr string) *RedLock {
 	rs := redsync.New(pool)
 
 	return &RedLock{
-		rs:      rs,
-		mutexes: make(map[string]*redsync.Mutex),
+		rs:          rs,
+		mutexes:     make(map[string]*redsync.Mutex),
+		renewCtx:    make(map[string]context.Context),
+		renewCancel: make(map[string]context.CancelFunc),
 	}
 }
 
@@ -39,8 +46,9 @@ func NewRedLock(redisAddr string) *RedLock {
 // timeout: 阻塞等待超时时间，如果为0则表示不阻塞
 // expiry: 锁的过期时间，防止死锁
 // retryDelay: 重试间隔
+// autoRenew: 是否启用自动续期
 // 返回值: 是否获取成功，错误信息
-func (r *RedLock) TryLock(lockName string, timeout, expiry, retryDelay time.Duration) (bool, error) {
+func (r *RedLock) TryLock(lockName string, timeout, expiry, retryDelay time.Duration, autoRenew bool) (bool, error) {
 	mutex := r.rs.NewMutex(lockName,
 		redsync.WithExpiry(expiry),
 		redsync.WithTries(1), // 非阻塞模式下只尝试一次
@@ -54,7 +62,14 @@ func (r *RedLock) TryLock(lockName string, timeout, expiry, retryDelay time.Dura
 		}
 
 		// 存储获取的锁以便后续解锁
+		r.mu.Lock()
 		r.mutexes[lockName] = mutex
+		r.mu.Unlock()
+
+		// 如果需要自动续期，启动自动续期协程
+		if autoRenew {
+			r.StartAutoRenew(lockName, expiry)
+		}
 		return true, nil
 	}
 
@@ -71,7 +86,14 @@ func (r *RedLock) TryLock(lockName string, timeout, expiry, retryDelay time.Dura
 			err := mutex.Lock()
 			if err == nil {
 				// 获取锁成功
+				r.mu.Lock()
 				r.mutexes[lockName] = mutex
+				r.mu.Unlock()
+
+				// 如果需要自动续期，启动自动续期协程
+				if autoRenew {
+					r.StartAutoRenew(lockName, expiry)
+				}
 				return true, nil
 			}
 
@@ -81,18 +103,86 @@ func (r *RedLock) TryLock(lockName string, timeout, expiry, retryDelay time.Dura
 	}
 }
 
+// StartAutoRenew 启动自动续期
+// lockName: 锁的名称
+// expiry: 锁的过期时间
+func (r *RedLock) StartAutoRenew(lockName string, expiry time.Duration) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	// 如果已经有续期协程在运行，先停止它
+	if cancel, exists := r.renewCancel[lockName]; exists {
+		cancel()
+	}
+
+	// 创建新的上下文和取消函数
+	ctx, cancel := context.WithCancel(context.Background())
+	r.renewCtx[lockName] = ctx
+	r.renewCancel[lockName] = cancel
+
+	mutex, exists := r.mutexes[lockName]
+	if !exists {
+		return
+	}
+
+	// 启动协程进行自动续期
+	go func() {
+		// 设置续期周期为过期时间的一半，确保有足够时间续期
+		interval := expiry / 2
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-ctx.Done():
+				// 上下文被取消，停止续期
+				return
+			case <-ticker.C:
+				// 尝试续期
+				if err := mutex.Extend(); err != nil {
+					// 续期失败，可能锁已经丢失
+					// 这里可以添加日志记录
+					return
+				}
+				// 续期成功
+			}
+		}
+	}()
+}
+
+// StopAutoRenew 停止自动续期
+// lockName: 锁的名称
+func (r *RedLock) StopAutoRenew(lockName string) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if cancel, exists := r.renewCancel[lockName]; exists {
+		cancel()
+		delete(r.renewCtx, lockName)
+		delete(r.renewCancel, lockName)
+	}
+}
+
 // Unlock 释放指定名称的锁
 // lockName: 锁的名称
 // 返回值: 是否释放成功，错误信息
 func (r *RedLock) Unlock(lockName string) (bool, error) {
+	r.mu.Lock()
 	mutex, exists := r.mutexes[lockName]
+	r.mu.Unlock()
+
 	if !exists {
 		return false, nil
 	}
 
+	// 停止自动续期
+	r.StopAutoRenew(lockName)
+
 	success, err := mutex.Unlock()
 	if success || err == nil {
+		r.mu.Lock()
 		delete(r.mutexes, lockName)
+		r.mu.Unlock()
 	}
 
 	return success, err
@@ -100,5 +190,7 @@ func (r *RedLock) Unlock(lockName string) (bool, error) {
 
 // GetLock 根据锁名称获取已经存在的锁对象
 func (r *RedLock) GetLock(lockName string) *redsync.Mutex {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	return r.mutexes[lockName]
 }
