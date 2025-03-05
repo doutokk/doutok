@@ -54,6 +54,17 @@ type Config struct {
 		CallBackUrl   string `mapstructure:"callback_url"`
 		NotifyBackUrl string `mapstructure:"notifyback_url"`
 	} `mapstructure:"alipay"`
+
+	RocketMQ struct {
+		NameServer        []string `mapstructure:"name_server"`
+		GroupName         string   `mapstructure:"group_name"`
+		OrderTopic        string   `mapstructure:"order_topic"`
+		OrderCancelTopic  string   `mapstructure:"order_cancel_topic"`
+		AccessKey         string   `mapstructure:"access_key"`
+		SecretKey         string   `mapstructure:"secret_key"`
+		OrderCancelDelay  int      `mapstructure:"order_cancel_delay"` // in minutes
+		MaxReconsumeTimes int      `mapstructure:"max_reconsume_times"`
+	} `mapstructure:"rocketmq"`
 }
 
 // GetConf gets configuration instance

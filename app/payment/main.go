@@ -6,6 +6,9 @@ import (
 	"github.com/doutokk/doutok/app/payment/biz/dal"
 	"github.com/doutokk/doutok/app/payment/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/payment/biz/dal/query"
+	"github.com/doutokk/doutok/app/payment/biz/fsm"
+	"github.com/doutokk/doutok/app/payment/biz/mq"
+	"github.com/doutokk/doutok/app/payment/biz/service"
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/app/payment/infra/rpc"
 	"github.com/doutokk/doutok/common/mtl"
@@ -26,6 +29,26 @@ func main() {
 	dal.Init()
 	rpc.InitClient()
 	query.SetDefault(mysql.DB)
+
+	// Initialize order canceller service
+	orderCanceller := service.NewOrderCancellerService()
+
+	// Initialize RocketMQ client
+	mqClient := mq.GetMQClient()
+
+	// Set up dependencies
+	mqClient.SetOrderCanceller(orderCanceller)
+	fsm.SetDelayedMessageSender(mqClient)
+
+	// Start RocketMQ client
+	if err := mqClient.InitProducer(); err != nil {
+		klog.Fatalf("Failed to initialize RocketMQ producer: %v", err)
+	}
+	if err := mqClient.InitConsumer(); err != nil {
+		klog.Fatalf("Failed to initialize RocketMQ consumer: %v", err)
+	}
+	defer mqClient.Close()
+
 	opts := kitexInit()
 
 	svr := paymentservice.NewServer(new(PaymentServiceImpl), opts...)
