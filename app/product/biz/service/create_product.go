@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/doutokk/doutok/app/product/infra"
 
 	"errors"
 
@@ -62,6 +63,22 @@ func (s *CreateProductService) Run(req *product.CreateProductReq) (resp *product
 	}
 	resp = &product.CreateProductResp{
 		Id: uint32(m.ID),
+	}
+
+	// 将商品插入 Elasticsearch
+	esProduct := &product.Product{
+		Id:          uint32(m.ID),
+		Name:        m.Name,
+		Description: m.Description,
+		Picture:     m.Picture,
+		Price:       m.Price,
+		Categories:  make([]string, len(m.Categories)),
+	}
+	for i, cat := range m.Categories {
+		esProduct.Categories[i] = cat.Name
+	}
+	if err := infra.InsertProduct(s.ctx, esProduct); err != nil {
+		return nil, err
 	}
 
 	// 数据库总条数
