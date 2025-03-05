@@ -17,6 +17,7 @@ func Example() {
 		0,                    // 不阻塞
 		30*time.Second,       // 锁的过期时间30秒
 		100*time.Millisecond, // 重试间隔
+		false,                // 不使用自动续期
 	)
 
 	if err != nil {
@@ -45,6 +46,7 @@ func Example() {
 		5*time.Second,        // 最多阻塞5秒
 		30*time.Second,       // 锁的过期时间30秒
 		100*time.Millisecond, // 重试间隔
+		false,                // 不使用自动续期
 	)
 
 	if err != nil {
@@ -58,6 +60,35 @@ func Example() {
 
 		// 业务逻辑完成后释放锁
 		if ok, err := redLock.Unlock(blockingLockName); !ok || err != nil {
+			fmt.Printf("释放锁失败: %v\n", err)
+		} else {
+			fmt.Println("成功释放锁")
+		}
+	}
+
+	// 示例3: 使用自动续期
+	autoRenewLockName := "user:long_running_task:789"
+	acquired, err = redLock.TryLock(
+		autoRenewLockName,
+		2*time.Second,        // 最多阻塞2秒
+		10*time.Second,       // 锁的过期时间10秒
+		100*time.Millisecond, // 重试间隔
+		true,                 // 使用自动续期
+	)
+
+	if err != nil {
+		fmt.Printf("获取锁失败: %v\n", err)
+		return
+	}
+
+	if acquired {
+		fmt.Println("成功获取锁，执行长时间运行的业务逻辑")
+
+		// 模拟长时间运行的任务
+		time.Sleep(30 * time.Second)
+
+		// 业务逻辑完成后释放锁（自动停止续期）
+		if ok, err := redLock.Unlock(autoRenewLockName); !ok || err != nil {
 			fmt.Printf("释放锁失败: %v\n", err)
 		} else {
 			fmt.Println("成功释放锁")

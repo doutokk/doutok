@@ -94,7 +94,7 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 
 	// Acquire lock for this order
 	lockKey := fmt.Sprintf("payment_order_lock:%s", req.OrderId)
-	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
 	if err != nil {
 		return nil, fmt.Errorf("failed to acquire lock: %w", err)
 	}
@@ -129,7 +129,7 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 func (o *PayOrderFSM) StartPayment(ctx context.Context) (string, error) {
 	// Acquire lock for this order
 	lockKey := fmt.Sprintf("payment_order_lock:%s", o.orderId)
-	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
 	if err != nil {
 		return "", fmt.Errorf("failed to acquire lock: %w", err)
 	}
@@ -162,7 +162,7 @@ func (o *PayOrderFSM) StartPayment(ctx context.Context) (string, error) {
 func (o *PayOrderFSM) PaymentSuccess(ctx context.Context) error {
 	// Acquire lock for this order
 	lockKey := fmt.Sprintf("payment_order_lock:%s", o.orderId)
-	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
 	if err != nil {
 		return fmt.Errorf("failed to acquire lock: %w", err)
 	}
@@ -189,7 +189,7 @@ func (o *PayOrderFSM) PaymentSuccess(ctx context.Context) error {
 func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
 	// Acquire lock for this order
 	lockKey := fmt.Sprintf("payment_order_lock:%s", o.orderId)
-	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond)
+	locked, err := redLock.TryLock(lockKey, 5*time.Second, 30*time.Second, 100*time.Millisecond, true)
 	if err != nil {
 		return fmt.Errorf("failed to acquire lock: %w", err)
 	}

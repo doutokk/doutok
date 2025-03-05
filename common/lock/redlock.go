@@ -2,6 +2,7 @@ package lock
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
@@ -139,9 +140,9 @@ func (r *RedLock) StartAutoRenew(lockName string, expiry time.Duration) {
 				return
 			case <-ticker.C:
 				// 尝试续期
-				if err := mutex.Extend(); err != nil {
+				if ok, err := mutex.Extend(); err != nil || !ok {
 					// 续期失败，可能锁已经丢失
-					// 这里可以添加日志记录
+					fmt.Printf("自动续期失败: %v\n", err)
 					return
 				}
 				// 续期成功
