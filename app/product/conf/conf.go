@@ -47,6 +47,12 @@ type Config struct {
 		Password string `mapstructure:"password"`
 		DB       int    `mapstructure:"db"`
 	} `mapstructure:"redis"`
+
+	ElasticSearch struct {
+		Address  string `mapstructure:"address"`
+		Username string `mapstructure:"username"`
+		Password string `mapstructure:"password"`
+	} `mapstructure:"elasticsearch"`
 }
 
 // GetConf gets configuration instance
