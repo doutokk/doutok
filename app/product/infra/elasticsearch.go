@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/doutokk/doutok/app/product/biz/dal/model"
+	"github.com/doutokk/doutok/app/product/biz/dal/mysql"
 	"github.com/doutokk/doutok/app/product/conf"
 	"log"
 	"strconv"
@@ -114,10 +116,15 @@ func SearchProducts(ctx context.Context, name string, category string, page int3
 		return nil, fmt.Errorf("error parsing response: %v", err)
 	}
 
+	var total int64
+	if err := mysql.DB.Model(&model.Product{}).Count(&total).Error; err != nil {
+		return nil, err
+	}
+
 	// 构造返回结果
 	return &product.SearchProductsResp{
 		Item:  extractProducts(result.Hits.Hits),
-		Total: int32(len(result.Hits.Hits)),
+		Total: int32(total),
 	}, nil
 }
 
@@ -131,9 +138,9 @@ func InsertProduct(ctx context.Context, prod *product.Product) error {
 
 	// 执行 ES 插入请求
 	res, err := esClient.Index(
-		"products",                      // 索引名称
-		strings.NewReader(string(data)), // 商品数据
-		esClient.Index.WithContext(ctx), // 上下文
+		"products",                                                // 索引名称
+		strings.NewReader(string(data)),                           // 商品数据
+		esClient.Index.WithContext(ctx),                           // 上下文
 		esClient.Index.WithDocumentID(strconv.Itoa(int(prod.Id))), // 文档 ID
 	)
 	if err != nil {
@@ -179,9 +186,9 @@ func UpdateProduct(ctx context.Context, prod *product.Product) error {
 
 	// 执行 ES 更新请求
 	res, err := esClient.Index(
-		"products",                      // 索引名称
-		strings.NewReader(string(data)), // 商品数据
-		esClient.Index.WithContext(ctx), // 上下文
+		"products",                                                // 索引名称
+		strings.NewReader(string(data)),                           // 商品数据
+		esClient.Index.WithContext(ctx),                           // 上下文
 		esClient.Index.WithDocumentID(strconv.Itoa(int(prod.Id))), // 文档 ID
 	)
 	if err != nil {
