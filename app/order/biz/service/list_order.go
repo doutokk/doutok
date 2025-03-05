@@ -57,6 +57,7 @@ func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRe
 				ZipCode:       m.ZipCode,
 			},
 			OrderItems: orderItemsResp,
+			CreatedAt:  m.CreatedAt,
 		})
 	}
 
