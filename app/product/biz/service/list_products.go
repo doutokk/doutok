@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
-
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/doutokk/doutok/app/product/biz/dal/model"
 	"github.com/doutokk/doutok/app/product/biz/dal/query"
@@ -92,7 +90,7 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	// Serialize response and store in Redis
 	data, err := json.Marshal(resp)
 	if err == nil {
-		redis.RedisClient.Set(s.ctx, cacheKey, data, time.Minute*10)
+		redis.RedisClient.Set(s.ctx, cacheKey, data, constants.Expire)
 	}
 
 	return resp, nil

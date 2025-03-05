@@ -2,8 +2,12 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/doutokk/doutok/app/product/biz/dal/redis"
+	"github.com/doutokk/doutok/app/product/constants"
+	"github.com/doutokk/doutok/app/product/infra"
 
-	"github.com/doutokk/doutok/app/product/biz/dal/query"
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
 )
 
@@ -18,41 +22,40 @@ func NewSearchProductsService(ctx context.Context) *SearchProductsService {
 
 // Run create note info
 func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *product.SearchProductsResp, err error) {
-	// Finish your business logic.
 	if req.Page <= 0 || req.PageSize <= 0 {
 		req.Page = 1
 		req.PageSize = 10
 	}
-	p := query.Product
 
-	// Get total count first
-	total, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Count()
-	if err != nil {
-		return
+	// 首页是调用的这里的接口，query是null，因此加上缓存
+	if req.Query == "" {
+		// Generate cache key
+		cacheKey := fmt.Sprintf(constants.ProductKeyPattern, req.Page, req.PageSize)
+
+		// Try to get cached response
+		cachedResp, err := redis.RedisClient.Get(s.ctx, cacheKey).Result()
+		if err == nil {
+			// Unmarshal cached response
+			var cachedResult product.SearchProductsResp
+			if err := json.Unmarshal([]byte(cachedResp), &cachedResult); err == nil {
+				return &cachedResult, nil
+			}
+		}
+
+		// If cache miss or unmarshal error, proceed with search
+		resp, err = infra.SearchProducts(s.ctx, req.Query, "", req.Page, int32(req.PageSize))
+		if err != nil {
+			return nil, err
+		}
+
+		// Cache the response
+		respJSON, err := json.Marshal(resp)
+		if err == nil {
+			redis.RedisClient.Set(s.ctx, cacheKey, respJSON, constants.Expire)
+		}
+
+		return resp, nil
 	}
 
-	prods, err := query.Q.Product.Where(p.Name.Like("%" + req.Query + "%")).Preload(p.Categories).
-		Limit(int(req.PageSize)).Offset(int(req.PageSize * int64(req.Page-1))).Find()
-	if err != nil {
-		return
-	}
-	resp = &product.SearchProductsResp{
-		Item:  make([]*product.Product, len(prods)),
-		Total: int32(total),
-	}
-	for i, prod := range prods {
-		cats := make([]string, len(prod.Categories))
-		for i, cat := range prod.Categories {
-			cats[i] = cat.Name
-		}
-		resp.Item[i] = &product.Product{
-			Id:          uint32(prod.ID),
-			Name:        prod.Name,
-			Description: prod.Description,
-			Picture:     prod.Picture,
-			Price:       prod.Price,
-			Categories:  cats,
-		}
-	}
-	return
+	return infra.SearchProducts(s.ctx, req.Query, "", req.Page, int32(req.PageSize))
 }

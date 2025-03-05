@@ -6,18 +6,25 @@ kitex:
 
 registry:
   registry_address:
-    - 10.21.32.14:8500
+    -
+  username: "xx"
+  password: "xx"
+
+mysql:
+  host: "xxx"
+  port: "3306"
+  username: "root"
+  password: "xxx"
+
+
+elasticsearch:
+  address: "http://10.21.32.14:9200"
   username: ""
   password: ""
 
-mysql:
-  host: "10.21.32.14"
-  port: "3306"
-  username: "root"
-  password: "puzzle"
 
 redis:
   address: "127.0.0.1:6379"
   username: ""
-  password: ""
+  password: "xxx"
   db: 0
