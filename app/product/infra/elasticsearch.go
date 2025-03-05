@@ -31,42 +31,46 @@ func InitElasticsearch() {
 
 // 搜索商品
 func SearchProducts(ctx context.Context, name string, category string, page int32, pageSize int32) (*product.SearchProductsResp, error) {
-
-	prod := &product.Product{
-		Id:          1,
-		Name:        "Product 1",
-		Description: "Description 1",
-		Picture:     "https://example.com/picture1.jpg",
-		Price:       10.99,
-		Categories:  []string{"Category 1", "Category 2"},
-	}
-
-	InsertProduct(ctx, prod)
-
 	// 构造查询语句
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
 			"bool": map[string]interface{}{
-				"must": []map[string]interface{}{
+				"should": []map[string]interface{}{
 					{
 						"match": map[string]interface{}{
 							"name": map[string]interface{}{
-								"query":     name,
-								"fuzziness": "AUTO",
+								"query":    name,  // 精确匹配
+								"operator": "and", // 精确匹配
+							},
+						},
+					},
+					{
+						"wildcard": map[string]interface{}{
+							"name": map[string]interface{}{
+								"value": fmt.Sprintf("%s*", name), // 前缀匹配
+							},
+						},
+					},
+					{
+						"fuzzy": map[string]interface{}{
+							"name": map[string]interface{}{
+								"value":     name,   // 模糊匹配
+								"fuzziness": "AUTO", // 模糊度
 							},
 						},
 					},
 				},
+				"minimum_should_match": 1, // 强制返回符合至少一个条件的商品
 			},
 		},
-		"from": (page - 1) * int32(pageSize),
+		"from": (page - 1) * pageSize,
 		"size": pageSize,
 	}
 
 	// 如果提供了类别，则添加类别筛选
 	if category != "" {
 		boolQuery := query["query"].(map[string]interface{})["bool"].(map[string]interface{})
-		mustQueries := boolQuery["must"].([]map[string]interface{})
+		mustQueries := boolQuery["should"].([]map[string]interface{})
 		boolQuery["must"] = append(mustQueries, map[string]interface{}{
 			"match": map[string]interface{}{
 				"categories": map[string]interface{}{
@@ -113,7 +117,7 @@ func SearchProducts(ctx context.Context, name string, category string, page int3
 	// 构造返回结果
 	return &product.SearchProductsResp{
 		Item:  extractProducts(result.Hits.Hits),
-		Total: int32(result.Hits.Total.Value),
+		Total: int32(len(result.Hits.Hits)),
 	}, nil
 }
 
@@ -141,6 +145,7 @@ func InsertProduct(ctx context.Context, prod *product.Product) error {
 		return fmt.Errorf("error response from Elasticsearch: %s", res.String())
 	}
 
+	log.Printf("Inserted product with ID: %d", prod.Id)
 	return nil
 }
 
