@@ -17,6 +17,7 @@ type Client interface {
 	GetOrderPayemntStatus(ctx context.Context, Req *payment.GetOrderPayemntStatusReq, callOptions ...callopt.Option) (r *payment.GetOrderPayemntStatusResp, err error)
 	Cancel(ctx context.Context, Req *payment.CancelPaymentReq, callOptions ...callopt.Option) (r *payment.CancelPaymentResp, err error)
 	DirectPayment(ctx context.Context, Req *payment.DirectPaymentReq, callOptions ...callopt.Option) (r *payment.DirectPaymentResp, err error)
+	CancelOrder(ctx context.Context, Req *payment.CancelOrderReq, callOptions ...callopt.Option) (r *payment.CancelOrderResp, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -76,4 +77,9 @@ func (p *kPaymentServiceClient) Cancel(ctx context.Context, Req *payment.CancelP
 func (p *kPaymentServiceClient) DirectPayment(ctx context.Context, Req *payment.DirectPaymentReq, callOptions ...callopt.Option) (r *payment.DirectPaymentResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.DirectPayment(ctx, Req)
+}
+
+func (p *kPaymentServiceClient) CancelOrder(ctx context.Context, Req *payment.CancelOrderReq, callOptions ...callopt.Option) (r *payment.CancelOrderResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.CancelOrder(ctx, Req)
 }

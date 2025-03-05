@@ -10,7 +10,6 @@ import (
 	//"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"time"
 
-	"github.com/doutokk/doutok/app/payment/biz/pay"
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/common/lock"
 
@@ -223,13 +222,14 @@ func (o *PayOrderFSM) PaymentFailed(ctx context.Context) error {
 
 // CancelPayment processes the CANCEL_ORDER event
 func (o *PayOrderFSM) CancelPayment(ctx context.Context) error {
+	previousState := o.fsm.Current()
 	err := o.fsm.Event(ctx, string(CancelOrder))
 	if err != nil {
 		return fmt.Errorf("failed to change state to cancelled: %w", err)
 	}
 
 	// If the order was in PAYING state, cancel the payment with the payment provider
-	if o.fsm.Current() == string(CANCELLED) && o.fsm.Before() == string(PAYING) {
+	if o.fsm.Current() == string(CANCELLED) && previousState == string(PAYING) {
 		pay.CancelOrder(o.orderId)
 	}
 

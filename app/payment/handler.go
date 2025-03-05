@@ -50,3 +50,10 @@ func (s *PaymentServiceImpl) DirectPayment(ctx context.Context, req *payment.Dir
 
 	return resp, err
 }
+
+// CancelOrder implements the PaymentServiceImpl interface.
+func (s *PaymentServiceImpl) CancelOrder(ctx context.Context, req *payment.CancelOrderReq) (resp *payment.CancelOrderResp, err error) {
+	resp, err = service.NewCancelOrderService(ctx).Run(req)
+
+	return resp, err
+}
