@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/doutokk/doutok/app/product/biz/dal/redis"
+	"github.com/doutokk/doutok/app/product/constants"
 	"github.com/doutokk/doutok/app/product/infra"
 
 	"github.com/doutokk/doutok/rpc_gen/kitex_gen/product"
@@ -29,7 +30,7 @@ func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *produ
 	// 首页是调用的这里的接口，query是null，因此加上缓存
 	if req.Query == "" {
 		// Generate cache key
-		cacheKey := fmt.Sprintf("search_products:page:%d:pageSize:%d", req.Page, req.PageSize)
+		cacheKey := fmt.Sprintf(constants.ProductKeyPattern, req.Page, req.PageSize)
 
 		// Try to get cached response
 		cachedResp, err := redis.RedisClient.Get(s.ctx, cacheKey).Result()
@@ -50,7 +51,7 @@ func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *produ
 		// Cache the response
 		respJSON, err := json.Marshal(resp)
 		if err == nil {
-			redis.RedisClient.Set(s.ctx, cacheKey, respJSON, 0)
+			redis.RedisClient.Set(s.ctx, cacheKey, respJSON, constants.Expire)
 		}
 
 		return resp, nil
