@@ -62,6 +62,11 @@ func (s *CreateProductService) Run(req *product.CreateProductReq) (resp *product
 		Id: uint32(m.ID),
 	}
 
+	var categories []string
+	for _, category := range m.Categories {
+		categories = append(categories, category.Name)
+	}
+
 	// 将商品插入 Elasticsearch
 	esProduct := &product.Product{
 		Id:          uint32(m.ID),
@@ -69,7 +74,7 @@ func (s *CreateProductService) Run(req *product.CreateProductReq) (resp *product
 		Description: m.Description,
 		Picture:     m.Picture,
 		Price:       m.Price,
-		Categories:  make([]string, len(m.Categories)),
+		Categories:  categories,
 	}
 	for i, cat := range m.Categories {
 		esProduct.Categories[i] = cat.Name
