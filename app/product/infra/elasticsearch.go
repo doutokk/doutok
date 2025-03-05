@@ -131,9 +131,9 @@ func InsertProduct(ctx context.Context, prod *product.Product) error {
 
 	// 执行 ES 插入请求
 	res, err := esClient.Index(
-		"products",                      // 索引名称
-		strings.NewReader(string(data)), // 商品数据
-		esClient.Index.WithContext(ctx), // 上下文
+		"products",                                                // 索引名称
+		strings.NewReader(string(data)),                           // 商品数据
+		esClient.Index.WithContext(ctx),                           // 上下文
 		esClient.Index.WithDocumentID(strconv.Itoa(int(prod.Id))), // 文档 ID
 	)
 	if err != nil {
@@ -146,6 +146,26 @@ func InsertProduct(ctx context.Context, prod *product.Product) error {
 	}
 
 	log.Printf("Inserted product with ID: %d", prod.Id)
+	return nil
+}
+
+func DeleteProduct(ctx context.Context, productId uint32) error {
+	// 执行 ES 删除请求
+	res, err := esClient.Delete(
+		"products",                       // 索引名称
+		strconv.Itoa(int(productId)),     // 文档 ID
+		esClient.Delete.WithContext(ctx), // 上下文
+	)
+	if err != nil {
+		return fmt.Errorf("error deleting product: %v", err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		return fmt.Errorf("error response from Elasticsearch: %s", res.String())
+	}
+
+	log.Printf("Deleted product with ID: %d", productId)
 	return nil
 }
 
