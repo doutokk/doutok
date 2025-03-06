@@ -3,13 +3,11 @@ package fsm
 import (
 	"context"
 	"fmt"
-
-	"github.com/doutokk/doutok/app/payment/biz/pay"
-
-	//"github.com/doutokk/doutok/app/payment/infra/rpc"
-	//"github.com/doutokk/doutok/rpc_gen/kitex_gen/order"
 	"time"
 
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/doutokk/doutok/app/payment/biz/interfaces"
+	"github.com/doutokk/doutok/app/payment/biz/pay"
 	"github.com/doutokk/doutok/app/payment/conf"
 	"github.com/doutokk/doutok/common/lock"
 
@@ -86,6 +84,14 @@ func RestoreFromDB(orderId string) (*PayOrderFSM, error) {
 // Redis address should come from configuration
 var redLock = lock.NewRedLock(conf.GetConf().Redis.Address)
 
+// Global variable for the delayed message sender
+var delayedMessageSender interfaces.DelayedMessageSender
+
+// SetDelayedMessageSender sets the implementation for sending delayed messages
+func SetDelayedMessageSender(sender interfaces.DelayedMessageSender) {
+	delayedMessageSender = sender
+}
+
 // NewOrder creates a new payment order with distributed locking
 func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 	o := &PayOrderFSM{}
@@ -128,6 +134,14 @@ func NewOrder(req CreatePayOrderReq) (*PayOrderFSM, error) {
 	o.data = req
 	if err != nil {
 		return nil, fmt.Errorf("failed to create payment log: %w", err)
+	}
+
+	// Schedule delayed order cancellation if we have a sender configured
+	if delayedMessageSender != nil {
+		if err := delayedMessageSender.SendDelayedOrderCancellation(context.Background(), req.OrderId); err != nil {
+			klog.Warnf("Failed to schedule delayed cancellation for order %s: %v", req.OrderId, err)
+			// Continue even if scheduling fails, as this is not critical for order creation
+		}
 	}
 
 	return o, nil

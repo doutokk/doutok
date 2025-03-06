@@ -27,3 +27,16 @@ alipay:
   private_key: "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDQ5Q5Q"
   callback_url: "http://localhost:8888/payment/alipay/callback"
   notifyback_url: "http://localhost:8888/payment/alipay/notify"
+
+rocketmq:
+  namesrv_addr: "10.21.22.54:8808"
+  group_id: "payment_group"
+  name_server:
+    - "10.21.22.54:8808"
+  group_name: "payment_service"
+  order_topic: "payment_order"
+  order_cancel_topic: "payment_order_cancel"
+  access_key: ""
+  secret_key: ""
+  order_cancel_delay: 30  # in minutes
+  max_reconsume_times: 3
